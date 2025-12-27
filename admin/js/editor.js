@@ -271,6 +271,11 @@ function clearForm(form) {
             document.getElementById('exam-id').value = '';
             document.getElementById('exam-label').value = '';
             document.getElementById('exam-text').value = '';
+            document.getElementById('exam-text-masc').value = '';
+            document.getElementById('exam-text-fem').value = '';
+            document.getElementById('exam-gendered').checked = false;
+            document.getElementById('exam-text-simple').classList.remove('hidden');
+            document.getElementById('exam-text-gendered').classList.add('hidden');
             document.getElementById('exam-output').textContent = 'Preencha o formulário acima para gerar o JSON';
             break;
 
@@ -358,7 +363,22 @@ function loadPhysicalExam(id) {
 
     document.getElementById('exam-id').value = id;
     document.getElementById('exam-label').value = addon.label || '';
-    document.getElementById('exam-text').value = addon.text || '';
+
+    // Handle gendered vs simple text
+    const isGendered = typeof addon.text === 'object';
+    document.getElementById('exam-gendered').checked = isGendered;
+    document.getElementById('exam-text-simple').classList.toggle('hidden', isGendered);
+    document.getElementById('exam-text-gendered').classList.toggle('hidden', !isGendered);
+
+    if (isGendered) {
+        document.getElementById('exam-text-masc').value = addon.text.masculino || '';
+        document.getElementById('exam-text-fem').value = addon.text.feminino || '';
+        document.getElementById('exam-text').value = '';
+    } else {
+        document.getElementById('exam-text').value = addon.text || '';
+        document.getElementById('exam-text-masc').value = '';
+        document.getElementById('exam-text-fem').value = '';
+    }
 }
 
 function loadCondition(id) {
@@ -859,6 +879,13 @@ function initPhysicalExamForm() {
     const textInput = document.getElementById('exam-text');
     attachAutocomplete(textInput, suggestions.addonTexts);
 
+    // Gendered checkbox toggle
+    const genderedCheckbox = document.getElementById('exam-gendered');
+    genderedCheckbox.addEventListener('change', () => {
+        document.getElementById('exam-text-simple').classList.toggle('hidden', genderedCheckbox.checked);
+        document.getElementById('exam-text-gendered').classList.toggle('hidden', !genderedCheckbox.checked);
+    });
+
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         generatePhysicalExamJSON();
@@ -868,9 +895,26 @@ function initPhysicalExamForm() {
 function generatePhysicalExamJSON() {
     const id = document.getElementById('exam-id').value.trim();
     const label = document.getElementById('exam-label').value.trim();
-    const text = document.getElementById('exam-text').value.trim();
+    const isGendered = document.getElementById('exam-gendered').checked;
 
-    if (!id || !label || !text) {
+    let text;
+    if (isGendered) {
+        const masc = document.getElementById('exam-text-masc').value.trim();
+        const fem = document.getElementById('exam-text-fem').value.trim();
+        if (!masc || !fem) {
+            document.getElementById('exam-output').textContent = 'Erro: Preencha ambos os textos (masculino e feminino)';
+            return;
+        }
+        text = { masculino: masc, feminino: fem };
+    } else {
+        text = document.getElementById('exam-text').value.trim();
+        if (!text) {
+            document.getElementById('exam-output').textContent = 'Erro: Preencha o texto do addon';
+            return;
+        }
+    }
+
+    if (!id || !label) {
         document.getElementById('exam-output').textContent = 'Erro: Preencha todos os campos obrigatórios (*)';
         return;
     }

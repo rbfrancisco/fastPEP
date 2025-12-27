@@ -156,101 +156,74 @@ Medication classes group interchangeable drugs, allowing users to pick one from 
 
 ### 3. Physical Exam (`data/physical-exam.json`)
 
-Contains the physical exam organized by body systems and condition-specific addons.
+Contains all physical exam addons. Each condition specifies which addons to include.
 
 #### Schema
 
 ```json
 {
-  "systems": {
-    "system-id": {
-      "label": "Display Label",
-      "base": "Default text for this system (or object with masculino/feminino)",
-      "default": true,
-      "addons": {
-        "addon-id": {
-          "label": "Variant label",
-          "base": "Alternative text (or object with masculino/feminino)"
-        }
-      }
-    }
-  },
   "addons": {
     "addon-id": {
-      "label": "Short label for checkbox",
-      "text": "Full text to append to exam"
+      "label": "Short label for display",
+      "text": "Full text for the physical exam (string or object with masculino/feminino)"
     }
   }
 }
 ```
 
-#### Systems
+#### Addons
 
-The exam is organized by body systems (Estado Geral, Cardiovascular, Respiratório). Each system has:
-
-| Field | Required | Description |
-|-------|----------|-------------|
-| `label` | Yes | Display name for the system |
-| `base` | Yes | Default text. Can be a string or object with `masculino`/`feminino` keys |
-| `default` | No | If `true`, this system is included by default for all conditions |
-| `addons` | No | Alternative variants for this system (e.g., "taquicárdico" for cardiovascular) |
-
-**System Addons:** These are radio button options that replace the default text for that system. For example, selecting "Taquicárdico" in Cardiovascular replaces the normal cardiovascular exam text.
-
-#### Standalone Addons
-
-Standalone addons are additional findings appended based on the diagnosis (e.g., oroscopia, otoscopia).
+All physical exam components are addons, including base findings (estado geral, cardiovascular, respiratório) and specific findings (oroscopia, otoscopia, etc.).
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `label` | Yes | Short description shown in the UI |
-| `text` | Yes | Full text appended to the physical exam |
+| `label` | Yes | Short description for display in editor |
+| `text` | Yes | Full text for the physical exam |
 
 #### Gender Handling
 
-- For gendered text (Estado Geral), use an object: `{ "masculino": "...", "feminino": "..." }`
-- For gender-neutral text (most systems), use a simple string
+For gendered text, use an object instead of a string:
+```json
+"text": {
+  "masculino": "Bom estado geral, corado, hidratado...",
+  "feminino": "Bom estado geral, corada, hidratada..."
+}
+```
+
+For gender-neutral text, use a simple string:
+```json
+"text": "BRNF em 2T, sem sopros..."
+```
 
 #### Example
 
 ```json
 {
-  "systems": {
-    "geral": {
-      "label": "Estado Geral",
-      "base": {
-        "masculino": "Bom estado geral, corado, hidratado...",
-        "feminino": "Bom estado geral, corada, hidratada..."
-      },
-      "default": true,
-      "addons": {
-        "regular-estado-geral": {
-          "label": "Regular estado geral",
-          "base": {
-            "masculino": "Regular estado geral, corado...",
-            "feminino": "Regular estado geral, corada..."
-          }
-        }
+  "addons": {
+    "geral-bom": {
+      "label": "Bom estado geral",
+      "text": {
+        "masculino": "Bom estado geral, corado, hidratado, anictérico, acianótico, eupneico em ar ambiente.",
+        "feminino": "Bom estado geral, corada, hidratada, anictérica, acianótica, eupneica em ar ambiente."
       }
     },
-    "cardiovascular": {
-      "label": "Cardiovascular",
-      "base": "BRNF em 2T, sem sopros, TEC <3s, extremidades quentes.",
-      "default": true,
-      "addons": {
-        "taquicardico": {
-          "label": "Taquicárdico",
-          "base": "Taquicárdico, BRNF em 2T, sem sopros..."
-        }
-      }
-    }
-  },
-  "addons": {
+    "cv-normal": {
+      "label": "Cardiovascular normal",
+      "text": "BRNF em 2T, sem sopros, TEC <3s, extremidades quentes e bem perfundidas."
+    },
     "oroscopia-amigdalite": {
       "label": "Oroscopia com amigdalite",
-      "text": "Orofaringe hiperemiada, amígdalas edemaciadas..."
+      "text": "Orofaringe hiperemiada, amígdalas edemaciadas e com presença de secreção purulenta."
     }
   }
+}
+```
+
+Conditions reference addons by ID:
+```json
+"ivas": {
+  "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "oroscopia-hiperemia"],
+  ...
 }
 ```
 
