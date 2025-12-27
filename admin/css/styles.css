@@ -481,3 +481,260 @@ body {
         align-self: flex-end;
     }
 }
+
+/* Loading Status */
+.loading-status {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.loading-status.loaded {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.loading-status.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Autocomplete */
+.autocomplete-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border: 2px solid var(--primary-color);
+    border-top: none;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    box-shadow: var(--shadow-md);
+}
+
+.autocomplete-dropdown.visible {
+    display: block;
+}
+
+.autocomplete-item {
+    padding: 0.6rem 0.85rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color var(--transition);
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+    background: #eff6ff;
+}
+
+.autocomplete-item mark {
+    background: #fef08a;
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* Fix for autocomplete in dynamic rows */
+.class-option-row .autocomplete-wrapper,
+.addon-row .autocomplete-wrapper,
+.conduct-row .autocomplete-wrapper,
+.group-option-row .autocomplete-wrapper {
+    flex: 1;
+}
+
+.class-option-row .autocomplete-wrapper input,
+.addon-row .autocomplete-wrapper input,
+.conduct-row .autocomplete-wrapper input,
+.group-option-row .autocomplete-wrapper input {
+    width: 100%;
+}
+
+.item-row .autocomplete-wrapper {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* Mode Selector */
+.mode-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    background: var(--surface);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.mode-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.mode-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.mode-btn[data-mode="edit"].active {
+    background: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+/* Entry Selector */
+.entry-selector {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: var(--radius-md);
+}
+
+.entry-selector label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: #92400e;
+}
+
+.entry-selector select {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+    border: 2px solid #fde68a;
+    border-radius: var(--radius-md);
+    background: white;
+    cursor: pointer;
+    outline: none;
+}
+
+.entry-selector select:focus {
+    border-color: var(--warning-color);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.form-actions .btn-primary {
+    flex: 2;
+}
+
+.btn-secondary {
+    flex: 1;
+    padding: 0.85rem 1.5rem;
+    background: var(--surface);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.btn-secondary:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+}
+
+/* Drag and Drop */
+.sortable-container {
+    min-height: 40px;
+}
+
+.sortable-item {
+    cursor: default;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: var(--text-secondary);
+    font-weight: bold;
+    padding: 0 0.25rem;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.drag-handle:hover {
+    color: var(--primary-color);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.sortable-item.dragging {
+    opacity: 0.5;
+    background: #eff6ff;
+}
+
+.sortable-item.drag-over {
+    border-top: 3px solid var(--primary-color);
+}
+
+/* Group header with drag handle */
+.group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.group-header .drag-handle {
+    margin-right: auto;
+    margin-right: 0;
+}
+
+.group-header .group-type-badge {
+    margin-right: auto;
+}
+
+/* Responsive adjustments for mode selector */
+@media (max-width: 600px) {
+    .mode-selector {
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn-primary,
+    .form-actions .btn-secondary {
+        flex: none;
+        width: 100%;
+    }
+}

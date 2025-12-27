@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastPEP - Editor de Dados</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="admin/css/styles.css">
 </head>
 <body>
     <div class="container">
         <header class="header">
             <h1>FastPEP Editor</h1>
-            <p class="subtitle">Gerador de JSON para adicionar novos dados</p>
+            <p class="subtitle">Criar e editar entradas dos arquivos JSON</p>
         </header>
 
         <!-- Tab Navigation -->
@@ -26,7 +26,17 @@
             <!-- Medication Tab -->
             <div id="medication-tab" class="tab-panel active">
                 <div class="form-section">
-                    <h2>Adicionar Medicamento</h2>
+                    <div class="mode-selector">
+                        <button type="button" class="mode-btn active" data-mode="new" data-form="medication">+ Novo</button>
+                        <button type="button" class="mode-btn" data-mode="edit" data-form="medication">✎ Editar Existente</button>
+                    </div>
+                    <div class="entry-selector hidden" id="medication-entry-selector">
+                        <label>Selecionar medicamento:</label>
+                        <select id="medication-select">
+                            <option value="">-- Escolha um medicamento --</option>
+                        </select>
+                    </div>
+                    <h2 id="medication-form-title">Novo Medicamento</h2>
                     <form id="medication-form">
                         <div class="form-group">
                             <label for="med-id">ID do Medicamento *</label>
@@ -57,7 +67,10 @@
                             <label for="med-hospital-note">Nota de Hospital</label>
                             <input type="text" id="med-hospital-note" placeholder="ex: (Aplicado no PS - não entra na prescrição para casa)">
                         </div>
-                        <button type="submit" class="btn-primary">Gerar JSON</button>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary btn-clear" data-form="medication">Limpar</button>
+                            <button type="submit" class="btn-primary">Gerar JSON</button>
+                        </div>
                     </form>
                 </div>
                 <div class="output-section">
@@ -72,7 +85,17 @@
             <!-- Medication Class Tab -->
             <div id="medication-class-tab" class="tab-panel">
                 <div class="form-section">
-                    <h2>Adicionar Classe de Medicamento</h2>
+                    <div class="mode-selector">
+                        <button type="button" class="mode-btn active" data-mode="new" data-form="class">+ Novo</button>
+                        <button type="button" class="mode-btn" data-mode="edit" data-form="class">✎ Editar Existente</button>
+                    </div>
+                    <div class="entry-selector hidden" id="class-entry-selector">
+                        <label>Selecionar classe:</label>
+                        <select id="class-select">
+                            <option value="">-- Escolha uma classe --</option>
+                        </select>
+                    </div>
+                    <h2 id="class-form-title">Nova Classe de Medicamento</h2>
                     <form id="medication-class-form">
                         <div class="form-group">
                             <label for="class-id">ID da Classe *</label>
@@ -84,16 +107,20 @@
                             <input type="text" id="class-label" placeholder="ex: AINE" required>
                         </div>
                         <div class="form-group">
-                            <label>Opções de Medicamentos *</label>
-                            <div id="class-options-container">
-                                <div class="class-option-row">
+                            <label>Opções de Medicamentos * <small>(arraste para reordenar)</small></label>
+                            <div id="class-options-container" class="sortable-container">
+                                <div class="class-option-row sortable-item">
+                                    <span class="drag-handle">⋮⋮</span>
                                     <input type="text" class="class-option" placeholder="ID do medicamento (ex: cetoprofeno-100mg)">
                                     <button type="button" class="btn-remove" title="Remover">×</button>
                                 </div>
                             </div>
                             <button type="button" class="btn-add" id="add-class-option">+ Adicionar Opção</button>
                         </div>
-                        <button type="submit" class="btn-primary">Gerar JSON</button>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary btn-clear" data-form="class">Limpar</button>
+                            <button type="submit" class="btn-primary">Gerar JSON</button>
+                        </div>
                     </form>
                 </div>
                 <div class="output-section">
@@ -108,7 +135,17 @@
             <!-- Physical Exam Tab -->
             <div id="physical-exam-tab" class="tab-panel">
                 <div class="form-section">
-                    <h2>Adicionar Addon de Exame Físico</h2>
+                    <div class="mode-selector">
+                        <button type="button" class="mode-btn active" data-mode="new" data-form="exam">+ Novo</button>
+                        <button type="button" class="mode-btn" data-mode="edit" data-form="exam">✎ Editar Existente</button>
+                    </div>
+                    <div class="entry-selector hidden" id="exam-entry-selector">
+                        <label>Selecionar addon:</label>
+                        <select id="exam-select">
+                            <option value="">-- Escolha um addon --</option>
+                        </select>
+                    </div>
+                    <h2 id="exam-form-title">Novo Addon de Exame Físico</h2>
                     <form id="physical-exam-form">
                         <div class="form-group">
                             <label for="exam-id">ID do Addon *</label>
@@ -116,15 +153,18 @@
                             <small>Use letras minúsculas e hífens.</small>
                         </div>
                         <div class="form-group">
-                            <label for="exam-text-male">Texto (Masculino) *</label>
-                            <textarea id="exam-text-male" rows="2" placeholder="ex: Oroscopia: hiperemia e hipertrofia de amígdalas, com exsudato purulento." required></textarea>
+                            <label for="exam-label">Label (para checkbox) *</label>
+                            <input type="text" id="exam-label" placeholder="ex: Oroscopia com amigdalite" required>
                         </div>
                         <div class="form-group">
-                            <label for="exam-text-female">Texto (Feminino) *</label>
-                            <textarea id="exam-text-female" rows="2" placeholder="ex: Oroscopia: hiperemia e hipertrofia de amígdalas, com exsudato purulento." required></textarea>
-                            <small>Pode ser igual ao masculino se não houver variação de gênero.</small>
+                            <label for="exam-text">Texto do Addon *</label>
+                            <textarea id="exam-text" rows="3" placeholder="ex: Orofaringe hiperemiada, amígdalas edemaciadas..." required></textarea>
+                            <small>Este texto será adicionado ao exame físico.</small>
                         </div>
-                        <button type="submit" class="btn-primary">Gerar JSON</button>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary btn-clear" data-form="exam">Limpar</button>
+                            <button type="submit" class="btn-primary">Gerar JSON</button>
+                        </div>
                     </form>
                 </div>
                 <div class="output-section">
@@ -139,7 +179,17 @@
             <!-- Condition Tab -->
             <div id="condition-tab" class="tab-panel">
                 <div class="form-section">
-                    <h2>Adicionar Condição / Diagnóstico</h2>
+                    <div class="mode-selector">
+                        <button type="button" class="mode-btn active" data-mode="new" data-form="condition">+ Novo</button>
+                        <button type="button" class="mode-btn" data-mode="edit" data-form="condition">✎ Editar Existente</button>
+                    </div>
+                    <div class="entry-selector hidden" id="condition-entry-selector">
+                        <label>Selecionar condição:</label>
+                        <select id="condition-select">
+                            <option value="">-- Escolha uma condição --</option>
+                        </select>
+                    </div>
+                    <h2 id="condition-form-title">Nova Condição / Diagnóstico</h2>
                     <form id="condition-form">
                         <div class="form-group">
                             <label for="cond-id">ID da Condição *</label>
@@ -153,9 +203,10 @@
 
                         <!-- Physical Exam Addons -->
                         <div class="form-group">
-                            <label>Addons de Exame Físico</label>
-                            <div id="cond-addons-container">
-                                <div class="addon-row">
+                            <label>Addons de Exame Físico <small>(arraste para reordenar)</small></label>
+                            <div id="cond-addons-container" class="sortable-container">
+                                <div class="addon-row sortable-item">
+                                    <span class="drag-handle">⋮⋮</span>
                                     <input type="text" class="cond-addon" placeholder="ID do addon (ex: oroscopia-amigdalite)">
                                     <button type="button" class="btn-remove" title="Remover">×</button>
                                 </div>
@@ -165,9 +216,10 @@
 
                         <!-- Conduct -->
                         <div class="form-group">
-                            <label>Conduta</label>
-                            <div id="cond-conduct-container">
-                                <div class="conduct-row">
+                            <label>Conduta <small>(arraste para reordenar)</small></label>
+                            <div id="cond-conduct-container" class="sortable-container">
+                                <div class="conduct-row sortable-item">
+                                    <span class="drag-handle">⋮⋮</span>
                                     <input type="text" class="cond-conduct" placeholder="ex: Explico sobre a condição e esclareço dúvidas">
                                     <button type="button" class="btn-remove" title="Remover">×</button>
                                 </div>
@@ -177,15 +229,18 @@
 
                         <!-- Prescription Groups -->
                         <div class="form-group">
-                            <label>Grupos de Prescrição</label>
-                            <div id="prescription-groups-container"></div>
+                            <label>Grupos de Prescrição <small>(arraste para reordenar grupos e itens)</small></label>
+                            <div id="prescription-groups-container" class="sortable-container"></div>
                             <div class="btn-group">
                                 <button type="button" class="btn-add" id="add-radio-group">+ Grupo Radio (ex: Antibiótico)</button>
                                 <button type="button" class="btn-add" id="add-items-group">+ Grupo Items (ex: Sintomáticos)</button>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-primary">Gerar JSON</button>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary btn-clear" data-form="condition">Limpar</button>
+                            <button type="submit" class="btn-primary">Gerar JSON</button>
+                        </div>
                     </form>
                 </div>
                 <div class="output-section">
@@ -205,8 +260,9 @@
 
     <!-- Templates for dynamic rows -->
     <template id="radio-group-template">
-        <div class="prescription-group radio-group-item">
+        <div class="prescription-group radio-group-item sortable-item">
             <div class="group-header">
+                <span class="drag-handle">⋮⋮</span>
                 <span class="group-type-badge">Radio</span>
                 <button type="button" class="btn-remove-group" title="Remover grupo">×</button>
             </div>
@@ -219,9 +275,10 @@
                 <input type="text" class="group-label" placeholder="ex: Antibiótico">
             </div>
             <div class="form-group">
-                <label>Opções (IDs de medicamentos)</label>
-                <div class="group-options-container">
-                    <div class="group-option-row">
+                <label>Opções (IDs de medicamentos) <small>(arraste para reordenar)</small></label>
+                <div class="group-options-container sortable-container">
+                    <div class="group-option-row sortable-item">
+                        <span class="drag-handle">⋮⋮</span>
                         <input type="text" class="group-option" placeholder="ID do medicamento">
                         <button type="button" class="btn-remove" title="Remover">×</button>
                     </div>
@@ -236,8 +293,9 @@
     </template>
 
     <template id="items-group-template">
-        <div class="prescription-group items-group-item">
+        <div class="prescription-group items-group-item sortable-item">
             <div class="group-header">
+                <span class="drag-handle">⋮⋮</span>
                 <span class="group-type-badge items">Items</span>
                 <button type="button" class="btn-remove-group" title="Remover grupo">×</button>
             </div>
@@ -250,8 +308,8 @@
                 <input type="text" class="group-label" placeholder="ex: Sintomáticos">
             </div>
             <div class="form-group">
-                <label>Items</label>
-                <div class="group-items-container"></div>
+                <label>Items <small>(arraste para reordenar)</small></label>
+                <div class="group-items-container sortable-container"></div>
                 <div class="btn-group">
                     <button type="button" class="btn-add add-med-item">+ Medicamento</button>
                     <button type="button" class="btn-add add-class-item">+ Classe</button>
@@ -261,7 +319,8 @@
     </template>
 
     <template id="med-item-template">
-        <div class="item-row med-item">
+        <div class="item-row med-item sortable-item">
+            <span class="drag-handle">⋮⋮</span>
             <span class="item-type-badge">Med</span>
             <input type="text" class="item-med-id" placeholder="ID do medicamento">
             <label class="item-checked-label">
@@ -273,7 +332,8 @@
     </template>
 
     <template id="class-item-template">
-        <div class="item-row class-item">
+        <div class="item-row class-item sortable-item">
+            <span class="drag-handle">⋮⋮</span>
             <span class="item-type-badge class">Class</span>
             <input type="text" class="item-class-id" placeholder="ID da classe">
             <input type="text" class="item-default" placeholder="Padrão (ID med)">
@@ -286,6 +346,6 @@
         </div>
     </template>
 
-    <script src="js/editor.js"></script>
+    <script src="admin/js/editor.js"></script>
 </body>
 </html>
