@@ -302,5 +302,47 @@
         ]
       }
     ]
-  }
+  },
+  "constipacao-funcional": {
+  "name": "Constipação funcional",
+  "physicalExamAddons": [
+    "abdome-normal"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Oriento mudanças alimentares e hidratação adequada",
+    "Prescrevo laxativo osmótico para casa",
+    "Oriento acompanhamento médico caso mudança continue para investigação aprofundada.",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "laxantes",
+      "label": "Laxantes",
+      "type": "radio",
+      "options": [
+        "macrogol-3350",
+        "lactulose-xarope"
+      ],
+      "default": "macrogol-3350"
+    },
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "med",
+          "medId": "escopolamina-10mg",
+          "checked": false
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-500mg",
+          "checked": false
+        }
+      ]
+    }
+  ]
+}
 }
