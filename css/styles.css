@@ -324,6 +324,70 @@ body {
     font-style: italic;
 }
 
+/* Class item with checkbox + nested radios */
+.treatment-class-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: #f8fafc;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.treatment-class-checkbox {
+    margin: 0;
+    padding: 0;
+}
+
+.treatment-class-checkbox:hover {
+    background: transparent;
+}
+
+.treatment-class-label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.treatment-class-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-left: 0.5rem;
+}
+
+.treatment-class-options.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.treatment-class-radio {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition);
+}
+
+.treatment-class-radio:hover {
+    background: #e2e8f0;
+}
+
+.treatment-class-radio input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.treatment-class-radio span {
+    white-space: nowrap;
+}
+
 /* Prescription formatting */
 .prescription-item {
     margin-bottom: 1rem;

@@ -12,9 +12,11 @@
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
-        "type": "checkbox",
-        "options": ["lavagem-nasal", "xarope-44e", "dipirona-500mg"],
-        "default": ["lavagem-nasal", "xarope-44e", "dipirona-500mg"]
+        "items": [
+          { "type": "med", "medId": "lavagem-nasal", "checked": true },
+          { "type": "med", "medId": "xarope-44e", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+        ]
       }
     ]
   },
@@ -39,9 +41,11 @@
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
-        "type": "checkbox",
-        "options": ["flurbiprofeno-pastilha", "cetoprofeno-100mg", "dipirona-500mg"],
-        "default": ["flurbiprofeno-pastilha", "cetoprofeno-100mg", "dipirona-500mg"]
+        "items": [
+          { "type": "med", "medId": "flurbiprofeno-pastilha", "checked": true },
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+        ]
       }
     ]
   },
@@ -66,9 +70,12 @@
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
-        "type": "checkbox",
-        "options": ["lavagem-nasal", "xarope-44e", "cetoprofeno-100mg", "dipirona-500mg"],
-        "default": ["lavagem-nasal", "xarope-44e", "cetoprofeno-100mg", "dipirona-500mg"]
+        "items": [
+          { "type": "med", "medId": "lavagem-nasal", "checked": true },
+          { "type": "med", "medId": "xarope-44e", "checked": true },
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+        ]
       }
     ]
   },
@@ -85,9 +92,13 @@
       {
         "id": "tratamento",
         "label": "Tratamento",
-        "type": "checkbox",
-        "options": ["sais-reidratacao", "floratil-200mg", "racecadotrila-100mg", "ondansetrona-4mg", "dipirona-500mg"],
-        "default": ["sais-reidratacao", "floratil-200mg", "racecadotrila-100mg", "ondansetrona-4mg", "dipirona-500mg"]
+        "items": [
+          { "type": "med", "medId": "sais-reidratacao", "checked": true },
+          { "type": "med", "medId": "floratil-200mg", "checked": true },
+          { "type": "med", "medId": "racecadotrila-100mg", "checked": true },
+          { "type": "class", "classId": "antiemetico", "default": "ondansetrona-4mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+        ]
       }
     ]
   },
@@ -112,9 +123,10 @@
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
-        "type": "checkbox",
-        "options": ["fenazopiridina-200mg", "dipirona-500mg"],
-        "default": ["fenazopiridina-200mg", "dipirona-500mg"]
+        "items": [
+          { "type": "med", "medId": "fenazopiridina-200mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+        ]
       }
     ]
   },
@@ -140,9 +152,10 @@
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
-        "type": "checkbox",
-        "options": ["cetoprofeno-100mg-5d", "dipirona-1g"],
-        "default": ["cetoprofeno-100mg-5d", "dipirona-1g"]
+        "items": [
+          { "type": "class", "classId": "aine-5d", "default": "cetoprofeno-100mg-5d", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+        ]
       }
     ]
   },
@@ -166,9 +179,10 @@
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
-        "type": "checkbox",
-        "options": ["cetoprofeno-100mg-5d", "dipirona-1g"],
-        "default": ["cetoprofeno-100mg-5d", "dipirona-1g"]
+        "items": [
+          { "type": "class", "classId": "aine-5d", "default": "cetoprofeno-100mg-5d", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+        ]
       }
     ]
   },
@@ -186,9 +200,11 @@
       {
         "id": "tratamento",
         "label": "Tratamento",
-        "type": "checkbox",
-        "options": ["ciprofloxacino-hidrocortisona-otologico", "cetoprofeno-100mg", "dipirona-1g"],
-        "default": ["ciprofloxacino-hidrocortisona-otologico", "cetoprofeno-100mg", "dipirona-1g"]
+        "items": [
+          { "type": "med", "medId": "ciprofloxacino-hidrocortisona-otologico", "checked": true },
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+        ]
       }
     ]
   },
@@ -206,9 +222,11 @@
       {
         "id": "tratamento",
         "label": "Tratamento",
-        "type": "checkbox",
-        "options": ["naratriptano-25mg", "cetoprofeno-100mg", "dipirona-1g"],
-        "default": ["naratriptano-25mg", "cetoprofeno-100mg", "dipirona-1g"]
+        "items": [
+          { "type": "med", "medId": "naratriptano-25mg", "checked": true },
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+        ]
       }
     ]
   },
@@ -225,9 +243,11 @@
       {
         "id": "tratamento",
         "label": "Tratamento",
-        "type": "checkbox",
-        "options": ["cetoprofeno-100mg", "ciclobenzaprina-5mg", "dipirona-1g"],
-        "default": ["cetoprofeno-100mg", "ciclobenzaprina-5mg", "dipirona-1g"]
+        "items": [
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
+          { "type": "med", "medId": "ciclobenzaprina-5mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+        ]
       }
     ]
   },
@@ -246,15 +266,17 @@
         "id": "antiviral",
         "label": "Antiviral",
         "type": "radio",
-        "options": ["aciclovir-400mg", "valaciclovir-500mg"],
+        "options": ["valaciclovir-500mg", "aciclovir-400mg"],
         "default": "valaciclovir-500mg"
       },
       {
         "id": "analgesia",
         "label": "Analgesia",
-        "type": "checkbox",
-        "options": ["cetoprofeno-100mg", "dipirona-1g", "tramadol-50mg"],
-        "default": ["cetoprofeno-100mg", "dipirona-1g"]
+        "items": [
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true },
+          { "type": "med", "medId": "tramadol-50mg", "checked": false }
+        ]
       }
     ]
   },
@@ -272,9 +294,12 @@
       {
         "id": "tratamento",
         "label": "Tratamento",
-        "type": "checkbox",
-        "options": ["colchicina-05mg", "naproxeno-500mg", "omeprazol-20mg", "dipirona-1g"],
-        "default": ["colchicina-05mg", "naproxeno-500mg", "omeprazol-20mg", "dipirona-1g"]
+        "items": [
+          { "type": "med", "medId": "colchicina-05mg", "checked": true },
+          { "type": "class", "classId": "aine", "default": "naproxeno-500mg", "checked": true },
+          { "type": "med", "medId": "omeprazol-20mg", "checked": true },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+        ]
       }
     ]
   }

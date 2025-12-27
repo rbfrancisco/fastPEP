@@ -1,0 +1,22 @@
+{
+  "aine": {
+    "label": "AINE",
+    "options": ["cetoprofeno-100mg", "ibuprofeno-600mg", "naproxeno-500mg"]
+  },
+  "aine-5d": {
+    "label": "AINE",
+    "options": ["cetoprofeno-100mg-5d", "ibuprofeno-600mg", "naproxeno-500mg"]
+  },
+  "analgesico": {
+    "label": "Analgésico/Antitérmico",
+    "options": ["dipirona-500mg", "dipirona-1g", "paracetamol-500mg"]
+  },
+  "antiemetico": {
+    "label": "Antiemético",
+    "options": ["ondansetrona-4mg", "ondansetrona-8mg", "metoclopramida-10mg", "dramin-b6"]
+  },
+  "antiviral-herpes": {
+    "label": "Antiviral",
+    "options": ["valaciclovir-500mg", "aciclovir-400mg"]
+  }
+}

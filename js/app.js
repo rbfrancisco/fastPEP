@@ -6,6 +6,7 @@
     let conditions = {};
     let physicalExam = {};
     let medications = {};
+    let medicationClasses = {};
 
     // Current state
     let currentGender = 'feminino';
@@ -48,15 +49,17 @@
     // Load JSON data
     async function loadData() {
         try {
-            const [conditionsData, physicalExamData, medicationsData] = await Promise.all([
+            const [conditionsData, physicalExamData, medicationsData, classesData] = await Promise.all([
                 fetch('data/conditions.json').then(r => r.json()),
                 fetch('data/physical-exam.json').then(r => r.json()),
-                fetch('data/medications.json').then(r => r.json())
+                fetch('data/medications.json').then(r => r.json()),
+                fetch('data/medication-classes.json').then(r => r.json())
             ]);
 
             conditions = conditionsData;
             physicalExam = physicalExamData;
             medications = medicationsData;
+            medicationClasses = classesData;
         } catch (error) {
             console.error('Erro ao carregar dados:', error);
         }
@@ -174,7 +177,6 @@
 
         return getSortedConditions().filter(({ name }) => {
             const nameLower = name.toLowerCase();
-            // All query words must be found somewhere in the name
             return queryWords.every(word => nameLower.includes(word));
         });
     }
@@ -193,7 +195,6 @@
             return `<div class="dropdown-item ${selectedClass}" data-id="${id}">${highlighted}</div>`;
         }).join('');
 
-        // Add click handlers
         elements.dropdown.querySelectorAll('.dropdown-item[data-id]').forEach(item => {
             item.addEventListener('click', () => selectCondition(item.dataset.id));
         });
@@ -238,9 +239,7 @@
         elements.searchInput.value = condition.name;
         hideDropdown();
 
-        // Reset selections to defaults
         initializeSelections(condition);
-
         renderAll();
     }
 
@@ -248,15 +247,42 @@
     function initializeSelections(condition) {
         currentSelections = {};
 
-        if (condition.prescriptionGroups) {
-            condition.prescriptionGroups.forEach(group => {
-                if (group.type === 'radio') {
-                    currentSelections[group.id] = group.default;
-                } else if (group.type === 'checkbox') {
-                    currentSelections[group.id] = [...group.default];
-                }
-            });
-        }
+        if (!condition.prescriptionGroups) return;
+
+        condition.prescriptionGroups.forEach(group => {
+            // Old format: radio type at group level (for antibiotics)
+            if (group.type === 'radio') {
+                currentSelections[group.id] = {
+                    type: 'radio',
+                    selected: group.default
+                };
+            }
+            // New format: items array with med and class types
+            else if (group.items) {
+                currentSelections[group.id] = {
+                    type: 'items',
+                    items: {}
+                };
+
+                group.items.forEach((item, index) => {
+                    const itemKey = `${group.id}-${index}`;
+                    if (item.type === 'med') {
+                        currentSelections[group.id].items[itemKey] = {
+                            type: 'med',
+                            medId: item.medId,
+                            checked: item.checked
+                        };
+                    } else if (item.type === 'class') {
+                        currentSelections[group.id].items[itemKey] = {
+                            type: 'class',
+                            classId: item.classId,
+                            checked: item.checked,
+                            selected: item.default
+                        };
+                    }
+                });
+            }
+        });
     }
 
     // Render all sections
@@ -274,7 +300,6 @@
         const condition = conditions[currentCondition];
         let text = physicalExam.base[currentGender];
 
-        // Add condition-specific addons
         if (condition.physicalExamAddons && condition.physicalExamAddons.length > 0) {
             const addons = condition.physicalExamAddons
                 .map(addonId => physicalExam.addons[addonId]?.text)
@@ -295,11 +320,13 @@
 
         const condition = conditions[currentCondition];
 
-        // Check if there are any radio groups (actual choices to make)
-        const hasRadioOptions = condition.prescriptionGroups?.some(g => g.type === 'radio');
-        const hasCheckboxOptions = condition.prescriptionGroups?.some(g => g.type === 'checkbox' && g.options.length > 1);
+        // Check if there are any options to show
+        const hasOptions = condition.prescriptionGroups?.some(g =>
+            g.type === 'radio' ||
+            (g.items && g.items.some(item => item.type === 'class' || g.items.length > 1))
+        );
 
-        if (!hasRadioOptions && !hasCheckboxOptions) {
+        if (!hasOptions) {
             elements.treatmentOptionsSection.classList.add('hidden');
             return;
         }
@@ -313,30 +340,96 @@
             html += `<span class="treatment-group-label">${group.label}:</span>`;
             html += `<div class="treatment-options">`;
 
-            group.options.forEach(medId => {
-                const med = medications[medId];
-                if (!med) return;
+            // Old format: radio type at group level
+            if (group.type === 'radio') {
+                group.options.forEach(medId => {
+                    const med = medications[medId];
+                    if (!med) return;
 
-                const inputType = group.type;
-                const inputName = `treatment-${group.id}`;
-                const isChecked = group.type === 'radio'
-                    ? currentSelections[group.id] === medId
-                    : currentSelections[group.id]?.includes(medId);
+                    const isChecked = currentSelections[group.id]?.selected === medId;
+                    const hospitalNote = med.inHospital ? ` <span class="hospital-note">${med.hospitalNote}</span>` : '';
 
-                // Show hospital note if medication is given in hospital
-                const hospitalNote = med.inHospital ? ` <span class="hospital-note">${med.hospitalNote}</span>` : '';
+                    html += `
+                        <label class="treatment-option">
+                            <input type="radio"
+                                   name="radio-${group.id}"
+                                   value="${medId}"
+                                   data-group="${group.id}"
+                                   data-type="radio"
+                                   ${isChecked ? 'checked' : ''}>
+                            <span class="treatment-option-text">${med.name}${hospitalNote}</span>
+                        </label>
+                    `;
+                });
+            }
+            // New format: items array
+            else if (group.items) {
+                group.items.forEach((item, index) => {
+                    const itemKey = `${group.id}-${index}`;
+                    const itemState = currentSelections[group.id]?.items?.[itemKey];
 
-                html += `
-                    <label class="treatment-option">
-                        <input type="${inputType}"
-                               name="${inputName}"
-                               value="${medId}"
-                               data-group="${group.id}"
-                               ${isChecked ? 'checked' : ''}>
-                        <span class="treatment-option-text">${med.name}${hospitalNote}</span>
-                    </label>
-                `;
-            });
+                    if (item.type === 'med') {
+                        const med = medications[item.medId];
+                        if (!med) return;
+
+                        const isChecked = itemState?.checked;
+                        const hospitalNote = med.inHospital ? ` <span class="hospital-note">${med.hospitalNote}</span>` : '';
+
+                        html += `
+                            <label class="treatment-option">
+                                <input type="checkbox"
+                                       data-group="${group.id}"
+                                       data-item-key="${itemKey}"
+                                       data-type="med"
+                                       ${isChecked ? 'checked' : ''}>
+                                <span class="treatment-option-text">${med.name}${hospitalNote}</span>
+                            </label>
+                        `;
+                    } else if (item.type === 'class') {
+                        const medClass = medicationClasses[item.classId];
+                        if (!medClass) return;
+
+                        const isChecked = itemState?.checked;
+                        const selectedMed = itemState?.selected;
+
+                        html += `
+                            <div class="treatment-class-item">
+                                <label class="treatment-option treatment-class-checkbox">
+                                    <input type="checkbox"
+                                           data-group="${group.id}"
+                                           data-item-key="${itemKey}"
+                                           data-type="class-toggle"
+                                           ${isChecked ? 'checked' : ''}>
+                                    <span class="treatment-option-text treatment-class-label">${medClass.label}:</span>
+                                </label>
+                                <div class="treatment-class-options ${isChecked ? '' : 'disabled'}">
+                        `;
+
+                        medClass.options.forEach(medId => {
+                            const med = medications[medId];
+                            if (!med) return;
+
+                            const isSelected = selectedMed === medId;
+
+                            html += `
+                                <label class="treatment-class-radio">
+                                    <input type="radio"
+                                           name="class-${itemKey}"
+                                           value="${medId}"
+                                           data-group="${group.id}"
+                                           data-item-key="${itemKey}"
+                                           data-type="class-select"
+                                           ${isSelected ? 'checked' : ''}
+                                           ${isChecked ? '' : 'disabled'}>
+                                    <span>${med.name}</span>
+                                </label>
+                            `;
+                        });
+
+                        html += `</div></div>`;
+                    }
+                });
+            }
 
             html += `</div></div>`;
         });
@@ -351,25 +444,32 @@
 
     // Handle treatment option change
     function handleTreatmentChange(e) {
-        const groupId = e.target.dataset.group;
-        const value = e.target.value;
-        const isChecked = e.target.checked;
-        const isRadio = e.target.type === 'radio';
+        const input = e.target;
+        const groupId = input.dataset.group;
+        const itemKey = input.dataset.itemKey;
+        const type = input.dataset.type;
 
-        if (isRadio) {
-            currentSelections[groupId] = value;
-        } else {
-            if (!currentSelections[groupId]) {
-                currentSelections[groupId] = [];
-            }
+        if (type === 'radio') {
+            // Old format: simple radio group
+            currentSelections[groupId].selected = input.value;
+        } else if (type === 'med') {
+            // Med checkbox toggle
+            currentSelections[groupId].items[itemKey].checked = input.checked;
+        } else if (type === 'class-toggle') {
+            // Class checkbox toggle
+            currentSelections[groupId].items[itemKey].checked = input.checked;
 
-            if (isChecked) {
-                if (!currentSelections[groupId].includes(value)) {
-                    currentSelections[groupId].push(value);
-                }
-            } else {
-                currentSelections[groupId] = currentSelections[groupId].filter(v => v !== value);
+            // Enable/disable the nested radios
+            const classOptions = input.closest('.treatment-class-item').querySelector('.treatment-class-options');
+            if (classOptions) {
+                classOptions.classList.toggle('disabled', !input.checked);
+                classOptions.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.disabled = !input.checked;
+                });
             }
+        } else if (type === 'class-select') {
+            // Class radio selection
+            currentSelections[groupId].items[itemKey].selected = input.value;
         }
 
         renderPrescription();
@@ -389,28 +489,38 @@
         if (!currentCondition) return;
 
         const condition = conditions[currentCondition];
-
-        // Collect all selected medications
         const selectedMeds = [];
 
         if (condition.prescriptionGroups) {
             condition.prescriptionGroups.forEach(group => {
-                const selection = currentSelections[group.id];
+                const groupState = currentSelections[group.id];
+                if (!groupState) return;
 
-                if (group.type === 'radio' && selection) {
-                    selectedMeds.push(selection);
-                } else if (group.type === 'checkbox' && selection) {
-                    // Maintain order from original options
-                    group.options.forEach(medId => {
-                        if (selection.includes(medId)) {
-                            selectedMeds.push(medId);
+                if (groupState.type === 'radio') {
+                    // Old format: simple radio
+                    if (groupState.selected) {
+                        selectedMeds.push(groupState.selected);
+                    }
+                } else if (groupState.type === 'items') {
+                    // New format: items
+                    // Preserve order from original items array
+                    group.items.forEach((item, index) => {
+                        const itemKey = `${group.id}-${index}`;
+                        const itemState = groupState.items[itemKey];
+
+                        if (!itemState || !itemState.checked) return;
+
+                        if (itemState.type === 'med') {
+                            selectedMeds.push(itemState.medId);
+                        } else if (itemState.type === 'class') {
+                            selectedMeds.push(itemState.selected);
                         }
                     });
                 }
             });
         }
 
-        // Filter out medications that are given in hospital (not for home prescription)
+        // Filter out medications that are given in hospital
         const homeMeds = selectedMeds.filter(medId => {
             const med = medications[medId];
             return med && !med.inHospital;
@@ -440,11 +550,9 @@
 
         if (!targetElement) return;
 
-        // Get text content (handles both plain text and HTML)
         let text = '';
 
         if (targetId === 'prescription-content') {
-            // Format prescription for copying
             const items = targetElement.querySelectorAll('.prescription-item');
             const lines = [];
             items.forEach((item, index) => {
@@ -459,11 +567,9 @@
             text = targetElement.textContent;
         }
 
-        // Copy to clipboard
         navigator.clipboard.writeText(text).then(() => {
             showToast('Copiado!');
 
-            // Visual feedback on button
             btn.classList.add('copied');
             const originalText = btn.querySelector('.copy-text');
             if (originalText) {
