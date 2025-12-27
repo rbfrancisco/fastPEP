@@ -17,7 +17,9 @@
   },
   "penicilina-benzatina": {
     "name": "Penicilina Benzatina 1.200.000 UI",
-    "instruction": "Aplicar 1 ampola intramuscular, dose única"
+    "instruction": "Aplicar 1 ampola intramuscular, dose única",
+    "inHospital": true,
+    "hospitalNote": "(Aplicado no PS - não entra na prescrição para casa)"
   },
   "azitromicina-500mg": {
     "name": "Azitromicina 500mg",

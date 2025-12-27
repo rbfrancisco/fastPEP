@@ -323,6 +323,9 @@
                     ? currentSelections[group.id] === medId
                     : currentSelections[group.id]?.includes(medId);
 
+                // Show hospital note if medication is given in hospital
+                const hospitalNote = med.inHospital ? ` <span class="hospital-note">${med.hospitalNote}</span>` : '';
+
                 html += `
                     <label class="treatment-option">
                         <input type="${inputType}"
@@ -330,7 +333,7 @@
                                value="${medId}"
                                data-group="${group.id}"
                                ${isChecked ? 'checked' : ''}>
-                        <span class="treatment-option-text">${med.name}</span>
+                        <span class="treatment-option-text">${med.name}${hospitalNote}</span>
                     </label>
                 `;
             });
@@ -407,22 +410,23 @@
             });
         }
 
-        if (selectedMeds.length === 0) {
-            elements.prescriptionContent.innerHTML = '<p class="placeholder-text">Nenhum medicamento selecionado</p>';
+        // Filter out medications that are given in hospital (not for home prescription)
+        const homeMeds = selectedMeds.filter(medId => {
+            const med = medications[medId];
+            return med && !med.inHospital;
+        });
+
+        if (homeMeds.length === 0) {
+            elements.prescriptionContent.innerHTML = '<p class="placeholder-text">Nenhum medicamento para prescrição domiciliar</p>';
             return;
         }
 
         let html = '';
-        selectedMeds.forEach((medId, index) => {
+        homeMeds.forEach((medId, index) => {
             const med = medications[medId];
             if (!med) return;
 
-            html += `
-                <div class="prescription-item">
-                    <div><span class="prescription-number">${index + 1}.</span> <span class="prescription-name">${med.name}</span></div>
-                    <div class="prescription-instruction">${med.instruction}</div>
-                </div>
-            `;
+            html += `<div class="prescription-item"><div><span class="prescription-number">${index + 1}.</span> <span class="prescription-name">${med.name}</span></div><div class="prescription-instruction">${med.instruction}</div></div>`;
         });
 
         elements.prescriptionContent.innerHTML = html;

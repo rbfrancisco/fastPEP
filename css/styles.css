@@ -254,6 +254,11 @@ body {
     line-height: 1.7;
 }
 
+/* Override pre-wrap for prescription (uses HTML structure) */
+#prescription-content {
+    white-space: normal;
+}
+
 .placeholder-text {
     color: var(--text-secondary);
     font-style: italic;
@@ -311,6 +316,12 @@ body {
 .treatment-option-text {
     font-size: 0.95rem;
     line-height: 1.4;
+}
+
+.hospital-note {
+    font-size: 0.8rem;
+    color: #b45309;
+    font-style: italic;
 }
 
 /* Prescription formatting */
