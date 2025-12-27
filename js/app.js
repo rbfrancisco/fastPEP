@@ -46,14 +46,15 @@
         elements.toast = document.getElementById('toast');
     }
 
-    // Load JSON data
+    // Load JSON data (with cache busting)
     async function loadData() {
         try {
+            const cacheBuster = `?v=${Date.now()}`;
             const [conditionsData, physicalExamData, medicationsData, classesData] = await Promise.all([
-                fetch('data/conditions.json').then(r => r.json()),
-                fetch('data/physical-exam.json').then(r => r.json()),
-                fetch('data/medications.json').then(r => r.json()),
-                fetch('data/medication-classes.json').then(r => r.json())
+                fetch('data/conditions.json' + cacheBuster).then(r => r.json()),
+                fetch('data/physical-exam.json' + cacheBuster).then(r => r.json()),
+                fetch('data/medications.json' + cacheBuster).then(r => r.json()),
+                fetch('data/medication-classes.json' + cacheBuster).then(r => r.json())
             ]);
 
             conditions = conditionsData;

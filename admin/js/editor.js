@@ -55,11 +55,12 @@ async function loadAllData() {
     document.querySelector('.header').appendChild(statusEl);
 
     try {
+        const cacheBuster = `?v=${Date.now()}`;
         const [medications, classes, physicalExam, conditions] = await Promise.all([
-            fetch('../data/medications.json').then(r => r.json()),
-            fetch('../data/medication-classes.json').then(r => r.json()),
-            fetch('../data/physical-exam.json').then(r => r.json()),
-            fetch('../data/conditions.json').then(r => r.json())
+            fetch('../data/medications.json' + cacheBuster).then(r => r.json()),
+            fetch('../data/medication-classes.json' + cacheBuster).then(r => r.json()),
+            fetch('../data/physical-exam.json' + cacheBuster).then(r => r.json()),
+            fetch('../data/conditions.json' + cacheBuster).then(r => r.json())
         ]);
 
         dataStore.medications = medications;
@@ -283,10 +284,21 @@ function clearForm(form) {
             document.getElementById('cond-id').value = '';
             document.getElementById('cond-name').value = '';
 
+            // Default addons: geral-bom, cv-normal, resp-normal
             document.getElementById('cond-addons-container').innerHTML = `
                 <div class="addon-row sortable-item">
                     <span class="drag-handle">⋮⋮</span>
-                    <input type="text" class="cond-addon" placeholder="ID do addon (ex: oroscopia-amigdalite)">
+                    <input type="text" class="cond-addon" value="geral-bom" placeholder="ID do addon">
+                    <button type="button" class="btn-remove" title="Remover">×</button>
+                </div>
+                <div class="addon-row sortable-item">
+                    <span class="drag-handle">⋮⋮</span>
+                    <input type="text" class="cond-addon" value="cv-normal" placeholder="ID do addon">
+                    <button type="button" class="btn-remove" title="Remover">×</button>
+                </div>
+                <div class="addon-row sortable-item">
+                    <span class="drag-handle">⋮⋮</span>
+                    <input type="text" class="cond-addon" value="resp-normal" placeholder="ID do addon">
                     <button type="button" class="btn-remove" title="Remover">×</button>
                 </div>`;
 
