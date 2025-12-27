@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastPEP - Editor de Dados</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>FastPEP Editor</h1>
+            <p class="subtitle">Gerador de JSON para adicionar novos dados</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="medication">Medicamento</button>
+            <button class="tab-btn" data-tab="medication-class">Classe de Med.</button>
+            <button class="tab-btn" data-tab="physical-exam">Exame Físico</button>
+            <button class="tab-btn" data-tab="condition">Condição</button>
+        </nav>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Medication Tab -->
+            <div id="medication-tab" class="tab-panel active">
+                <div class="form-section">
+                    <h2>Adicionar Medicamento</h2>
+                    <form id="medication-form">
+                        <div class="form-group">
+                            <label for="med-id">ID do Medicamento *</label>
+                            <input type="text" id="med-id" placeholder="ex: amoxicilina-500mg" required>
+                            <small>Use letras minúsculas, hífens e números. Sem espaços ou acentos.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="med-name">Nome de Exibição *</label>
+                            <input type="text" id="med-name" placeholder="ex: Amoxicilina 500mg" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="med-instruction">Instrução de Uso *</label>
+                            <textarea id="med-instruction" rows="3" placeholder="ex: Tomar 1 comprimido de 8 em 8 horas, por 10 dias" required></textarea>
+                            <small>Use {duration} para duração variável (ex: "por {duration} dias")</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="med-duration">Duração Padrão (opcional)</label>
+                            <input type="text" id="med-duration" placeholder="ex: 3">
+                            <small>Obrigatório se usar {duration} na instrução</small>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="med-in-hospital">
+                                Medicamento aplicado no hospital (não vai para prescrição)
+                            </label>
+                        </div>
+                        <div class="form-group hidden" id="hospital-note-group">
+                            <label for="med-hospital-note">Nota de Hospital</label>
+                            <input type="text" id="med-hospital-note" placeholder="ex: (Aplicado no PS - não entra na prescrição para casa)">
+                        </div>
+                        <button type="submit" class="btn-primary">Gerar JSON</button>
+                    </form>
+                </div>
+                <div class="output-section">
+                    <div class="output-header">
+                        <h3>JSON Gerado</h3>
+                        <button class="copy-btn" data-target="medication-output">Copiar</button>
+                    </div>
+                    <pre id="medication-output" class="json-output">Preencha o formulário acima para gerar o JSON</pre>
+                </div>
+            </div>
+
+            <!-- Medication Class Tab -->
+            <div id="medication-class-tab" class="tab-panel">
+                <div class="form-section">
+                    <h2>Adicionar Classe de Medicamento</h2>
+                    <form id="medication-class-form">
+                        <div class="form-group">
+                            <label for="class-id">ID da Classe *</label>
+                            <input type="text" id="class-id" placeholder="ex: aine" required>
+                            <small>Use letras minúsculas, sem espaços ou acentos.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="class-label">Nome de Exibição *</label>
+                            <input type="text" id="class-label" placeholder="ex: AINE" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Opções de Medicamentos *</label>
+                            <div id="class-options-container">
+                                <div class="class-option-row">
+                                    <input type="text" class="class-option" placeholder="ID do medicamento (ex: cetoprofeno-100mg)">
+                                    <button type="button" class="btn-remove" title="Remover">×</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-add" id="add-class-option">+ Adicionar Opção</button>
+                        </div>
+                        <button type="submit" class="btn-primary">Gerar JSON</button>
+                    </form>
+                </div>
+                <div class="output-section">
+                    <div class="output-header">
+                        <h3>JSON Gerado</h3>
+                        <button class="copy-btn" data-target="class-output">Copiar</button>
+                    </div>
+                    <pre id="class-output" class="json-output">Preencha o formulário acima para gerar o JSON</pre>
+                </div>
+            </div>
+
+            <!-- Physical Exam Tab -->
+            <div id="physical-exam-tab" class="tab-panel">
+                <div class="form-section">
+                    <h2>Adicionar Addon de Exame Físico</h2>
+                    <form id="physical-exam-form">
+                        <div class="form-group">
+                            <label for="exam-id">ID do Addon *</label>
+                            <input type="text" id="exam-id" placeholder="ex: oroscopia-amigdalite" required>
+                            <small>Use letras minúsculas e hífens.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam-text-male">Texto (Masculino) *</label>
+                            <textarea id="exam-text-male" rows="2" placeholder="ex: Oroscopia: hiperemia e hipertrofia de amígdalas, com exsudato purulento." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam-text-female">Texto (Feminino) *</label>
+                            <textarea id="exam-text-female" rows="2" placeholder="ex: Oroscopia: hiperemia e hipertrofia de amígdalas, com exsudato purulento." required></textarea>
+                            <small>Pode ser igual ao masculino se não houver variação de gênero.</small>
+                        </div>
+                        <button type="submit" class="btn-primary">Gerar JSON</button>
+                    </form>
+                </div>
+                <div class="output-section">
+                    <div class="output-header">
+                        <h3>JSON Gerado</h3>
+                        <button class="copy-btn" data-target="exam-output">Copiar</button>
+                    </div>
+                    <pre id="exam-output" class="json-output">Preencha o formulário acima para gerar o JSON</pre>
+                </div>
+            </div>
+
+            <!-- Condition Tab -->
+            <div id="condition-tab" class="tab-panel">
+                <div class="form-section">
+                    <h2>Adicionar Condição / Diagnóstico</h2>
+                    <form id="condition-form">
+                        <div class="form-group">
+                            <label for="cond-id">ID da Condição *</label>
+                            <input type="text" id="cond-id" placeholder="ex: faringoamigdalite-bacteriana" required>
+                            <small>Use letras minúsculas e hífens.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="cond-name">Nome de Exibição *</label>
+                            <input type="text" id="cond-name" placeholder="ex: Faringoamigdalite bacteriana" required>
+                        </div>
+
+                        <!-- Physical Exam Addons -->
+                        <div class="form-group">
+                            <label>Addons de Exame Físico</label>
+                            <div id="cond-addons-container">
+                                <div class="addon-row">
+                                    <input type="text" class="cond-addon" placeholder="ID do addon (ex: oroscopia-amigdalite)">
+                                    <button type="button" class="btn-remove" title="Remover">×</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-add" id="add-cond-addon">+ Adicionar Addon</button>
+                        </div>
+
+                        <!-- Conduct -->
+                        <div class="form-group">
+                            <label>Conduta</label>
+                            <div id="cond-conduct-container">
+                                <div class="conduct-row">
+                                    <input type="text" class="cond-conduct" placeholder="ex: Explico sobre a condição e esclareço dúvidas">
+                                    <button type="button" class="btn-remove" title="Remover">×</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-add" id="add-cond-conduct">+ Adicionar Conduta</button>
+                        </div>
+
+                        <!-- Prescription Groups -->
+                        <div class="form-group">
+                            <label>Grupos de Prescrição</label>
+                            <div id="prescription-groups-container"></div>
+                            <div class="btn-group">
+                                <button type="button" class="btn-add" id="add-radio-group">+ Grupo Radio (ex: Antibiótico)</button>
+                                <button type="button" class="btn-add" id="add-items-group">+ Grupo Items (ex: Sintomáticos)</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Gerar JSON</button>
+                    </form>
+                </div>
+                <div class="output-section">
+                    <div class="output-header">
+                        <h3>JSON Gerado</h3>
+                        <button class="copy-btn" data-target="condition-output">Copiar</button>
+                    </div>
+                    <pre id="condition-output" class="json-output">Preencha o formulário acima para gerar o JSON</pre>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <a href="../index.html">← Voltar para FastPEP</a>
+        </footer>
+    </div>
+
+    <!-- Templates for dynamic rows -->
+    <template id="radio-group-template">
+        <div class="prescription-group radio-group-item">
+            <div class="group-header">
+                <span class="group-type-badge">Radio</span>
+                <button type="button" class="btn-remove-group" title="Remover grupo">×</button>
+            </div>
+            <div class="form-group">
+                <label>ID do Grupo</label>
+                <input type="text" class="group-id" placeholder="ex: antibiotico">
+            </div>
+            <div class="form-group">
+                <label>Label do Grupo</label>
+                <input type="text" class="group-label" placeholder="ex: Antibiótico">
+            </div>
+            <div class="form-group">
+                <label>Opções (IDs de medicamentos)</label>
+                <div class="group-options-container">
+                    <div class="group-option-row">
+                        <input type="text" class="group-option" placeholder="ID do medicamento">
+                        <button type="button" class="btn-remove" title="Remover">×</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add add-group-option">+ Adicionar Opção</button>
+            </div>
+            <div class="form-group">
+                <label>Padrão (ID)</label>
+                <input type="text" class="group-default" placeholder="ID do medicamento padrão">
+            </div>
+        </div>
+    </template>
+
+    <template id="items-group-template">
+        <div class="prescription-group items-group-item">
+            <div class="group-header">
+                <span class="group-type-badge items">Items</span>
+                <button type="button" class="btn-remove-group" title="Remover grupo">×</button>
+            </div>
+            <div class="form-group">
+                <label>ID do Grupo</label>
+                <input type="text" class="group-id" placeholder="ex: sintomaticos">
+            </div>
+            <div class="form-group">
+                <label>Label do Grupo</label>
+                <input type="text" class="group-label" placeholder="ex: Sintomáticos">
+            </div>
+            <div class="form-group">
+                <label>Items</label>
+                <div class="group-items-container"></div>
+                <div class="btn-group">
+                    <button type="button" class="btn-add add-med-item">+ Medicamento</button>
+                    <button type="button" class="btn-add add-class-item">+ Classe</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="med-item-template">
+        <div class="item-row med-item">
+            <span class="item-type-badge">Med</span>
+            <input type="text" class="item-med-id" placeholder="ID do medicamento">
+            <label class="item-checked-label">
+                <input type="checkbox" class="item-checked" checked>
+                Marcado
+            </label>
+            <button type="button" class="btn-remove" title="Remover">×</button>
+        </div>
+    </template>
+
+    <template id="class-item-template">
+        <div class="item-row class-item">
+            <span class="item-type-badge class">Class</span>
+            <input type="text" class="item-class-id" placeholder="ID da classe">
+            <input type="text" class="item-default" placeholder="Padrão (ID med)">
+            <input type="text" class="item-duration" placeholder="Duração (opc)">
+            <label class="item-checked-label">
+                <input type="checkbox" class="item-checked" checked>
+                Marcado
+            </label>
+            <button type="button" class="btn-remove" title="Remover">×</button>
+        </div>
+    </template>
+
+    <script src="js/editor.js"></script>
+</body>
+</html>

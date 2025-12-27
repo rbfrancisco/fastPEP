@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastPEP - Prontuário Rápido</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>FastPEP</h1>
+            <p class="subtitle">Prontuário Eletrônico Rápido</p>
+        </header>
+
+        <main class="main">
+            <!-- Configuration Section -->
+            <section class="config-section">
+                <div class="config-group">
+                    <label class="config-label">Sexo:</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="gender" value="masculino"> Masculino
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="gender" value="feminino" checked> Feminino
+                        </label>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <label class="config-label" for="diagnosis-search">Diagnóstico:</label>
+                    <div class="search-container">
+                        <input
+                            type="text"
+                            id="diagnosis-search"
+                            class="search-input"
+                            placeholder="Digite para buscar..."
+                            autocomplete="off"
+                        >
+                        <div id="diagnosis-dropdown" class="dropdown hidden"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Physical Exam Section -->
+            <section class="output-section" id="physical-exam-section">
+                <div class="section-header">
+                    <h2>Exame Físico</h2>
+                    <button class="copy-btn" data-target="physical-exam-content" title="Copiar">
+                        <span class="copy-icon">📋</span>
+                        <span class="copy-text">Copiar</span>
+                    </button>
+                </div>
+                <div class="section-content" id="physical-exam-content">
+                    <p class="placeholder-text">Selecione um diagnóstico para ver o exame físico</p>
+                </div>
+            </section>
+
+            <!-- Treatment Options Section (only visible when there are options) -->
+            <section class="output-section hidden" id="treatment-options-section">
+                <div class="section-header">
+                    <h2>Opções de Tratamento</h2>
+                </div>
+                <div class="section-content" id="treatment-options-content">
+                </div>
+            </section>
+
+            <!-- Conduct Section -->
+            <section class="output-section" id="conduct-section">
+                <div class="section-header">
+                    <h2>Conduta</h2>
+                    <button class="copy-btn" data-target="conduct-content" title="Copiar">
+                        <span class="copy-icon">📋</span>
+                        <span class="copy-text">Copiar</span>
+                    </button>
+                </div>
+                <div class="section-content" id="conduct-content">
+                    <p class="placeholder-text">Selecione um diagnóstico para ver a conduta</p>
+                </div>
+            </section>
+
+            <!-- Prescription Section -->
+            <section class="output-section" id="prescription-section">
+                <div class="section-header">
+                    <h2>Prescrição</h2>
+                    <button class="copy-btn" data-target="prescription-content" title="Copiar">
+                        <span class="copy-icon">📋</span>
+                        <span class="copy-text">Copiar</span>
+                    </button>
+                </div>
+                <div class="section-content" id="prescription-content">
+                    <p class="placeholder-text">Selecione um diagnóstico para ver a prescrição</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>FastPEP - Ferramenta de apoio à documentação médica</p>
+        </footer>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast hidden">Copiado!</div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

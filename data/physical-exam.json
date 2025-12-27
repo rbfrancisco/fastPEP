@@ -1,0 +1,64 @@
+{
+  "base": {
+    "masculino": "Bom estado geral, corado, hidratado, anictérico, acianótico, eupneico em ar ambiente\nBRNF em 2T, sem sopros, TEC <3s, extremidades quentes e bem perfundidas\nMV+ bilateralmente, sem RA.",
+    "feminino": "Bom estado geral, corada, hidratada, anictérica, acianótica, eupneica em ar ambiente\nBRNF em 2T, sem sopros, TEC <3s, extremidades quentes e bem perfundidas\nMV+ bilateralmente, sem RA."
+  },
+  "addons": {
+    "abdome-normal": {
+      "label": "Abdome normal",
+      "text": "Abdome globoso, RHA+, indolor a palpação, sem massas palpáveis ou visceromegalias"
+    },
+    "mmii-sem-edema": {
+      "label": "MMII sem edema",
+      "text": "MMII sem edema"
+    },
+    "oroscopia-normal": {
+      "label": "Oroscopia normal",
+      "text": "Cavidade oral e orofaringe sem alterações."
+    },
+    "oroscopia-hiperemia": {
+      "label": "Oroscopia com hiperemia",
+      "text": "Orofaringe hiperemiada."
+    },
+    "oroscopia-amigdalite": {
+      "label": "Oroscopia com amigdalite",
+      "text": "Orofaringe hiperemiada, amígdalas edemaciadas e com presença de secreção purulenta."
+    },
+    "linfonodomegalia-cervical": {
+      "label": "Linfonodomegalia cervical",
+      "text": "Linfonodomegalia palpável em cadeias cervicais."
+    },
+    "otoscopia-normal": {
+      "label": "Otoscopia normal",
+      "text": "Região retroauricular sem abaulamentos, eritema ou dor a palpação.\nConduto auditivo pérvio, sem sinais flogísticos ou secreção.\nMembrana timpânica íntegra, translúcida. Sem evidência de abaulamento, hiperemia, perfuração ou supuração."
+    },
+    "otoscopia-oma": {
+      "label": "Otoscopia - Otite média",
+      "text": "Região retroauricular sem abaulamentos, eritema ou dor a palpação.\nConduto auditivo pérvio, sem sinais flogísticos ou secreção.\nMembrana timpânica com hiperemia e abaulamento."
+    },
+    "otoscopia-oea": {
+      "label": "Otoscopia - Otite externa",
+      "text": "Região retroauricular sem abaulamentos, eritema ou dor a palpação.\nConduto auditivo com hiperemia, edema e dor à manipulação do tragus.\nMembrana timpânica de difícil visualização devido edema do conduto."
+    },
+    "neurologico-normal": {
+      "label": "Neurológico normal",
+      "text": "Paciente vígil, orientado em tempo e espaço, colaborativo.\nPIFR, campimetria por confrontação sem alterações, assume as 9 posições do olhar.\nMímica facial preservada e simétrica. Sensibilidade dolorosa facial preservada. Língua, úvula e palato sem desvios.\nForça grau V nos 4 membros. Reflexos profundos normais. Sensibilidade dolorosa preservada nos 4 membros."
+    },
+    "giordano-negativo": {
+      "label": "Giordano negativo",
+      "text": "Giordano negativo bilateralmente."
+    },
+    "giordano-positivo": {
+      "label": "Giordano positivo",
+      "text": "Giordano positivo à direita/esquerda."
+    },
+    "pele-herpes-zoster": {
+      "label": "Lesões herpéticas",
+      "text": "Vesículas agrupadas sobre base eritematosa, em distribuição dermatomérica."
+    },
+    "articulacao-gota": {
+      "label": "Artrite (Gota)",
+      "text": "Articulação com sinais flogísticos: edema, calor, rubor e dor à palpação."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "aine": {
+    "label": "AINE",
+    "options": ["cetoprofeno-100mg", "ibuprofeno-600mg", "naproxeno-500mg"]
+  },
+  "analgesico": {
+    "label": "Analgésico/Antitérmico",
+    "options": ["dipirona-500mg", "dipirona-1g", "paracetamol-500mg"]
+  },
+  "antiemetico": {
+    "label": "Antiemético",
+    "options": ["ondansetrona-4mg", "ondansetrona-8mg", "metoclopramida-10mg", "dramin-b6"]
+  }
+}
