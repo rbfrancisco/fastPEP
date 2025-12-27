@@ -1,4 +1,4 @@
-// FastPEP Editor - JSON Generator with Autocomplete
+// FastPEP Editor - JSON Generator with Edit Mode and Reordering
 
 // ============ DATA STORE ============
 const dataStore = {
@@ -24,15 +24,26 @@ const suggestions = {
     groupLabels: []
 };
 
+// Current edit mode state
+const editState = {
+    medication: { mode: 'new', currentId: null },
+    class: { mode: 'new', currentId: null },
+    exam: { mode: 'new', currentId: null },
+    condition: { mode: 'new', currentId: null }
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadAllData();
     initTabs();
+    initModeSelectors();
     initMedicationForm();
     initMedicationClassForm();
     initPhysicalExamForm();
     initConditionForm();
     initCopyButtons();
+    initClearButtons();
     initGlobalAutocomplete();
+    initDragAndDrop();
 });
 
 // ============ DATA LOADING ============
@@ -57,13 +68,15 @@ async function loadAllData() {
         dataStore.loaded = true;
 
         buildSuggestions();
+        populateSelectors();
+
         statusEl.textContent = `✓ Dados carregados (${suggestions.medicationIds.length} meds, ${suggestions.classIds.length} classes, ${suggestions.addonIds.length} addons, ${suggestions.conditionIds.length} condições)`;
         statusEl.classList.add('loaded');
 
         setTimeout(() => statusEl.remove(), 3000);
     } catch (err) {
         console.error('Erro ao carregar dados:', err);
-        statusEl.textContent = '⚠ Erro ao carregar dados. Autocomplete indisponível.';
+        statusEl.textContent = '⚠ Erro ao carregar dados. Modo edição indisponível.';
         statusEl.classList.add('error');
     }
 }
@@ -88,10 +101,7 @@ function buildSuggestions() {
     if (dataStore.physicalExam.addons) {
         for (const [id, addon] of Object.entries(dataStore.physicalExam.addons)) {
             suggestions.addonIds.push(id);
-            if (addon.male) suggestions.addonTexts.push(addon.male);
-            if (addon.female && addon.female !== addon.male) {
-                suggestions.addonTexts.push(addon.female);
-            }
+            if (addon.text) suggestions.addonTexts.push(addon.text);
         }
     }
 
@@ -99,7 +109,6 @@ function buildSuggestions() {
     for (const [id, cond] of Object.entries(dataStore.conditions)) {
         suggestions.conditionIds.push(id);
 
-        // Collect conduct texts
         if (cond.conduct) {
             cond.conduct.forEach(text => {
                 if (!suggestions.conductTexts.includes(text)) {
@@ -108,7 +117,6 @@ function buildSuggestions() {
             });
         }
 
-        // Collect group IDs and labels
         if (cond.prescriptionGroups) {
             cond.prescriptionGroups.forEach(group => {
                 if (group.id && !suggestions.groupIds.includes(group.id)) {
@@ -122,18 +130,432 @@ function buildSuggestions() {
     }
 }
 
+function populateSelectors() {
+    // Medications
+    const medSelect = document.getElementById('medication-select');
+    Object.entries(dataStore.medications)
+        .sort((a, b) => a[1].name.localeCompare(b[1].name))
+        .forEach(([id, med]) => {
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = `${med.name} (${id})`;
+            medSelect.appendChild(option);
+        });
+
+    // Classes
+    const classSelect = document.getElementById('class-select');
+    Object.entries(dataStore.medicationClasses)
+        .sort((a, b) => a[1].label.localeCompare(b[1].label))
+        .forEach(([id, cls]) => {
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = `${cls.label} (${id})`;
+            classSelect.appendChild(option);
+        });
+
+    // Addons
+    const examSelect = document.getElementById('exam-select');
+    if (dataStore.physicalExam.addons) {
+        Object.entries(dataStore.physicalExam.addons)
+            .sort((a, b) => (a[1].label || a[0]).localeCompare(b[1].label || b[0]))
+            .forEach(([id, addon]) => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = `${addon.label || id} (${id})`;
+                examSelect.appendChild(option);
+            });
+    }
+
+    // Conditions
+    const condSelect = document.getElementById('condition-select');
+    Object.entries(dataStore.conditions)
+        .sort((a, b) => a[1].name.localeCompare(b[1].name))
+        .forEach(([id, cond]) => {
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = `${cond.name} (${id})`;
+            condSelect.appendChild(option);
+        });
+}
+
+// ============ MODE SELECTORS ============
+function initModeSelectors() {
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const form = btn.dataset.form;
+            const mode = btn.dataset.mode;
+
+            // Update button states
+            document.querySelectorAll(`.mode-btn[data-form="${form}"]`).forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update edit state
+            editState[form].mode = mode;
+
+            // Show/hide entry selector
+            const selector = document.getElementById(`${form}-entry-selector`);
+            if (selector) {
+                selector.classList.toggle('hidden', mode === 'new');
+            }
+
+            // Update title
+            const titleMap = {
+                medication: { new: 'Novo Medicamento', edit: 'Editar Medicamento' },
+                class: { new: 'Nova Classe de Medicamento', edit: 'Editar Classe de Medicamento' },
+                exam: { new: 'Novo Addon de Exame Físico', edit: 'Editar Addon de Exame Físico' },
+                condition: { new: 'Nova Condição / Diagnóstico', edit: 'Editar Condição / Diagnóstico' }
+            };
+            const titleEl = document.getElementById(`${form}-form-title`);
+            if (titleEl && titleMap[form]) {
+                titleEl.textContent = titleMap[form][mode];
+            }
+
+            // Clear form when switching modes
+            clearForm(form);
+        });
+    });
+
+    // Entry selectors
+    document.getElementById('medication-select').addEventListener('change', (e) => loadMedication(e.target.value));
+    document.getElementById('class-select').addEventListener('change', (e) => loadMedicationClass(e.target.value));
+    document.getElementById('exam-select').addEventListener('change', (e) => loadPhysicalExam(e.target.value));
+    document.getElementById('condition-select').addEventListener('change', (e) => loadCondition(e.target.value));
+}
+
+// ============ CLEAR BUTTONS ============
+function initClearButtons() {
+    document.querySelectorAll('.btn-clear').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const form = btn.dataset.form;
+            clearForm(form);
+
+            // Reset selector
+            const select = document.getElementById(`${form}-select`) ||
+                          document.getElementById(`${form === 'medication' ? 'medication' : form}-select`);
+            if (select) select.value = '';
+        });
+    });
+}
+
+function clearForm(form) {
+    editState[form].currentId = null;
+
+    switch (form) {
+        case 'medication':
+            document.getElementById('med-id').value = '';
+            document.getElementById('med-id').dataset.manualEdit = '';
+            document.getElementById('med-name').value = '';
+            document.getElementById('med-instruction').value = '';
+            document.getElementById('med-duration').value = '';
+            document.getElementById('med-in-hospital').checked = false;
+            document.getElementById('med-hospital-note').value = '';
+            document.getElementById('hospital-note-group').classList.add('hidden');
+            document.getElementById('medication-output').textContent = 'Preencha o formulário acima para gerar o JSON';
+            break;
+
+        case 'class':
+            document.getElementById('class-id').value = '';
+            document.getElementById('class-label').value = '';
+            const classContainer = document.getElementById('class-options-container');
+            classContainer.innerHTML = `
+                <div class="class-option-row sortable-item">
+                    <span class="drag-handle">⋮⋮</span>
+                    <input type="text" class="class-option" placeholder="ID do medicamento (ex: cetoprofeno-100mg)">
+                    <button type="button" class="btn-remove" title="Remover">×</button>
+                </div>`;
+            document.getElementById('class-output').textContent = 'Preencha o formulário acima para gerar o JSON';
+            break;
+
+        case 'exam':
+            document.getElementById('exam-id').value = '';
+            document.getElementById('exam-label').value = '';
+            document.getElementById('exam-text').value = '';
+            document.getElementById('exam-output').textContent = 'Preencha o formulário acima para gerar o JSON';
+            break;
+
+        case 'condition':
+            document.getElementById('cond-id').value = '';
+            document.getElementById('cond-name').value = '';
+
+            document.getElementById('cond-addons-container').innerHTML = `
+                <div class="addon-row sortable-item">
+                    <span class="drag-handle">⋮⋮</span>
+                    <input type="text" class="cond-addon" placeholder="ID do addon (ex: oroscopia-amigdalite)">
+                    <button type="button" class="btn-remove" title="Remover">×</button>
+                </div>`;
+
+            document.getElementById('cond-conduct-container').innerHTML = `
+                <div class="conduct-row sortable-item">
+                    <span class="drag-handle">⋮⋮</span>
+                    <input type="text" class="cond-conduct" placeholder="ex: Explico sobre a condição e esclareço dúvidas">
+                    <button type="button" class="btn-remove" title="Remover">×</button>
+                </div>`;
+
+            document.getElementById('prescription-groups-container').innerHTML = '';
+            document.getElementById('condition-output').textContent = 'Preencha o formulário acima para gerar o JSON';
+            break;
+    }
+}
+
+// ============ LOAD EXISTING DATA ============
+function loadMedication(id) {
+    if (!id) return;
+
+    const med = dataStore.medications[id];
+    if (!med) return;
+
+    editState.medication.currentId = id;
+
+    document.getElementById('med-id').value = id;
+    document.getElementById('med-id').dataset.manualEdit = 'true';
+    document.getElementById('med-name').value = med.name;
+    document.getElementById('med-instruction').value = med.instruction;
+    document.getElementById('med-duration').value = med.defaultDuration || '';
+    document.getElementById('med-in-hospital').checked = !!med.inHospital;
+    document.getElementById('med-hospital-note').value = med.hospitalNote || '';
+    document.getElementById('hospital-note-group').classList.toggle('hidden', !med.inHospital);
+}
+
+function loadMedicationClass(id) {
+    if (!id) return;
+
+    const cls = dataStore.medicationClasses[id];
+    if (!cls) return;
+
+    editState.class.currentId = id;
+
+    document.getElementById('class-id').value = id;
+    document.getElementById('class-label').value = cls.label;
+
+    const container = document.getElementById('class-options-container');
+    container.innerHTML = '';
+
+    cls.options.forEach(optId => {
+        const row = document.createElement('div');
+        row.className = 'class-option-row sortable-item';
+        row.innerHTML = `
+            <span class="drag-handle">⋮⋮</span>
+            <input type="text" class="class-option" value="${optId}" placeholder="ID do medicamento">
+            <button type="button" class="btn-remove" title="Remover">×</button>
+        `;
+        container.appendChild(row);
+    });
+
+    initDragAndDrop();
+}
+
+function loadPhysicalExam(id) {
+    if (!id) return;
+
+    const addon = dataStore.physicalExam.addons?.[id];
+    if (!addon) return;
+
+    editState.exam.currentId = id;
+
+    document.getElementById('exam-id').value = id;
+    document.getElementById('exam-label').value = addon.label || '';
+    document.getElementById('exam-text').value = addon.text || '';
+}
+
+function loadCondition(id) {
+    if (!id) return;
+
+    const cond = dataStore.conditions[id];
+    if (!cond) return;
+
+    editState.condition.currentId = id;
+
+    document.getElementById('cond-id').value = id;
+    document.getElementById('cond-name').value = cond.name;
+
+    // Load addons
+    const addonsContainer = document.getElementById('cond-addons-container');
+    addonsContainer.innerHTML = '';
+    (cond.physicalExamAddons || []).forEach(addonId => {
+        const row = document.createElement('div');
+        row.className = 'addon-row sortable-item';
+        row.innerHTML = `
+            <span class="drag-handle">⋮⋮</span>
+            <input type="text" class="cond-addon" value="${addonId}" placeholder="ID do addon">
+            <button type="button" class="btn-remove" title="Remover">×</button>
+        `;
+        addonsContainer.appendChild(row);
+    });
+    if (addonsContainer.children.length === 0) {
+        addonsContainer.innerHTML = `
+            <div class="addon-row sortable-item">
+                <span class="drag-handle">⋮⋮</span>
+                <input type="text" class="cond-addon" placeholder="ID do addon">
+                <button type="button" class="btn-remove" title="Remover">×</button>
+            </div>`;
+    }
+
+    // Load conduct
+    const conductContainer = document.getElementById('cond-conduct-container');
+    conductContainer.innerHTML = '';
+    (cond.conduct || []).forEach(text => {
+        const row = document.createElement('div');
+        row.className = 'conduct-row sortable-item';
+        row.innerHTML = `
+            <span class="drag-handle">⋮⋮</span>
+            <input type="text" class="cond-conduct" value="${escapeHtml(text)}" placeholder="Conduta">
+            <button type="button" class="btn-remove" title="Remover">×</button>
+        `;
+        conductContainer.appendChild(row);
+    });
+    if (conductContainer.children.length === 0) {
+        conductContainer.innerHTML = `
+            <div class="conduct-row sortable-item">
+                <span class="drag-handle">⋮⋮</span>
+                <input type="text" class="cond-conduct" placeholder="Conduta">
+                <button type="button" class="btn-remove" title="Remover">×</button>
+            </div>`;
+    }
+
+    // Load prescription groups
+    const groupsContainer = document.getElementById('prescription-groups-container');
+    groupsContainer.innerHTML = '';
+    (cond.prescriptionGroups || []).forEach(group => {
+        if (group.type === 'radio') {
+            loadRadioGroup(groupsContainer, group);
+        } else {
+            loadItemsGroup(groupsContainer, group);
+        }
+    });
+
+    initDragAndDrop();
+}
+
+function loadRadioGroup(container, group) {
+    const template = document.getElementById('radio-group-template');
+    const clone = template.content.cloneNode(true);
+    const groupEl = clone.querySelector('.prescription-group');
+
+    groupEl.querySelector('.group-id').value = group.id || '';
+    groupEl.querySelector('.group-label').value = group.label || '';
+    groupEl.querySelector('.group-default').value = group.default || '';
+
+    const optionsContainer = groupEl.querySelector('.group-options-container');
+    optionsContainer.innerHTML = '';
+    (group.options || []).forEach(optId => {
+        const row = document.createElement('div');
+        row.className = 'group-option-row sortable-item';
+        row.innerHTML = `
+            <span class="drag-handle">⋮⋮</span>
+            <input type="text" class="group-option" value="${optId}" placeholder="ID do medicamento">
+            <button type="button" class="btn-remove" title="Remover">×</button>
+        `;
+        optionsContainer.appendChild(row);
+    });
+
+    container.appendChild(clone);
+}
+
+function loadItemsGroup(container, group) {
+    const template = document.getElementById('items-group-template');
+    const clone = template.content.cloneNode(true);
+    const groupEl = clone.querySelector('.prescription-group');
+
+    groupEl.querySelector('.group-id').value = group.id || '';
+    groupEl.querySelector('.group-label').value = group.label || '';
+
+    const itemsContainer = groupEl.querySelector('.group-items-container');
+    (group.items || []).forEach(item => {
+        if (item.type === 'med') {
+            const medTemplate = document.getElementById('med-item-template');
+            const medClone = medTemplate.content.cloneNode(true);
+            const row = medClone.querySelector('.item-row');
+            row.querySelector('.item-med-id').value = item.medId || '';
+            row.querySelector('.item-checked').checked = item.checked !== false;
+            itemsContainer.appendChild(medClone);
+        } else if (item.type === 'class') {
+            const classTemplate = document.getElementById('class-item-template');
+            const classClone = classTemplate.content.cloneNode(true);
+            const row = classClone.querySelector('.item-row');
+            row.querySelector('.item-class-id').value = item.classId || '';
+            row.querySelector('.item-default').value = item.default || '';
+            row.querySelector('.item-duration').value = item.duration || '';
+            row.querySelector('.item-checked').checked = item.checked !== false;
+            itemsContainer.appendChild(classClone);
+        }
+    });
+
+    container.appendChild(clone);
+}
+
+// ============ DRAG AND DROP ============
+function initDragAndDrop() {
+    document.querySelectorAll('.sortable-container').forEach(container => {
+        setupSortable(container);
+    });
+}
+
+function setupSortable(container) {
+    let draggedItem = null;
+
+    container.querySelectorAll('.sortable-item').forEach(item => {
+        const handle = item.querySelector('.drag-handle');
+        if (!handle) return;
+
+        handle.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            draggedItem = item;
+            item.classList.add('dragging');
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+    });
+
+    function onMouseMove(e) {
+        if (!draggedItem) return;
+
+        const siblings = [...container.querySelectorAll('.sortable-item:not(.dragging)')];
+        const nextSibling = siblings.find(sibling => {
+            const rect = sibling.getBoundingClientRect();
+            return e.clientY < rect.top + rect.height / 2;
+        });
+
+        siblings.forEach(s => s.classList.remove('drag-over'));
+        if (nextSibling) {
+            nextSibling.classList.add('drag-over');
+        }
+    }
+
+    function onMouseUp(e) {
+        if (!draggedItem) return;
+
+        const siblings = [...container.querySelectorAll('.sortable-item:not(.dragging)')];
+        const nextSibling = siblings.find(sibling => {
+            const rect = sibling.getBoundingClientRect();
+            return e.clientY < rect.top + rect.height / 2;
+        });
+
+        siblings.forEach(s => s.classList.remove('drag-over'));
+        draggedItem.classList.remove('dragging');
+
+        if (nextSibling) {
+            container.insertBefore(draggedItem, nextSibling);
+        } else {
+            container.appendChild(draggedItem);
+        }
+
+        draggedItem = null;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+    }
+}
+
 // ============ AUTOCOMPLETE SYSTEM ============
 let activeAutocomplete = null;
 
 function initGlobalAutocomplete() {
-    // Close autocomplete when clicking outside
     document.addEventListener('click', (e) => {
         if (activeAutocomplete && !e.target.closest('.autocomplete-wrapper')) {
             closeAutocomplete();
         }
     });
 
-    // Close on escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && activeAutocomplete) {
             closeAutocomplete();
@@ -142,6 +564,8 @@ function initGlobalAutocomplete() {
 }
 
 function attachAutocomplete(input, suggestionList, options = {}) {
+    if (input.closest('.autocomplete-wrapper')) return;
+
     const wrapper = document.createElement('div');
     wrapper.className = 'autocomplete-wrapper';
     input.parentNode.insertBefore(wrapper, input);
@@ -271,7 +695,7 @@ function initCopyButtons() {
             const outputEl = document.getElementById(targetId);
             const text = outputEl.textContent;
 
-            if (text.includes('Preencha') || text.includes('Erro')) {
+            if (text.includes('Preencha') || text.includes('Erro:')) {
                 return;
             }
 
@@ -296,7 +720,6 @@ function initMedicationForm() {
     const inHospitalCheckbox = document.getElementById('med-in-hospital');
     const hospitalNoteGroup = document.getElementById('hospital-note-group');
 
-    // Attach autocomplete to instruction field
     const instructionInput = document.getElementById('med-instruction');
     attachAutocomplete(instructionInput, suggestions.medicationInstructions);
 
@@ -304,7 +727,6 @@ function initMedicationForm() {
         hospitalNoteGroup.classList.toggle('hidden', !inHospitalCheckbox.checked);
     });
 
-    // Auto-generate ID from name
     const nameInput = document.getElementById('med-name');
     const idInput = document.getElementById('med-id');
     nameInput.addEventListener('input', () => {
@@ -325,7 +747,7 @@ function initMedicationForm() {
 function generateId(name) {
     return name
         .toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove accents
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
 }
@@ -343,12 +765,6 @@ function generateMedicationJSON() {
         return;
     }
 
-    // Check for duplicate ID
-    if (dataStore.medications[id]) {
-        document.getElementById('medication-output').textContent = `⚠ Aviso: ID "${id}" já existe! O JSON abaixo irá substituir o existente.\n\n"${id}": ${JSON.stringify({ name, instruction, ...(duration && { defaultDuration: duration }), ...(inHospital && { inHospital: true }), ...(hospitalNote && { hospitalNote }) }, null, 2)}`;
-        return;
-    }
-
     const medication = { name, instruction };
     if (duration) medication.defaultDuration = duration;
     if (inHospital) {
@@ -356,7 +772,10 @@ function generateMedicationJSON() {
         if (hospitalNote) medication.hospitalNote = hospitalNote;
     }
 
-    const output = `"${id}": ${JSON.stringify(medication, null, 2)}`;
+    const isEdit = editState.medication.mode === 'edit' && editState.medication.currentId === id;
+    const prefix = isEdit ? '// SUBSTITUIR entrada existente:\n' : '';
+
+    const output = `${prefix}"${id}": ${JSON.stringify(medication, null, 2)}`;
     document.getElementById('medication-output').textContent = output;
 }
 
@@ -366,14 +785,9 @@ function initMedicationClassForm() {
     const container = document.getElementById('class-options-container');
     const addBtn = document.getElementById('add-class-option');
 
-    // Attach autocomplete to first option
-    const firstInput = container.querySelector('.class-option');
-    if (firstInput) {
-        attachAutocomplete(firstInput, suggestions.medicationIds);
-    }
-
     addBtn.addEventListener('click', () => {
-        addDynamicRowWithAutocomplete(container, 'class-option', 'class-option-row', suggestions.medicationIds);
+        addDynamicRowWithAutocomplete(container, 'class-option', 'class-option-row', suggestions.medicationIds, true);
+        initDragAndDrop();
     });
 
     container.addEventListener('click', (e) => {
@@ -391,22 +805,19 @@ function initMedicationClassForm() {
 function generateMedicationClassJSON() {
     const id = document.getElementById('class-id').value.trim();
     const label = document.getElementById('class-label').value.trim();
-    const options = getInputValues('.class-option');
+    const options = getInputValuesOrdered('#class-options-container .class-option');
 
     if (!id || !label || options.length === 0) {
         document.getElementById('class-output').textContent = 'Erro: Preencha todos os campos obrigatórios';
         return;
     }
 
-    // Validate medication IDs exist
-    const invalidMeds = options.filter(opt => !dataStore.medications[opt]);
-    if (invalidMeds.length > 0) {
-        document.getElementById('class-output').textContent = `⚠ Aviso: Os seguintes IDs de medicamento não existem: ${invalidMeds.join(', ')}\n\nCertifique-se de adicionar esses medicamentos primeiro.\n\n"${id}": ${JSON.stringify({ label, options }, null, 2)}`;
-        return;
-    }
-
     const classData = { label, options };
-    const output = `"${id}": ${JSON.stringify(classData, null, 2)}`;
+
+    const isEdit = editState.class.mode === 'edit' && editState.class.currentId === id;
+    const prefix = isEdit ? '// SUBSTITUIR entrada existente:\n' : '';
+
+    const output = `${prefix}"${id}": ${JSON.stringify(classData, null, 2)}`;
     document.getElementById('class-output').textContent = output;
 }
 
@@ -414,19 +825,8 @@ function generateMedicationClassJSON() {
 function initPhysicalExamForm() {
     const form = document.getElementById('physical-exam-form');
 
-    // Attach autocomplete to text fields
-    const maleInput = document.getElementById('exam-text-male');
-    const femaleInput = document.getElementById('exam-text-female');
-
-    attachAutocomplete(maleInput, suggestions.addonTexts);
-    attachAutocomplete(femaleInput, suggestions.addonTexts);
-
-    // Auto-copy male to female if empty
-    maleInput.addEventListener('blur', () => {
-        if (!femaleInput.value.trim() && maleInput.value.trim()) {
-            femaleInput.value = maleInput.value;
-        }
-    });
+    const textInput = document.getElementById('exam-text');
+    attachAutocomplete(textInput, suggestions.addonTexts);
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -436,22 +836,20 @@ function initPhysicalExamForm() {
 
 function generatePhysicalExamJSON() {
     const id = document.getElementById('exam-id').value.trim();
-    const textMale = document.getElementById('exam-text-male').value.trim();
-    const textFemale = document.getElementById('exam-text-female').value.trim();
+    const label = document.getElementById('exam-label').value.trim();
+    const text = document.getElementById('exam-text').value.trim();
 
-    if (!id || !textMale || !textFemale) {
+    if (!id || !label || !text) {
         document.getElementById('exam-output').textContent = 'Erro: Preencha todos os campos obrigatórios (*)';
         return;
     }
 
-    // Check for duplicate
-    if (dataStore.physicalExam.addons && dataStore.physicalExam.addons[id]) {
-        document.getElementById('exam-output').textContent = `⚠ Aviso: ID "${id}" já existe em addons!\n\n"${id}": ${JSON.stringify({ male: textMale, female: textFemale }, null, 2)}`;
-        return;
-    }
+    const examData = { label, text };
 
-    const examData = { male: textMale, female: textFemale };
-    const output = `"${id}": ${JSON.stringify(examData, null, 2)}`;
+    const isEdit = editState.exam.mode === 'edit' && editState.exam.currentId === id;
+    const prefix = isEdit ? '// SUBSTITUIR entrada existente:\n' : '';
+
+    const output = `${prefix}"${id}": ${JSON.stringify(examData, null, 2)}`;
     document.getElementById('exam-output').textContent = output;
 }
 
@@ -459,15 +857,11 @@ function generatePhysicalExamJSON() {
 function initConditionForm() {
     const form = document.getElementById('condition-form');
 
-    // Addons with autocomplete
+    // Addons
     const addonsContainer = document.getElementById('cond-addons-container');
-    const firstAddonInput = addonsContainer.querySelector('.cond-addon');
-    if (firstAddonInput) {
-        attachAutocomplete(firstAddonInput, suggestions.addonIds);
-    }
-
     document.getElementById('add-cond-addon').addEventListener('click', () => {
-        addDynamicRowWithAutocomplete(addonsContainer, 'cond-addon', 'addon-row', suggestions.addonIds);
+        addDynamicRowWithAutocomplete(addonsContainer, 'cond-addon', 'addon-row', suggestions.addonIds, true);
+        initDragAndDrop();
     });
     addonsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-remove')) {
@@ -475,15 +869,11 @@ function initConditionForm() {
         }
     });
 
-    // Conduct with autocomplete
+    // Conduct
     const conductContainer = document.getElementById('cond-conduct-container');
-    const firstConductInput = conductContainer.querySelector('.cond-conduct');
-    if (firstConductInput) {
-        attachAutocomplete(firstConductInput, suggestions.conductTexts);
-    }
-
     document.getElementById('add-cond-conduct').addEventListener('click', () => {
-        addDynamicRowWithAutocomplete(conductContainer, 'cond-conduct', 'conduct-row', suggestions.conductTexts);
+        addDynamicRowWithAutocomplete(conductContainer, 'cond-conduct', 'conduct-row', suggestions.conductTexts, true);
+        initDragAndDrop();
     });
     conductContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-remove')) {
@@ -496,17 +886,18 @@ function initConditionForm() {
 
     document.getElementById('add-radio-group').addEventListener('click', () => {
         addPrescriptionGroup(groupsContainer, 'radio');
+        initDragAndDrop();
     });
 
     document.getElementById('add-items-group').addEventListener('click', () => {
         addPrescriptionGroup(groupsContainer, 'items');
+        initDragAndDrop();
     });
 
     groupsContainer.addEventListener('click', (e) => {
         handleGroupContainerClick(e, groupsContainer);
     });
 
-    // Setup autocomplete for dynamically added inputs in groups
     groupsContainer.addEventListener('focusin', (e) => {
         const target = e.target;
         if (target.classList.contains('group-option') && !target.dataset.autocompleteAttached) {
@@ -525,7 +916,6 @@ function initConditionForm() {
             attachAutocomplete(target, suggestions.classIds);
             target.dataset.autocompleteAttached = 'true';
         } else if (target.classList.contains('item-default') && !target.dataset.autocompleteAttached) {
-            // For default medication in class items, suggest meds from that class
             const classIdInput = target.closest('.item-row').querySelector('.item-class-id');
             const classId = classIdInput?.value;
             const classData = dataStore.medicationClasses[classId];
@@ -533,7 +923,6 @@ function initConditionForm() {
             attachAutocomplete(target, classMeds);
             target.dataset.autocompleteAttached = 'true';
         } else if (target.classList.contains('group-default') && !target.dataset.autocompleteAttached) {
-            // Suggest from the group's options
             const groupEl = target.closest('.prescription-group');
             const optionInputs = groupEl.querySelectorAll('.group-option');
             const groupMeds = Array.from(optionInputs).map(i => i.value.trim()).filter(Boolean);
@@ -573,8 +962,9 @@ function handleGroupContainerClick(e, groupsContainer) {
     if (target.classList.contains('add-group-option')) {
         const optionsContainer = target.closest('.form-group').querySelector('.group-options-container');
         const row = document.createElement('div');
-        row.className = 'group-option-row';
+        row.className = 'group-option-row sortable-item';
         row.innerHTML = `
+            <span class="drag-handle">⋮⋮</span>
             <input type="text" class="group-option" placeholder="ID do medicamento">
             <button type="button" class="btn-remove" title="Remover">×</button>
         `;
@@ -582,6 +972,7 @@ function handleGroupContainerClick(e, groupsContainer) {
         const input = row.querySelector('input');
         attachAutocomplete(input, suggestions.medicationIds);
         input.focus();
+        initDragAndDrop();
         return;
     }
 
@@ -590,6 +981,7 @@ function handleGroupContainerClick(e, groupsContainer) {
         const template = document.getElementById('med-item-template');
         const clone = template.content.cloneNode(true);
         itemsContainer.appendChild(clone);
+        initDragAndDrop();
         return;
     }
 
@@ -598,6 +990,7 @@ function handleGroupContainerClick(e, groupsContainer) {
         const template = document.getElementById('class-item-template');
         const clone = template.content.cloneNode(true);
         itemsContainer.appendChild(clone);
+        initDragAndDrop();
         return;
     }
 }
@@ -605,25 +998,13 @@ function handleGroupContainerClick(e, groupsContainer) {
 function generateConditionJSON() {
     const id = document.getElementById('cond-id').value.trim();
     const name = document.getElementById('cond-name').value.trim();
-    const addons = getInputValues('.cond-addon');
-    const conduct = getInputValues('.cond-conduct');
+    const addons = getInputValuesOrdered('#cond-addons-container .cond-addon');
+    const conduct = getInputValuesOrdered('#cond-conduct-container .cond-conduct');
     const prescriptionGroups = getPrescriptionGroups();
 
     if (!id || !name) {
         document.getElementById('condition-output').textContent = 'Erro: Preencha ID e Nome da condição';
         return;
-    }
-
-    // Validate addons exist
-    const invalidAddons = addons.filter(a => !dataStore.physicalExam.addons || !dataStore.physicalExam.addons[a]);
-    let warnings = [];
-    if (invalidAddons.length > 0) {
-        warnings.push(`Addons não encontrados: ${invalidAddons.join(', ')}`);
-    }
-
-    // Check for duplicate
-    if (dataStore.conditions[id]) {
-        warnings.push(`ID "${id}" já existe e será substituído`);
     }
 
     const condition = {
@@ -633,11 +1014,10 @@ function generateConditionJSON() {
         prescriptionGroups
     };
 
-    let output = '';
-    if (warnings.length > 0) {
-        output = `⚠ Avisos:\n${warnings.map(w => '  • ' + w).join('\n')}\n\n`;
-    }
-    output += `"${id}": ${JSON.stringify(condition, null, 2)}`;
+    const isEdit = editState.condition.mode === 'edit' && editState.condition.currentId === id;
+    const prefix = isEdit ? '// SUBSTITUIR entrada existente:\n' : '';
+
+    const output = `${prefix}"${id}": ${JSON.stringify(condition, null, 2)}`;
     document.getElementById('condition-output').textContent = output;
 }
 
@@ -697,21 +1077,11 @@ function getPrescriptionGroups() {
 }
 
 // ============ UTILITY FUNCTIONS ============
-function addDynamicRow(container, inputClass, rowClass = 'class-option-row') {
+function addDynamicRowWithAutocomplete(container, inputClass, rowClass, suggestionList, withHandle = false) {
     const row = document.createElement('div');
-    row.className = rowClass;
+    row.className = `${rowClass} sortable-item`;
     row.innerHTML = `
-        <input type="text" class="${inputClass}" placeholder="">
-        <button type="button" class="btn-remove" title="Remover">×</button>
-    `;
-    container.appendChild(row);
-    row.querySelector('input').focus();
-}
-
-function addDynamicRowWithAutocomplete(container, inputClass, rowClass, suggestionList) {
-    const row = document.createElement('div');
-    row.className = rowClass;
-    row.innerHTML = `
+        ${withHandle ? '<span class="drag-handle">⋮⋮</span>' : ''}
         <input type="text" class="${inputClass}" placeholder="">
         <button type="button" class="btn-remove" title="Remover">×</button>
     `;
@@ -725,10 +1095,14 @@ function removeRow(btn, container, rowClass) {
     const rows = container.querySelectorAll(`.${rowClass}`);
     if (rows.length > 1) {
         btn.closest(`.${rowClass}`).remove();
+    } else {
+        // Clear the input instead of removing
+        const input = btn.closest(`.${rowClass}`).querySelector('input');
+        if (input) input.value = '';
     }
 }
 
-function getInputValues(selector) {
+function getInputValuesOrdered(selector) {
     const values = [];
     document.querySelectorAll(selector).forEach(input => {
         const val = input.value.trim();

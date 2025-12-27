@@ -395,12 +395,53 @@ Used for symptomatic medications where multiple can be selected.
 
 ### Using the Admin Editor
 
+The Admin Editor (`admin/index.html`) provides a visual interface for creating and editing JSON entries without manually editing files.
+
+#### Features
+
+- **Create New Entries**: Fill in form fields to generate JSON for new medications, classes, addons, or conditions
+- **Edit Existing Entries**: Load and modify any existing entry from the database
+- **Autocomplete**: All fields suggest existing values to ensure consistency and speed up data entry
+- **Drag-and-Drop Reordering**: Reorder prescription items, medication options, addons, and conduct items by dragging
+- **Validation**: Warns about missing references or duplicate IDs
+
+#### Creating New Entries
+
 1. Open `admin/index.html` in your browser
 2. Select the appropriate tab (Medication, Class, Physical Exam, or Condition)
-3. Fill in the form fields - autocomplete will suggest existing values
-4. Click "Gerar JSON" to generate the JSON code
-5. Click "Copiar" to copy to clipboard
-6. Paste into the appropriate data file
+3. Ensure "Novo" mode is selected (default)
+4. Fill in the form fields - autocomplete will suggest existing values
+5. For lists (medications in a class, items in a prescription group), use the drag handles (⋮⋮) to reorder
+6. Click "Gerar JSON" to generate the JSON code
+7. Click "Copiar" to copy to clipboard
+8. Paste into the appropriate data file, replacing or adding the entry
+
+#### Editing Existing Entries
+
+1. Open `admin/index.html` in your browser
+2. Select the appropriate tab
+3. Click "Editar Existente" to switch to edit mode
+4. Select an entry from the dropdown - all fields will be populated
+5. Make your changes (edit text, reorder items, add/remove elements)
+6. Click "Gerar JSON" to generate the updated JSON
+7. Click "Copiar" to copy to clipboard
+8. In the data file, find and replace the existing entry with the new JSON
+
+#### Reordering Items
+
+The order of items in the editor directly affects the output order. To reorder:
+
+1. Locate the drag handle (⋮⋮) on the left side of any reorderable item
+2. Click and hold the drag handle
+3. Drag the item to its new position
+4. Release to drop
+
+Reorderable elements include:
+- Medication options in a class
+- Physical exam addons in a condition
+- Conduct items in a condition
+- Prescription groups (entire groups can be reordered)
+- Items within a prescription group
 
 ---
 
