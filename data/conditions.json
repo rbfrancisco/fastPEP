@@ -153,7 +153,7 @@
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "class", "classId": "aine-5d", "default": "cetoprofeno-100mg-5d", "checked": true },
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true, "duration": "5" },
           { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
         ]
       }
@@ -180,7 +180,7 @@
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "class", "classId": "aine-5d", "default": "cetoprofeno-100mg-5d", "checked": true },
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true, "duration": "5" },
           { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
         ]
       }
@@ -244,8 +244,8 @@
         "id": "tratamento",
         "label": "Tratamento",
         "items": [
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
           { "type": "med", "medId": "ciclobenzaprina-5mg", "checked": true },
+          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
           { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
         ]
       }
@@ -273,9 +273,9 @@
         "id": "analgesia",
         "label": "Analgesia",
         "items": [
+          { "type": "med", "medId": "tramadol-50mg", "checked": false },
           { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true },
-          { "type": "med", "medId": "tramadol-50mg", "checked": false }
+          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
         ]
       }
     ]
@@ -296,8 +296,8 @@
         "label": "Tratamento",
         "items": [
           { "type": "med", "medId": "colchicina-05mg", "checked": true },
-          { "type": "class", "classId": "aine", "default": "naproxeno-500mg", "checked": true },
           { "type": "med", "medId": "omeprazol-20mg", "checked": true },
+          { "type": "class", "classId": "aine", "default": "naproxeno-500mg", "checked": true },
           { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
         ]
       }

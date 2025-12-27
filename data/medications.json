@@ -95,19 +95,18 @@
   },
   "cetoprofeno-100mg": {
     "name": "Cetoprofeno 100mg",
-    "instruction": "Tomar 1cp de 12 em 12 horas, por 3 dias"
-  },
-  "cetoprofeno-100mg-5d": {
-    "name": "Cetoprofeno 100mg",
-    "instruction": "Tomar 1cp de 12 em 12 horas, por 5 dias"
+    "instruction": "Tomar 1cp de 12 em 12 horas, por {duration} dias",
+    "defaultDuration": "3"
   },
   "ibuprofeno-600mg": {
     "name": "Ibuprofeno 600mg",
-    "instruction": "Tomar 1cp de 8 em 8 horas, por 3 dias"
+    "instruction": "Tomar 1cp de 8 em 8 horas, por {duration} dias",
+    "defaultDuration": "3"
   },
   "naproxeno-500mg": {
     "name": "Naproxeno 500mg",
-    "instruction": "Tomar 1cp de 12 em 12 horas, por 3 dias"
+    "instruction": "Tomar 1cp de 12 em 12 horas, por {duration} dias",
+    "defaultDuration": "3"
   },
   "prednisolona-40mg": {
     "name": "Prednisolona 40mg",
