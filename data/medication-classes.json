@@ -10,5 +10,13 @@
   "antiemetico": {
     "label": "Antiemético",
     "options": ["ondansetrona-4mg", "ondansetrona-8mg", "metoclopramida-10mg", "dramin-b6"]
-  }
+  },
+  "laxantes": {
+  "label": "Laxantes",
+  "options": [
+    "macrogol-3350",
+    "lactulose-xarope"
+  ]
+}
+  
 }
