@@ -156,15 +156,24 @@ Medication classes group interchangeable drugs, allowing users to pick one from 
 
 ### 3. Physical Exam (`data/physical-exam.json`)
 
-Contains the base physical exam and condition-specific addons.
+Contains the physical exam organized by body systems and condition-specific addons.
 
 #### Schema
 
 ```json
 {
-  "base": {
-    "masculino": "Base exam text for male patients...",
-    "feminino": "Base exam text for female patients..."
+  "systems": {
+    "system-id": {
+      "label": "Display Label",
+      "base": "Default text for this system (or object with masculino/feminino)",
+      "default": true,
+      "addons": {
+        "addon-id": {
+          "label": "Variant label",
+          "base": "Alternative text (or object with masculino/feminino)"
+        }
+      }
+    }
   },
   "addons": {
     "addon-id": {
@@ -175,41 +184,71 @@ Contains the base physical exam and condition-specific addons.
 }
 ```
 
-#### Base Exam
+#### Systems
 
-The `base` object contains the standard physical exam text that applies to all patients:
-- `masculino`: Text with masculine adjectives (corado, hidratado, etc.)
-- `feminino`: Text with feminine adjectives (corada, hidratada, etc.)
-
-Use `\n` for line breaks within the text.
-
-#### Addons
-
-Addons are additional findings appended based on the diagnosis.
+The exam is organized by body systems (Estado Geral, Cardiovascular, Respiratório). Each system has:
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `label` | Yes | Short description shown in the checkbox list |
+| `label` | Yes | Display name for the system |
+| `base` | Yes | Default text. Can be a string or object with `masculino`/`feminino` keys |
+| `default` | No | If `true`, this system is included by default for all conditions |
+| `addons` | No | Alternative variants for this system (e.g., "taquicárdico" for cardiovascular) |
+
+**System Addons:** These are radio button options that replace the default text for that system. For example, selecting "Taquicárdico" in Cardiovascular replaces the normal cardiovascular exam text.
+
+#### Standalone Addons
+
+Standalone addons are additional findings appended based on the diagnosis (e.g., oroscopia, otoscopia).
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `label` | Yes | Short description shown in the UI |
 | `text` | Yes | Full text appended to the physical exam |
 
-**Note:** If the addon text doesn't vary by gender, the same text is used for both. The addon structure uses a simple `text` field (not `male`/`female`) since most findings are gender-neutral.
+#### Gender Handling
+
+- For gendered text (Estado Geral), use an object: `{ "masculino": "...", "feminino": "..." }`
+- For gender-neutral text (most systems), use a simple string
 
 #### Example
 
 ```json
 {
-  "base": {
-    "masculino": "Bom estado geral, corado, hidratado...",
-    "feminino": "Bom estado geral, corada, hidratada..."
+  "systems": {
+    "geral": {
+      "label": "Estado Geral",
+      "base": {
+        "masculino": "Bom estado geral, corado, hidratado...",
+        "feminino": "Bom estado geral, corada, hidratada..."
+      },
+      "default": true,
+      "addons": {
+        "regular-estado-geral": {
+          "label": "Regular estado geral",
+          "base": {
+            "masculino": "Regular estado geral, corado...",
+            "feminino": "Regular estado geral, corada..."
+          }
+        }
+      }
+    },
+    "cardiovascular": {
+      "label": "Cardiovascular",
+      "base": "BRNF em 2T, sem sopros, TEC <3s, extremidades quentes.",
+      "default": true,
+      "addons": {
+        "taquicardico": {
+          "label": "Taquicárdico",
+          "base": "Taquicárdico, BRNF em 2T, sem sopros..."
+        }
+      }
+    }
   },
   "addons": {
     "oroscopia-amigdalite": {
       "label": "Oroscopia com amigdalite",
-      "text": "Orofaringe hiperemiada, amígdalas edemaciadas e com presença de secreção purulenta."
-    },
-    "giordano-positivo": {
-      "label": "Giordano positivo",
-      "text": "Giordano positivo à direita/esquerda."
+      "text": "Orofaringe hiperemiada, amígdalas edemaciadas..."
     }
   }
 }

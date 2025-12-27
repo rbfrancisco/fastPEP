@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initClearButtons();
     initGlobalAutocomplete();
     initDragAndDrop();
+    attachInitialAutocompletes();
 });
 
 // ============ DATA LOADING ============
@@ -295,6 +296,9 @@ function clearForm(form) {
             document.getElementById('condition-output').textContent = 'Preencha o formulário acima para gerar o JSON';
             break;
     }
+
+    // Re-attach autocomplete to newly created initial inputs
+    attachInitialAutocompletes();
 }
 
 // ============ LOAD EXISTING DATA ============
@@ -667,6 +671,33 @@ function closeAutocomplete() {
         activeAutocomplete.dropdown.classList.remove('visible');
         activeAutocomplete = null;
     }
+}
+
+// Attach autocomplete to all initial/existing inputs
+function attachInitialAutocompletes() {
+    // Medication class options
+    document.querySelectorAll('#class-options-container .class-option').forEach(input => {
+        if (!input.dataset.autocompleteAttached) {
+            attachAutocomplete(input, suggestions.medicationIds);
+            input.dataset.autocompleteAttached = 'true';
+        }
+    });
+
+    // Condition addons
+    document.querySelectorAll('#cond-addons-container .cond-addon').forEach(input => {
+        if (!input.dataset.autocompleteAttached) {
+            attachAutocomplete(input, suggestions.addonIds);
+            input.dataset.autocompleteAttached = 'true';
+        }
+    });
+
+    // Condition conduct
+    document.querySelectorAll('#cond-conduct-container .cond-conduct').forEach(input => {
+        if (!input.dataset.autocompleteAttached) {
+            attachAutocomplete(input, suggestions.conductTexts);
+            input.dataset.autocompleteAttached = 'true';
+        }
+    });
 }
 
 // ============ TAB NAVIGATION ============

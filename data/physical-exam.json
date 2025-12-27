@@ -1,16 +1,72 @@
 {
-  "base": {
-    "masculino": "Bom estado geral, corado, hidratado, anictérico, acianótico, eupneico em ar ambiente\nBRNF em 2T, sem sopros, TEC <3s, extremidades quentes e bem perfundidas\nMV+ bilateralmente, sem RA.",
-    "feminino": "Bom estado geral, corada, hidratada, anictérica, acianótica, eupneica em ar ambiente\nBRNF em 2T, sem sopros, TEC <3s, extremidades quentes e bem perfundidas\nMV+ bilateralmente, sem RA."
+  "systems": {
+    "geral": {
+      "label": "Estado Geral",
+      "base": {
+        "masculino": "Bom estado geral, corado, hidratado, anictérico, acianótico, eupneico em ar ambiente.",
+        "feminino": "Bom estado geral, corada, hidratada, anictérica, acianótica, eupneica em ar ambiente."
+      },
+      "default": true,
+      "addons": {
+        "regular-estado-geral": {
+          "label": "Regular estado geral",
+          "base": {
+            "masculino": "Regular estado geral, corado, hidratado, anictérico, acianótico, eupneico em ar ambiente.",
+            "feminino": "Regular estado geral, corada, hidratada, anictérica, acianótica, eupneica em ar ambiente."
+          }
+        },
+        "mau-estado-geral": {
+          "label": "Mau estado geral",
+          "base": {
+            "masculino": "Mau estado geral, hipocorado, desidratado, anictérico, acianótico, taquipneico em ar ambiente.",
+            "feminino": "Mau estado geral, hipocorada, desidratada, anictérica, acianótica, taquipneica em ar ambiente."
+          }
+        }
+      }
+    },
+    "cardiovascular": {
+      "label": "Cardiovascular",
+      "base": "BRNF em 2T, sem sopros, TEC <3s, extremidades quentes e bem perfundidas.",
+      "default": true,
+      "addons": {
+        "taquicardico": {
+          "label": "Taquicárdico",
+          "base": "Taquicárdico, BRNF em 2T, sem sopros, TEC <3s, extremidades quentes e bem perfundidas."
+        },
+        "tec-aumentado": {
+          "label": "TEC aumentado",
+          "base": "BRNF em 2T, sem sopros, TEC >3s, extremidades frias."
+        }
+      }
+    },
+    "respiratorio": {
+      "label": "Respiratório",
+      "base": "MV+ bilateralmente, sem RA.",
+      "default": true,
+      "addons": {
+        "mv-reduzido": {
+          "label": "MV reduzido",
+          "base": "MV reduzido bilateralmente, sem RA."
+        },
+        "sibilos": {
+          "label": "Sibilos",
+          "base": "MV+ bilateralmente, com sibilos difusos."
+        },
+        "estertores-crepitantes": {
+          "label": "Estertores crepitantes",
+          "base": "MV+ bilateralmente, com estertores crepitantes em bases."
+        }
+      }
+    }
   },
   "addons": {
     "abdome-normal": {
       "label": "Abdome normal",
-      "text": "Abdome globoso, RHA+, indolor a palpação, sem massas palpáveis ou visceromegalias"
+      "text": "Abdome globoso, RHA+, indolor a palpação, sem massas palpáveis ou visceromegalias."
     },
     "mmii-sem-edema": {
       "label": "MMII sem edema",
-      "text": "MMII sem edema"
+      "text": "MMII sem edema."
     },
     "oroscopia-normal": {
       "label": "Oroscopia normal",

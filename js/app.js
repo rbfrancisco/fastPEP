@@ -12,6 +12,7 @@
     let currentGender = 'feminino';
     let currentCondition = null;
     let currentSelections = {};
+    let currentSystemSelections = {}; // For physical exam system addons
 
     // DOM Elements
     const elements = {
@@ -19,6 +20,8 @@
         searchInput: null,
         dropdown: null,
         physicalExamContent: null,
+        physicalExamOptionsSection: null,
+        physicalExamOptionsContent: null,
         treatmentOptionsSection: null,
         treatmentOptionsContent: null,
         conductContent: null,
@@ -39,6 +42,8 @@
         elements.searchInput = document.getElementById('diagnosis-search');
         elements.dropdown = document.getElementById('diagnosis-dropdown');
         elements.physicalExamContent = document.getElementById('physical-exam-content');
+        elements.physicalExamOptionsSection = document.getElementById('physical-exam-options-section');
+        elements.physicalExamOptionsContent = document.getElementById('physical-exam-options-content');
         elements.treatmentOptionsSection = document.getElementById('treatment-options-section');
         elements.treatmentOptionsContent = document.getElementById('treatment-options-content');
         elements.conductContent = document.getElementById('conduct-content');
@@ -104,11 +109,11 @@
     }
 
     function handleSearchFocus() {
-        if (elements.searchInput.value.trim() === '') {
-            showAllConditions();
-        } else {
-            handleSearchInput({ target: elements.searchInput });
+        // If input has value (diagnosis selected), clear it for new search
+        if (elements.searchInput.value.trim() !== '') {
+            elements.searchInput.value = '';
         }
+        showAllConditions();
     }
 
     function handleSearchKeydown(e) {
@@ -215,8 +220,22 @@
         const condition = conditions[conditionId];
         elements.searchInput.value = condition.name;
         hideDropdown();
+        initializeSystemSelections();
         initializeSelections(condition);
         renderAll();
+    }
+
+    // Initialize physical exam system selections (default: base for all systems)
+    function initializeSystemSelections() {
+        currentSystemSelections = {};
+        if (!physicalExam.systems) return;
+
+        Object.keys(physicalExam.systems).forEach(systemId => {
+            const system = physicalExam.systems[systemId];
+            if (system.default) {
+                currentSystemSelections[systemId] = 'base'; // 'base' means the default base text
+            }
+        });
     }
 
     // Initialize selections with defaults (including duration)
@@ -259,27 +278,122 @@
     }
 
     function renderAll() {
+        renderPhysicalExamOptions();
         renderPhysicalExam();
         renderTreatmentOptions();
         renderConduct();
         renderPrescription();
     }
 
+    // Render physical exam options (system variant selectors)
+    function renderPhysicalExamOptions() {
+        if (!currentCondition || !physicalExam.systems) {
+            elements.physicalExamOptionsSection.classList.add('hidden');
+            return;
+        }
+
+        // Check if any system has addons
+        const hasOptions = Object.values(physicalExam.systems).some(system =>
+            system.addons && Object.keys(system.addons).length > 0
+        );
+
+        if (!hasOptions) {
+            elements.physicalExamOptionsSection.classList.add('hidden');
+            return;
+        }
+
+        elements.physicalExamOptionsSection.classList.remove('hidden');
+        let html = '';
+
+        Object.entries(physicalExam.systems).forEach(([systemId, system]) => {
+            if (!system.addons || Object.keys(system.addons).length === 0) return;
+
+            const currentSelection = currentSystemSelections[systemId] || 'base';
+
+            html += `<div class="treatment-group">`;
+            html += `<span class="treatment-group-label">${system.label}:</span>`;
+            html += `<div class="treatment-options">`;
+
+            // Base option (default normal exam)
+            const baseLabel = system.label === 'Estado Geral' ? 'Bom estado geral' : 'Normal';
+            html += `<label class="treatment-option">
+                <input type="radio" name="system-${systemId}" value="base" data-system="${systemId}" ${currentSelection === 'base' ? 'checked' : ''}>
+                <span class="treatment-option-text">${baseLabel}</span>
+            </label>`;
+
+            // Addon options (variants)
+            Object.entries(system.addons).forEach(([addonId, addon]) => {
+                html += `<label class="treatment-option">
+                    <input type="radio" name="system-${systemId}" value="${addonId}" data-system="${systemId}" ${currentSelection === addonId ? 'checked' : ''}>
+                    <span class="treatment-option-text">${addon.label}</span>
+                </label>`;
+            });
+
+            html += `</div></div>`;
+        });
+
+        elements.physicalExamOptionsContent.innerHTML = html;
+
+        // Add event listeners
+        elements.physicalExamOptionsContent.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.addEventListener('change', handleSystemChange);
+        });
+    }
+
+    function handleSystemChange(e) {
+        const systemId = e.target.dataset.system;
+        const value = e.target.value;
+        currentSystemSelections[systemId] = value;
+        renderPhysicalExam();
+    }
+
     function renderPhysicalExam() {
         if (!currentCondition) return;
         const condition = conditions[currentCondition];
-        let text = physicalExam.base[currentGender];
+        let textParts = [];
 
-        if (condition.physicalExamAddons && condition.physicalExamAddons.length > 0) {
-            const addons = condition.physicalExamAddons
-                .map(addonId => physicalExam.addons[addonId]?.text)
-                .filter(Boolean)
-                .join('\n');
-            if (addons) {
-                text += '\n' + addons;
-            }
+        // Build text from systems
+        if (physicalExam.systems) {
+            Object.entries(physicalExam.systems).forEach(([systemId, system]) => {
+                if (!system.default && !currentSystemSelections[systemId]) return;
+
+                const selection = currentSystemSelections[systemId] || 'base';
+
+                if (selection === 'base') {
+                    // Use base text
+                    if (typeof system.base === 'object') {
+                        textParts.push(system.base[currentGender]);
+                    } else {
+                        textParts.push(system.base);
+                    }
+                } else {
+                    // Use addon text
+                    const addon = system.addons?.[selection];
+                    if (addon) {
+                        if (typeof addon.base === 'object') {
+                            textParts.push(addon.base[currentGender]);
+                        } else {
+                            textParts.push(addon.base);
+                        }
+                    }
+                }
+            });
+        } else if (physicalExam.base) {
+            // Backward compatibility: old structure with single base
+            textParts.push(physicalExam.base[currentGender]);
         }
-        elements.physicalExamContent.textContent = text;
+
+        // Add condition-specific addons
+        if (condition.physicalExamAddons && condition.physicalExamAddons.length > 0) {
+            condition.physicalExamAddons.forEach(addonId => {
+                const addon = physicalExam.addons?.[addonId];
+                if (addon?.text) {
+                    textParts.push(addon.text);
+                }
+            });
+        }
+
+        elements.physicalExamContent.textContent = textParts.join('\n');
     }
 
     // Render treatment options - reordered: simple meds first, then classes
