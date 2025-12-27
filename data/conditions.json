@@ -1,0 +1,281 @@
+{
+  "ivas": {
+    "name": "IVAS (Resfriado comum)",
+    "physicalExamAddons": ["oroscopia-hiperemia"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento medidas de suporte: hidratação, repouso, lavagem nasal",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "type": "checkbox",
+        "options": ["lavagem-nasal", "xarope-44e", "dipirona-500mg"],
+        "default": ["lavagem-nasal", "xarope-44e", "dipirona-500mg"]
+      }
+    ]
+  },
+  "faringoamigdalite-bacteriana": {
+    "name": "Faringoamigdalite bacteriana",
+    "physicalExamAddons": ["oroscopia-amigdalite", "linfonodomegalia-cervical"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro",
+      "Atesto 2 dias"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": ["amoxicilina-500mg", "penicilina-benzatina", "azitromicina-500mg"],
+        "default": "amoxicilina-500mg"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "type": "checkbox",
+        "options": ["flurbiprofeno-pastilha", "cetoprofeno-100mg", "dipirona-500mg"],
+        "default": ["flurbiprofeno-pastilha", "cetoprofeno-100mg", "dipirona-500mg"]
+      }
+    ]
+  },
+  "rinossinusite-bacteriana": {
+    "name": "Rinossinusite bacteriana",
+    "physicalExamAddons": ["oroscopia-hiperemia"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia",
+      "Oriento lavagem nasal frequente",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": ["amoxicilina-clavulanato-875mg", "azitromicina-500mg", "levofloxacino-750mg"],
+        "default": "amoxicilina-clavulanato-875mg"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "type": "checkbox",
+        "options": ["lavagem-nasal", "xarope-44e", "cetoprofeno-100mg", "dipirona-500mg"],
+        "default": ["lavagem-nasal", "xarope-44e", "cetoprofeno-100mg", "dipirona-500mg"]
+      }
+    ]
+  },
+  "geca": {
+    "name": "GECA (Gastroenterocolite aguda)",
+    "physicalExamAddons": ["abdome-normal"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento hidratação vigorosa e dieta leve",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "type": "checkbox",
+        "options": ["sais-reidratacao", "floratil-200mg", "racecadotrila-100mg", "ondansetrona-4mg", "dipirona-500mg"],
+        "default": ["sais-reidratacao", "floratil-200mg", "racecadotrila-100mg", "ondansetrona-4mg", "dipirona-500mg"]
+      }
+    ]
+  },
+  "itu-nao-complicada": {
+    "name": "ITU não complicada",
+    "physicalExamAddons": ["abdome-normal", "giordano-negativo"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia",
+      "Oriento hidratação abundante",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": ["fosfomicina-3g", "nitrofurantoina-100mg", "cefalexina-500mg", "cefuroxima-250mg", "sulfametoxazol-trimetoprima"],
+        "default": "fosfomicina-3g"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "type": "checkbox",
+        "options": ["fenazopiridina-200mg", "dipirona-500mg"],
+        "default": ["fenazopiridina-200mg", "dipirona-500mg"]
+      }
+    ]
+  },
+  "pielonefrite-ambulatorial": {
+    "name": "Pielonefrite (tratamento ambulatorial)",
+    "physicalExamAddons": ["abdome-normal", "giordano-positivo"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia",
+      "Oriento hidratação abundante",
+      "Prescrevo sintomáticos para casa",
+      "Oriento retorno em 48-72h para reavaliação",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": ["amoxicilina-clavulanato-875mg", "ciprofloxacino-500mg", "levofloxacino-750mg"],
+        "default": "amoxicilina-clavulanato-875mg"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "type": "checkbox",
+        "options": ["cetoprofeno-100mg-5d", "dipirona-1g"],
+        "default": ["cetoprofeno-100mg-5d", "dipirona-1g"]
+      }
+    ]
+  },
+  "otite-media-aguda": {
+    "name": "Otite média aguda",
+    "physicalExamAddons": ["otoscopia-oma"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": ["amoxicilina-500mg-8h", "amoxicilina-clavulanato-875mg-10d"],
+        "default": "amoxicilina-500mg-8h"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "type": "checkbox",
+        "options": ["cetoprofeno-100mg-5d", "dipirona-1g"],
+        "default": ["cetoprofeno-100mg-5d", "dipirona-1g"]
+      }
+    ]
+  },
+  "otite-externa-aguda": {
+    "name": "Otite externa aguda",
+    "physicalExamAddons": ["otoscopia-oea"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo tratamento tópico",
+      "Oriento manter orelha seca",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "type": "checkbox",
+        "options": ["ciprofloxacino-hidrocortisona-otologico", "cetoprofeno-100mg", "dipirona-1g"],
+        "default": ["ciprofloxacino-hidrocortisona-otologico", "cetoprofeno-100mg", "dipirona-1g"]
+      }
+    ]
+  },
+  "enxaqueca": {
+    "name": "Enxaqueca",
+    "physicalExamAddons": ["neurologico-normal"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo medicação abortiva para crises",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro",
+      "Encaminho para acompanhamento ambulatorial"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "type": "checkbox",
+        "options": ["naratriptano-25mg", "cetoprofeno-100mg", "dipirona-1g"],
+        "default": ["naratriptano-25mg", "cetoprofeno-100mg", "dipirona-1g"]
+      }
+    ]
+  },
+  "dor-muscular": {
+    "name": "Dor muscular / Lombalgia",
+    "physicalExamAddons": [],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento repouso relativo e aplicação de calor local",
+      "Prescrevo anti-inflamatório e relaxante muscular",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "type": "checkbox",
+        "options": ["cetoprofeno-100mg", "ciclobenzaprina-5mg", "dipirona-1g"],
+        "default": ["cetoprofeno-100mg", "ciclobenzaprina-5mg", "dipirona-1g"]
+      }
+    ]
+  },
+  "herpes-zoster": {
+    "name": "Herpes zoster",
+    "physicalExamAddons": ["pele-herpes-zoster"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antiviral",
+      "Prescrevo analgesia",
+      "Oriento cuidados com as lesões",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antiviral",
+        "label": "Antiviral",
+        "type": "radio",
+        "options": ["aciclovir-400mg", "valaciclovir-500mg"],
+        "default": "valaciclovir-500mg"
+      },
+      {
+        "id": "analgesia",
+        "label": "Analgesia",
+        "type": "checkbox",
+        "options": ["cetoprofeno-100mg", "dipirona-1g", "tramadol-50mg"],
+        "default": ["cetoprofeno-100mg", "dipirona-1g"]
+      }
+    ]
+  },
+  "crise-gota": {
+    "name": "Crise de Gota",
+    "physicalExamAddons": ["articulacao-gota"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo tratamento para crise",
+      "Oriento repouso da articulação",
+      "Oriento dieta com restrição de purinas",
+      "Encaminho para acompanhamento ambulatorial"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "type": "checkbox",
+        "options": ["colchicina-05mg", "naproxeno-500mg", "omeprazol-20mg", "dipirona-1g"],
+        "default": ["colchicina-05mg", "naproxeno-500mg", "omeprazol-20mg", "dipirona-1g"]
+      }
+    ]
+  }
+}

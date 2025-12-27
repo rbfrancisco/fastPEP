@@ -1,0 +1,499 @@
+// FastPEP - Main Application
+(function() {
+    'use strict';
+
+    // Data storage
+    let conditions = {};
+    let physicalExam = {};
+    let medications = {};
+
+    // Current state
+    let currentGender = 'feminino';
+    let currentCondition = null;
+    let currentSelections = {};
+
+    // DOM Elements
+    const elements = {
+        genderRadios: null,
+        searchInput: null,
+        dropdown: null,
+        physicalExamContent: null,
+        treatmentOptionsSection: null,
+        treatmentOptionsContent: null,
+        conductContent: null,
+        prescriptionContent: null,
+        toast: null
+    };
+
+    // Initialize application
+    async function init() {
+        cacheElements();
+        await loadData();
+        setupEventListeners();
+    }
+
+    // Cache DOM elements
+    function cacheElements() {
+        elements.genderRadios = document.querySelectorAll('input[name="gender"]');
+        elements.searchInput = document.getElementById('diagnosis-search');
+        elements.dropdown = document.getElementById('diagnosis-dropdown');
+        elements.physicalExamContent = document.getElementById('physical-exam-content');
+        elements.treatmentOptionsSection = document.getElementById('treatment-options-section');
+        elements.treatmentOptionsContent = document.getElementById('treatment-options-content');
+        elements.conductContent = document.getElementById('conduct-content');
+        elements.prescriptionContent = document.getElementById('prescription-content');
+        elements.toast = document.getElementById('toast');
+    }
+
+    // Load JSON data
+    async function loadData() {
+        try {
+            const [conditionsData, physicalExamData, medicationsData] = await Promise.all([
+                fetch('data/conditions.json').then(r => r.json()),
+                fetch('data/physical-exam.json').then(r => r.json()),
+                fetch('data/medications.json').then(r => r.json())
+            ]);
+
+            conditions = conditionsData;
+            physicalExam = physicalExamData;
+            medications = medicationsData;
+        } catch (error) {
+            console.error('Erro ao carregar dados:', error);
+        }
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+        // Gender selection
+        elements.genderRadios.forEach(radio => {
+            radio.addEventListener('change', handleGenderChange);
+        });
+
+        // Search input
+        elements.searchInput.addEventListener('input', handleSearchInput);
+        elements.searchInput.addEventListener('focus', handleSearchFocus);
+        elements.searchInput.addEventListener('keydown', handleSearchKeydown);
+
+        // Click outside to close dropdown
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                hideDropdown();
+            }
+        });
+
+        // Copy buttons
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', handleCopy);
+        });
+    }
+
+    // Handle gender change
+    function handleGenderChange(e) {
+        currentGender = e.target.value;
+        if (currentCondition) {
+            renderAll();
+        }
+    }
+
+    // Handle search input
+    function handleSearchInput(e) {
+        const query = e.target.value.toLowerCase().trim();
+
+        if (query.length === 0) {
+            showAllConditions();
+            return;
+        }
+
+        const filtered = filterConditions(query);
+        renderDropdown(filtered, query);
+    }
+
+    // Handle search focus
+    function handleSearchFocus() {
+        if (elements.searchInput.value.trim() === '') {
+            showAllConditions();
+        } else {
+            handleSearchInput({ target: elements.searchInput });
+        }
+    }
+
+    // Handle keyboard navigation
+    function handleSearchKeydown(e) {
+        const items = elements.dropdown.querySelectorAll('.dropdown-item');
+        const activeItem = elements.dropdown.querySelector('.dropdown-item.active');
+        let activeIndex = Array.from(items).indexOf(activeItem);
+
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                if (activeIndex < items.length - 1) {
+                    if (activeItem) activeItem.classList.remove('active');
+                    items[activeIndex + 1].classList.add('active');
+                    items[activeIndex + 1].scrollIntoView({ block: 'nearest' });
+                } else if (activeIndex === -1 && items.length > 0) {
+                    items[0].classList.add('active');
+                }
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                if (activeIndex > 0) {
+                    if (activeItem) activeItem.classList.remove('active');
+                    items[activeIndex - 1].classList.add('active');
+                    items[activeIndex - 1].scrollIntoView({ block: 'nearest' });
+                }
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (activeItem) {
+                    selectCondition(activeItem.dataset.id);
+                }
+                break;
+            case 'Escape':
+                hideDropdown();
+                elements.searchInput.blur();
+                break;
+        }
+    }
+
+    // Show all conditions in dropdown
+    function showAllConditions() {
+        const sorted = getSortedConditions();
+        renderDropdown(sorted, '');
+    }
+
+    // Get conditions sorted alphabetically
+    function getSortedConditions() {
+        return Object.entries(conditions)
+            .map(([id, data]) => ({ id, name: data.name }))
+            .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+    }
+
+    // Filter conditions by query (fuzzy search - matches any word)
+    function filterConditions(query) {
+        const queryWords = query.split(/\s+/).filter(w => w.length > 0);
+
+        return getSortedConditions().filter(({ name }) => {
+            const nameLower = name.toLowerCase();
+            // All query words must be found somewhere in the name
+            return queryWords.every(word => nameLower.includes(word));
+        });
+    }
+
+    // Render dropdown
+    function renderDropdown(items, query) {
+        if (items.length === 0) {
+            elements.dropdown.innerHTML = '<div class="dropdown-item">Nenhum diagnóstico encontrado</div>';
+            showDropdown();
+            return;
+        }
+
+        elements.dropdown.innerHTML = items.map(({ id, name }) => {
+            const highlighted = highlightMatches(name, query);
+            const selectedClass = currentCondition === id ? 'selected' : '';
+            return `<div class="dropdown-item ${selectedClass}" data-id="${id}">${highlighted}</div>`;
+        }).join('');
+
+        // Add click handlers
+        elements.dropdown.querySelectorAll('.dropdown-item[data-id]').forEach(item => {
+            item.addEventListener('click', () => selectCondition(item.dataset.id));
+        });
+
+        showDropdown();
+    }
+
+    // Highlight matching text
+    function highlightMatches(text, query) {
+        if (!query) return text;
+
+        const words = query.split(/\s+/).filter(w => w.length > 0);
+        let result = text;
+
+        words.forEach(word => {
+            const regex = new RegExp(`(${escapeRegex(word)})`, 'gi');
+            result = result.replace(regex, '<span class="highlight">$1</span>');
+        });
+
+        return result;
+    }
+
+    // Escape regex special characters
+    function escapeRegex(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Show/hide dropdown
+    function showDropdown() {
+        elements.dropdown.classList.remove('hidden');
+    }
+
+    function hideDropdown() {
+        elements.dropdown.classList.add('hidden');
+    }
+
+    // Select a condition
+    function selectCondition(conditionId) {
+        currentCondition = conditionId;
+        const condition = conditions[conditionId];
+
+        elements.searchInput.value = condition.name;
+        hideDropdown();
+
+        // Reset selections to defaults
+        initializeSelections(condition);
+
+        renderAll();
+    }
+
+    // Initialize selections with defaults
+    function initializeSelections(condition) {
+        currentSelections = {};
+
+        if (condition.prescriptionGroups) {
+            condition.prescriptionGroups.forEach(group => {
+                if (group.type === 'radio') {
+                    currentSelections[group.id] = group.default;
+                } else if (group.type === 'checkbox') {
+                    currentSelections[group.id] = [...group.default];
+                }
+            });
+        }
+    }
+
+    // Render all sections
+    function renderAll() {
+        renderPhysicalExam();
+        renderTreatmentOptions();
+        renderConduct();
+        renderPrescription();
+    }
+
+    // Render physical exam
+    function renderPhysicalExam() {
+        if (!currentCondition) return;
+
+        const condition = conditions[currentCondition];
+        let text = physicalExam.base[currentGender];
+
+        // Add condition-specific addons
+        if (condition.physicalExamAddons && condition.physicalExamAddons.length > 0) {
+            const addons = condition.physicalExamAddons
+                .map(addonId => physicalExam.addons[addonId]?.text)
+                .filter(Boolean)
+                .join('\n');
+
+            if (addons) {
+                text += '\n' + addons;
+            }
+        }
+
+        elements.physicalExamContent.textContent = text;
+    }
+
+    // Render treatment options
+    function renderTreatmentOptions() {
+        if (!currentCondition) return;
+
+        const condition = conditions[currentCondition];
+
+        // Check if there are any radio groups (actual choices to make)
+        const hasRadioOptions = condition.prescriptionGroups?.some(g => g.type === 'radio');
+        const hasCheckboxOptions = condition.prescriptionGroups?.some(g => g.type === 'checkbox' && g.options.length > 1);
+
+        if (!hasRadioOptions && !hasCheckboxOptions) {
+            elements.treatmentOptionsSection.classList.add('hidden');
+            return;
+        }
+
+        elements.treatmentOptionsSection.classList.remove('hidden');
+
+        let html = '';
+
+        condition.prescriptionGroups.forEach(group => {
+            html += `<div class="treatment-group">`;
+            html += `<span class="treatment-group-label">${group.label}:</span>`;
+            html += `<div class="treatment-options">`;
+
+            group.options.forEach(medId => {
+                const med = medications[medId];
+                if (!med) return;
+
+                const inputType = group.type;
+                const inputName = `treatment-${group.id}`;
+                const isChecked = group.type === 'radio'
+                    ? currentSelections[group.id] === medId
+                    : currentSelections[group.id]?.includes(medId);
+
+                html += `
+                    <label class="treatment-option">
+                        <input type="${inputType}"
+                               name="${inputName}"
+                               value="${medId}"
+                               data-group="${group.id}"
+                               ${isChecked ? 'checked' : ''}>
+                        <span class="treatment-option-text">${med.name}</span>
+                    </label>
+                `;
+            });
+
+            html += `</div></div>`;
+        });
+
+        elements.treatmentOptionsContent.innerHTML = html;
+
+        // Add change handlers
+        elements.treatmentOptionsContent.querySelectorAll('input').forEach(input => {
+            input.addEventListener('change', handleTreatmentChange);
+        });
+    }
+
+    // Handle treatment option change
+    function handleTreatmentChange(e) {
+        const groupId = e.target.dataset.group;
+        const value = e.target.value;
+        const isChecked = e.target.checked;
+        const isRadio = e.target.type === 'radio';
+
+        if (isRadio) {
+            currentSelections[groupId] = value;
+        } else {
+            if (!currentSelections[groupId]) {
+                currentSelections[groupId] = [];
+            }
+
+            if (isChecked) {
+                if (!currentSelections[groupId].includes(value)) {
+                    currentSelections[groupId].push(value);
+                }
+            } else {
+                currentSelections[groupId] = currentSelections[groupId].filter(v => v !== value);
+            }
+        }
+
+        renderPrescription();
+    }
+
+    // Render conduct
+    function renderConduct() {
+        if (!currentCondition) return;
+
+        const condition = conditions[currentCondition];
+        const text = condition.conduct.map(item => `- ${item}`).join('\n');
+        elements.conductContent.textContent = text;
+    }
+
+    // Render prescription
+    function renderPrescription() {
+        if (!currentCondition) return;
+
+        const condition = conditions[currentCondition];
+
+        // Collect all selected medications
+        const selectedMeds = [];
+
+        if (condition.prescriptionGroups) {
+            condition.prescriptionGroups.forEach(group => {
+                const selection = currentSelections[group.id];
+
+                if (group.type === 'radio' && selection) {
+                    selectedMeds.push(selection);
+                } else if (group.type === 'checkbox' && selection) {
+                    // Maintain order from original options
+                    group.options.forEach(medId => {
+                        if (selection.includes(medId)) {
+                            selectedMeds.push(medId);
+                        }
+                    });
+                }
+            });
+        }
+
+        if (selectedMeds.length === 0) {
+            elements.prescriptionContent.innerHTML = '<p class="placeholder-text">Nenhum medicamento selecionado</p>';
+            return;
+        }
+
+        let html = '';
+        selectedMeds.forEach((medId, index) => {
+            const med = medications[medId];
+            if (!med) return;
+
+            html += `
+                <div class="prescription-item">
+                    <div><span class="prescription-number">${index + 1}.</span> <span class="prescription-name">${med.name}</span></div>
+                    <div class="prescription-instruction">${med.instruction}</div>
+                </div>
+            `;
+        });
+
+        elements.prescriptionContent.innerHTML = html;
+    }
+
+    // Handle copy
+    function handleCopy(e) {
+        const btn = e.currentTarget;
+        const targetId = btn.dataset.target;
+        const targetElement = document.getElementById(targetId);
+
+        if (!targetElement) return;
+
+        // Get text content (handles both plain text and HTML)
+        let text = '';
+
+        if (targetId === 'prescription-content') {
+            // Format prescription for copying
+            const items = targetElement.querySelectorAll('.prescription-item');
+            const lines = [];
+            items.forEach((item, index) => {
+                const name = item.querySelector('.prescription-name')?.textContent || '';
+                const instruction = item.querySelector('.prescription-instruction')?.textContent || '';
+                lines.push(`${index + 1}. ${name}`);
+                lines.push(instruction);
+                lines.push('');
+            });
+            text = lines.join('\n').trim();
+        } else {
+            text = targetElement.textContent;
+        }
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('Copiado!');
+
+            // Visual feedback on button
+            btn.classList.add('copied');
+            const originalText = btn.querySelector('.copy-text');
+            if (originalText) {
+                const original = originalText.textContent;
+                originalText.textContent = 'Copiado!';
+                setTimeout(() => {
+                    originalText.textContent = original;
+                    btn.classList.remove('copied');
+                }, 1500);
+            } else {
+                setTimeout(() => btn.classList.remove('copied'), 1500);
+            }
+        }).catch(err => {
+            console.error('Erro ao copiar:', err);
+            showToast('Erro ao copiar');
+        });
+    }
+
+    // Show toast notification
+    function showToast(message) {
+        elements.toast.textContent = message;
+        elements.toast.classList.remove('hidden');
+        elements.toast.classList.add('show');
+
+        setTimeout(() => {
+            elements.toast.classList.remove('show');
+            setTimeout(() => elements.toast.classList.add('hidden'), 150);
+        }, 1500);
+    }
+
+    // Start application when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
