@@ -427,24 +427,18 @@
                         selectedMeds.push({ medId: groupState.selected, duration: null });
                     }
                 } else if (groupState.type === 'items') {
-                    // Preserve order: first meds, then classes
-                    const medItems = [];
-                    const classItems = [];
-
+                    // Preserve original order from JSON (important for patient adherence)
                     group.items.forEach((item, index) => {
                         const itemKey = `${group.id}-${index}`;
                         const itemState = groupState.items[itemKey];
                         if (!itemState || !itemState.checked) return;
 
                         if (itemState.type === 'med') {
-                            medItems.push({ medId: itemState.medId, duration: null });
+                            selectedMeds.push({ medId: itemState.medId, duration: null });
                         } else if (itemState.type === 'class') {
-                            classItems.push({ medId: itemState.selected, duration: itemState.duration });
+                            selectedMeds.push({ medId: itemState.selected, duration: itemState.duration });
                         }
                     });
-
-                    // Add meds first, then classes
-                    selectedMeds.push(...medItems, ...classItems);
                 }
             });
         }
