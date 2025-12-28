@@ -46,14 +46,15 @@
         elements.toast = document.getElementById('toast');
     }
 
-    // Load JSON data
+    // Load JSON data (with cache busting)
     async function loadData() {
         try {
+            const cacheBuster = `?v=${Date.now()}`;
             const [conditionsData, physicalExamData, medicationsData, classesData] = await Promise.all([
-                fetch('data/conditions.json').then(r => r.json()),
-                fetch('data/physical-exam.json').then(r => r.json()),
-                fetch('data/medications.json').then(r => r.json()),
-                fetch('data/medication-classes.json').then(r => r.json())
+                fetch('data/conditions.json' + cacheBuster).then(r => r.json()),
+                fetch('data/physical-exam.json' + cacheBuster).then(r => r.json()),
+                fetch('data/medications.json' + cacheBuster).then(r => r.json()),
+                fetch('data/medication-classes.json' + cacheBuster).then(r => r.json())
             ]);
 
             conditions = conditionsData;
@@ -104,11 +105,11 @@
     }
 
     function handleSearchFocus() {
-        if (elements.searchInput.value.trim() === '') {
-            showAllConditions();
-        } else {
-            handleSearchInput({ target: elements.searchInput });
+        // If input has value (diagnosis selected), clear it for new search
+        if (elements.searchInput.value.trim() !== '') {
+            elements.searchInput.value = '';
         }
+        showAllConditions();
     }
 
     function handleSearchKeydown(e) {
@@ -265,21 +266,31 @@
         renderPrescription();
     }
 
+    // Render physical exam - simply concatenate condition addons
     function renderPhysicalExam() {
         if (!currentCondition) return;
         const condition = conditions[currentCondition];
-        let text = physicalExam.base[currentGender];
+        const textParts = [];
 
         if (condition.physicalExamAddons && condition.physicalExamAddons.length > 0) {
-            const addons = condition.physicalExamAddons
-                .map(addonId => physicalExam.addons[addonId]?.text)
-                .filter(Boolean)
-                .join('\n');
-            if (addons) {
-                text += '\n' + addons;
-            }
+            condition.physicalExamAddons.forEach(addonId => {
+                const addon = physicalExam.addons?.[addonId];
+                if (addon) {
+                    // Handle gendered text (object with masculino/feminino) or simple string
+                    if (typeof addon.text === 'object') {
+                        textParts.push(addon.text[currentGender]);
+                    } else if (addon.text) {
+                        textParts.push(addon.text);
+                    }
+                }
+            });
         }
-        elements.physicalExamContent.textContent = text;
+
+        if (textParts.length > 0) {
+            elements.physicalExamContent.textContent = textParts.join('\n');
+        } else {
+            elements.physicalExamContent.innerHTML = '<p class="placeholder-text">Nenhum addon de exame físico configurado</p>';
+        }
     }
 
     // Render treatment options - reordered: simple meds first, then classes

@@ -1,7 +1,7 @@
 {
   "ivas": {
     "name": "IVAS (Resfriado comum)",
-    "physicalExamAddons": ["oroscopia-hiperemia"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "oroscopia-hiperemia"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Oriento medidas de suporte: hidratação, repouso, lavagem nasal",
@@ -22,7 +22,7 @@
   },
   "faringoamigdalite-bacteriana": {
     "name": "Faringoamigdalite bacteriana",
-    "physicalExamAddons": ["oroscopia-amigdalite", "linfonodomegalia-cervical"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "oroscopia-amigdalite", "linfonodomegalia-cervical"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -51,7 +51,7 @@
   },
   "rinossinusite-bacteriana": {
     "name": "Rinossinusite bacteriana",
-    "physicalExamAddons": ["oroscopia-hiperemia"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "oroscopia-hiperemia"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -81,7 +81,7 @@
   },
   "geca": {
     "name": "GECA (Gastroenterocolite aguda)",
-    "physicalExamAddons": ["abdome-normal"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "abdome-normal"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Oriento hidratação vigorosa e dieta leve",
@@ -104,7 +104,7 @@
   },
   "itu-nao-complicada": {
     "name": "ITU não complicada",
-    "physicalExamAddons": ["abdome-normal", "giordano-negativo"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "abdome-normal", "giordano-negativo"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -132,7 +132,7 @@
   },
   "pielonefrite-ambulatorial": {
     "name": "Pielonefrite (tratamento ambulatorial)",
-    "physicalExamAddons": ["abdome-normal", "giordano-positivo"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "abdome-normal", "giordano-positivo"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -161,7 +161,7 @@
   },
   "otite-media-aguda": {
     "name": "Otite média aguda",
-    "physicalExamAddons": ["otoscopia-oma"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "otoscopia-oma"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -188,7 +188,7 @@
   },
   "otite-externa-aguda": {
     "name": "Otite externa aguda",
-    "physicalExamAddons": ["otoscopia-oea"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "otoscopia-oea"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo tratamento tópico",
@@ -210,7 +210,7 @@
   },
   "enxaqueca": {
     "name": "Enxaqueca",
-    "physicalExamAddons": ["neurologico-normal"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "neurologico-normal"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo medicação abortiva para crises",
@@ -232,7 +232,7 @@
   },
   "dor-muscular": {
     "name": "Dor muscular / Lombalgia",
-    "physicalExamAddons": [],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Oriento repouso relativo e aplicação de calor local",
@@ -253,7 +253,7 @@
   },
   "herpes-zoster": {
     "name": "Herpes zoster",
-    "physicalExamAddons": ["pele-herpes-zoster"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "pele-herpes-zoster"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antiviral",
@@ -282,7 +282,7 @@
   },
   "crise-gota": {
     "name": "Crise de Gota",
-    "physicalExamAddons": ["articulacao-gota"],
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "articulacao-gota"],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo tratamento para crise",
@@ -304,45 +304,31 @@
     ]
   },
   "constipacao-funcional": {
-  "name": "Constipação funcional",
-  "physicalExamAddons": [
-    "abdome-normal"
-  ],
-  "conduct": [
-    "Explico sobre a condição e esclareço dúvidas",
-    "Oriento mudanças alimentares e hidratação adequada",
-    "Prescrevo laxativo osmótico para casa",
-    "Oriento acompanhamento médico caso mudança continue para investigação aprofundada.",
-    "Oriento sinais de alarme para retorno ao pronto-socorro"
-  ],
-  "prescriptionGroups": [
-    {
-      "id": "laxantes",
-      "label": "Laxantes",
-      "type": "radio",
-      "options": [
-        "macrogol-3350",
-        "lactulose-xarope"
-      ],
-      "default": "macrogol-3350"
-    },
-    {
-      "id": "sintomaticos",
-      "label": "Sintomáticos",
-      "items": [
-        {
-          "type": "med",
-          "medId": "escopolamina-10mg",
-          "checked": false
-        },
-        {
-          "type": "class",
-          "classId": "analgesico",
-          "default": "dipirona-500mg",
-          "checked": false
-        }
-      ]
-    }
-  ]
-}
+    "name": "Constipação funcional",
+    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "abdome-normal"],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento mudanças alimentares e hidratação adequada",
+      "Prescrevo laxativo osmótico para casa",
+      "Oriento acompanhamento médico caso mudança continue para investigação aprofundada.",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "laxantes",
+        "label": "Laxantes",
+        "type": "radio",
+        "options": ["macrogol-3350", "lactulose-xarope"],
+        "default": "macrogol-3350"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          { "type": "med", "medId": "escopolamina-10mg", "checked": false },
+          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": false }
+        ]
+      }
+    ]
+  }
 }

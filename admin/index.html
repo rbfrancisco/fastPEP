@@ -157,9 +157,21 @@
                             <input type="text" id="exam-label" placeholder="ex: Oroscopia com amigdalite" required>
                         </div>
                         <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="exam-gendered">
+                                Texto varia por gênero (masculino/feminino)
+                            </label>
+                        </div>
+                        <div class="form-group" id="exam-text-simple">
                             <label for="exam-text">Texto do Addon *</label>
-                            <textarea id="exam-text" rows="3" placeholder="ex: Orofaringe hiperemiada, amígdalas edemaciadas..." required></textarea>
+                            <textarea id="exam-text" rows="3" placeholder="ex: Orofaringe hiperemiada, amígdalas edemaciadas..."></textarea>
                             <small>Este texto será adicionado ao exame físico.</small>
+                        </div>
+                        <div class="form-group hidden" id="exam-text-gendered">
+                            <label for="exam-text-masc">Texto (Masculino) *</label>
+                            <textarea id="exam-text-masc" rows="2" placeholder="ex: Bom estado geral, corado, hidratado..."></textarea>
+                            <label for="exam-text-fem" style="margin-top: 0.5rem;">Texto (Feminino) *</label>
+                            <textarea id="exam-text-fem" rows="2" placeholder="ex: Bom estado geral, corada, hidratada..."></textarea>
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn-secondary btn-clear" data-form="exam">Limpar</button>
@@ -207,7 +219,17 @@
                             <div id="cond-addons-container" class="sortable-container">
                                 <div class="addon-row sortable-item">
                                     <span class="drag-handle">⋮⋮</span>
-                                    <input type="text" class="cond-addon" placeholder="ID do addon (ex: oroscopia-amigdalite)">
+                                    <input type="text" class="cond-addon" value="geral-bom" placeholder="ID do addon">
+                                    <button type="button" class="btn-remove" title="Remover">×</button>
+                                </div>
+                                <div class="addon-row sortable-item">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <input type="text" class="cond-addon" value="cv-normal" placeholder="ID do addon">
+                                    <button type="button" class="btn-remove" title="Remover">×</button>
+                                </div>
+                                <div class="addon-row sortable-item">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <input type="text" class="cond-addon" value="resp-normal" placeholder="ID do addon">
                                     <button type="button" class="btn-remove" title="Remover">×</button>
                                 </div>
                             </div>

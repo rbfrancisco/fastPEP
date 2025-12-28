@@ -156,62 +156,74 @@ Medication classes group interchangeable drugs, allowing users to pick one from 
 
 ### 3. Physical Exam (`data/physical-exam.json`)
 
-Contains the base physical exam and condition-specific addons.
+Contains all physical exam addons. Each condition specifies which addons to include.
 
 #### Schema
 
 ```json
 {
-  "base": {
-    "masculino": "Base exam text for male patients...",
-    "feminino": "Base exam text for female patients..."
-  },
   "addons": {
     "addon-id": {
-      "label": "Short label for checkbox",
-      "text": "Full text to append to exam"
+      "label": "Short label for display",
+      "text": "Full text for the physical exam (string or object with masculino/feminino)"
     }
   }
 }
 ```
 
-#### Base Exam
-
-The `base` object contains the standard physical exam text that applies to all patients:
-- `masculino`: Text with masculine adjectives (corado, hidratado, etc.)
-- `feminino`: Text with feminine adjectives (corada, hidratada, etc.)
-
-Use `\n` for line breaks within the text.
-
 #### Addons
 
-Addons are additional findings appended based on the diagnosis.
+All physical exam components are addons, including base findings (estado geral, cardiovascular, respiratório) and specific findings (oroscopia, otoscopia, etc.).
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `label` | Yes | Short description shown in the checkbox list |
-| `text` | Yes | Full text appended to the physical exam |
+| `label` | Yes | Short description for display in editor |
+| `text` | Yes | Full text for the physical exam |
 
-**Note:** If the addon text doesn't vary by gender, the same text is used for both. The addon structure uses a simple `text` field (not `male`/`female`) since most findings are gender-neutral.
+#### Gender Handling
+
+For gendered text, use an object instead of a string:
+```json
+"text": {
+  "masculino": "Bom estado geral, corado, hidratado...",
+  "feminino": "Bom estado geral, corada, hidratada..."
+}
+```
+
+For gender-neutral text, use a simple string:
+```json
+"text": "BRNF em 2T, sem sopros..."
+```
 
 #### Example
 
 ```json
 {
-  "base": {
-    "masculino": "Bom estado geral, corado, hidratado...",
-    "feminino": "Bom estado geral, corada, hidratada..."
-  },
   "addons": {
+    "geral-bom": {
+      "label": "Bom estado geral",
+      "text": {
+        "masculino": "Bom estado geral, corado, hidratado, anictérico, acianótico, eupneico em ar ambiente.",
+        "feminino": "Bom estado geral, corada, hidratada, anictérica, acianótica, eupneica em ar ambiente."
+      }
+    },
+    "cv-normal": {
+      "label": "Cardiovascular normal",
+      "text": "BRNF em 2T, sem sopros, TEC <3s, extremidades quentes e bem perfundidas."
+    },
     "oroscopia-amigdalite": {
       "label": "Oroscopia com amigdalite",
       "text": "Orofaringe hiperemiada, amígdalas edemaciadas e com presença de secreção purulenta."
-    },
-    "giordano-positivo": {
-      "label": "Giordano positivo",
-      "text": "Giordano positivo à direita/esquerda."
     }
   }
+}
+```
+
+Conditions reference addons by ID:
+```json
+"ivas": {
+  "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "oroscopia-hiperemia"],
+  ...
 }
 ```
 
