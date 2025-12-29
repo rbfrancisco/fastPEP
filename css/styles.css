@@ -264,6 +264,27 @@ body {
     font-style: italic;
 }
 
+/* Editable sections */
+.section-content.editable {
+    cursor: text;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition), box-shadow var(--transition);
+}
+
+.section-content.editable:hover {
+    background-color: #fafafa;
+}
+
+.section-content.editable:focus {
+    outline: none;
+    background-color: #fffef5;
+    box-shadow: inset 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.section-content.editable:focus-visible {
+    outline: none;
+}
+
 /* Treatment Options */
 #treatment-options-content {
     display: flex;
@@ -443,6 +464,23 @@ body {
     padding: 1.5rem;
     color: var(--text-secondary);
     font-size: 0.85rem;
+}
+
+.shortcuts-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.shortcuts-hint kbd {
+    display: inline-block;
+    padding: 0.15rem 0.4rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
 /* Highlight matched text in dropdown */

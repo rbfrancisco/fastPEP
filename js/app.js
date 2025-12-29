@@ -85,6 +85,111 @@
         document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', handleCopy);
         });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', handleGlobalKeydown);
+    }
+
+    // Global keyboard shortcuts
+    function handleGlobalKeydown(e) {
+        // Don't trigger shortcuts when typing in editable areas (except for copy shortcuts with Ctrl)
+        const isEditing = e.target.matches('input, textarea, [contenteditable="true"]');
+
+        // "/" to focus search (only when not editing)
+        if (e.key === '/' && !isEditing) {
+            e.preventDefault();
+            elements.searchInput.focus();
+            return;
+        }
+
+        // Ctrl+number shortcuts for copying
+        if (e.ctrlKey && !e.shiftKey) {
+            switch (e.key) {
+                case '1':
+                    e.preventDefault();
+                    triggerCopy('physical-exam-content');
+                    break;
+                case '2':
+                    e.preventDefault();
+                    triggerCopy('conduct-content');
+                    break;
+                case '3':
+                    e.preventDefault();
+                    triggerCopy('prescription-content');
+                    break;
+            }
+        }
+
+        // Ctrl+Shift+A to copy all sections
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+            e.preventDefault();
+            copyAllSections();
+        }
+    }
+
+    // Trigger copy for a specific target
+    function triggerCopy(targetId) {
+        const btn = document.querySelector(`.copy-btn[data-target="${targetId}"]`);
+        if (btn) {
+            btn.click();
+        }
+    }
+
+    // Copy all sections at once
+    function copyAllSections() {
+        if (!currentCondition) {
+            showToast('Selecione um diagnóstico primeiro');
+            return;
+        }
+
+        const parts = [];
+
+        // Physical Exam
+        const physicalExamText = elements.physicalExamContent.innerText.trim();
+        if (physicalExamText && !physicalExamText.includes('Selecione um diagnóstico')) {
+            parts.push('EXAME FÍSICO:\n' + physicalExamText);
+        }
+
+        // Conduct
+        const conductText = elements.conductContent.innerText.trim();
+        if (conductText && !conductText.includes('Selecione um diagnóstico')) {
+            parts.push('CONDUTA:\n' + conductText);
+        }
+
+        // Prescription
+        const prescriptionText = getPrescriptionText();
+        if (prescriptionText && !prescriptionText.includes('Selecione um diagnóstico') && !prescriptionText.includes('Nenhum medicamento')) {
+            parts.push('PRESCRIÇÃO:\n' + prescriptionText);
+        }
+
+        const fullText = parts.join('\n\n');
+
+        navigator.clipboard.writeText(fullText).then(() => {
+            showToast('Tudo copiado!');
+        }).catch(err => {
+            console.error('Erro ao copiar:', err);
+            showToast('Erro ao copiar');
+        });
+    }
+
+    // Extract prescription text (handles both structured HTML and edited plain text)
+    function getPrescriptionText() {
+        const items = elements.prescriptionContent.querySelectorAll('.prescription-item');
+        if (items.length > 0) {
+            // Structured HTML format
+            const lines = [];
+            items.forEach((item, index) => {
+                const name = item.querySelector('.prescription-name')?.textContent || '';
+                const instruction = item.querySelector('.prescription-instruction')?.textContent || '';
+                lines.push(`${index + 1}. ${name}`);
+                lines.push(instruction);
+                lines.push('');
+            });
+            return lines.join('\n').trim();
+        } else {
+            // Plain text (user edited the structure away)
+            return elements.prescriptionContent.innerText.trim();
+        }
     }
 
     function handleGenderChange(e) {
@@ -288,8 +393,12 @@
 
         if (textParts.length > 0) {
             elements.physicalExamContent.textContent = textParts.join('\n');
+            elements.physicalExamContent.contentEditable = 'true';
+            elements.physicalExamContent.classList.add('editable');
         } else {
             elements.physicalExamContent.innerHTML = '<p class="placeholder-text">Nenhum addon de exame físico configurado</p>';
+            elements.physicalExamContent.contentEditable = 'false';
+            elements.physicalExamContent.classList.remove('editable');
         }
     }
 
@@ -409,8 +518,16 @@
     function renderConduct() {
         if (!currentCondition) return;
         const condition = conditions[currentCondition];
-        const text = condition.conduct.map(item => `- ${item}`).join('\n');
-        elements.conductContent.textContent = text;
+        if (condition.conduct && condition.conduct.length > 0) {
+            const text = condition.conduct.map(item => `- ${item}`).join('\n');
+            elements.conductContent.textContent = text;
+            elements.conductContent.contentEditable = 'true';
+            elements.conductContent.classList.add('editable');
+        } else {
+            elements.conductContent.innerHTML = '<p class="placeholder-text">Nenhuma conduta configurada</p>';
+            elements.conductContent.contentEditable = 'false';
+            elements.conductContent.classList.remove('editable');
+        }
     }
 
     // Get instruction with duration placeholder replaced
@@ -462,6 +579,8 @@
 
         if (homeMeds.length === 0) {
             elements.prescriptionContent.innerHTML = '<p class="placeholder-text">Nenhum medicamento para prescrição domiciliar</p>';
+            elements.prescriptionContent.contentEditable = 'false';
+            elements.prescriptionContent.classList.remove('editable');
             return;
         }
 
@@ -474,6 +593,8 @@
         });
 
         elements.prescriptionContent.innerHTML = html;
+        elements.prescriptionContent.contentEditable = 'true';
+        elements.prescriptionContent.classList.add('editable');
     }
 
     function handleCopy(e) {
@@ -484,18 +605,9 @@
 
         let text = '';
         if (targetId === 'prescription-content') {
-            const items = targetElement.querySelectorAll('.prescription-item');
-            const lines = [];
-            items.forEach((item, index) => {
-                const name = item.querySelector('.prescription-name')?.textContent || '';
-                const instruction = item.querySelector('.prescription-instruction')?.textContent || '';
-                lines.push(`${index + 1}. ${name}`);
-                lines.push(instruction);
-                lines.push('');
-            });
-            text = lines.join('\n').trim();
+            text = getPrescriptionText();
         } else {
-            text = targetElement.textContent;
+            text = targetElement.innerText.trim();
         }
 
         navigator.clipboard.writeText(text).then(() => {
