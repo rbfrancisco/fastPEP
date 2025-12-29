@@ -25,30 +25,26 @@ fs.mkdirSync('dist/data', { recursive: true });
 function encryptFile(inputPath, outputPath) {
   console.log(`Encrypting ${inputPath} -> ${outputPath}`);
   
-  // Use staticrypt with --stdout and capture the output
-  const cmd = `./node_modules/.bin/staticrypt "${inputPath}" -p "${password}" --short --stdout`;
-  console.log(`Running: staticrypt ${inputPath} -p [HIDDEN] --short --stdout`);
+  // pagecrypt <input> <output> <password>
+  const cmd = `./node_modules/.bin/pagecrypt "${inputPath}" "${outputPath}" "${password}"`;
+  console.log(`Running: pagecrypt ${inputPath} ${outputPath} [HIDDEN]`);
   
   try {
-    const encrypted = execSync(cmd, { 
+    execSync(cmd, { 
       encoding: 'utf8',
-      maxBuffer: 10 * 1024 * 1024 // 10MB buffer
+      stdio: 'inherit'
     });
     
-    if (!encrypted || encrypted.length === 0) {
-      console.error(`ERROR: staticrypt returned empty output for ${inputPath}`);
-      // Fallback: just copy the original file
-      console.log('Falling back to copying original file...');
-      fs.copyFileSync(inputPath, outputPath);
+    if (fs.existsSync(outputPath)) {
+      const size = fs.statSync(outputPath).size;
+      console.log(`✓ Created ${outputPath} (${size} bytes)`);
     } else {
-      fs.writeFileSync(outputPath, encrypted);
-      console.log(`✓ Created ${outputPath} (${encrypted.length} bytes)`);
+      console.error(`ERROR: ${outputPath} was not created`);
+      process.exit(1);
     }
   } catch (err) {
     console.error(`Command failed:`, err.message);
-    if (err.stdout) console.error('stdout:', err.stdout);
-    if (err.stderr) console.error('stderr:', err.stderr);
-    throw err;
+    process.exit(1);
   }
 }
 
@@ -65,15 +61,6 @@ function copyDir(src, dest) {
       fs.copyFileSync(srcPath, destPath);
     }
   }
-}
-
-// Check staticrypt version
-console.log('Checking staticrypt...');
-try {
-  const version = execSync('./node_modules/.bin/staticrypt --version', { encoding: 'utf8' });
-  console.log('staticrypt version:', version.trim());
-} catch (e) {
-  console.log('Could not get version');
 }
 
 // Encrypt HTML files
