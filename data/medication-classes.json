@@ -1,22 +1,41 @@
 {
   "aine": {
     "label": "AINE",
-    "options": ["cetoprofeno-100mg", "ibuprofeno-600mg", "naproxeno-500mg"]
+    "options": [
+      "cetoprofeno-100mg",
+      "ibuprofeno-600mg",
+      "naproxeno-500mg"
+    ]
   },
   "analgesico": {
     "label": "Analgésico/Antitérmico",
-    "options": ["dipirona-500mg", "dipirona-1g", "paracetamol-500mg"]
+    "options": [
+      "dipirona-500mg",
+      "dipirona-1g",
+      "paracetamol-500mg"
+    ]
   },
   "antiemetico": {
     "label": "Antiemético",
-    "options": ["ondansetrona-4mg", "ondansetrona-8mg", "metoclopramida-10mg", "dramin-b6"]
+    "options": [
+      "ondansetrona-4mg",
+      "ondansetrona-8mg",
+      "metoclopramida-10mg",
+      "dramin-b6"
+    ]
   },
   "laxantes": {
-  "label": "Laxantes",
-  "options": [
-    "macrogol-3350",
-    "lactulose-xarope"
-  ]
-}
-  
+    "label": "Laxantes",
+    "options": [
+      "macrogol-3350",
+      "lactulose-xarope"
+    ]
+  },
+  "ferro": {
+    "label": "Ferro",
+    "options": [
+      "sulfato-ferroso-40mg",
+      "neutrofer-300mg"
+    ]
+  }
 }

@@ -1,0 +1,21 @@
+{
+  "name": "fastpep",
+  "version": "1.0.0",
+  "description": "FastPEP - Prontuário Eletrônico Rápido para médicos de emergência",
+  "main": "server/index.js",
+  "scripts": {
+    "server": "node server/index.js",
+    "start": "node server/index.js"
+  },
+  "keywords": [
+    "medical",
+    "ehr",
+    "emergency"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

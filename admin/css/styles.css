@@ -62,6 +62,29 @@ body {
     font-size: 0.95rem;
 }
 
+.btn-refresh {
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.btn-refresh:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-refresh:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 /* Tab Navigation */
 .tab-nav {
     display: flex;
@@ -317,6 +340,80 @@ body {
 
 .copy-btn.copied {
     background: var(--success-color);
+}
+
+/* Output buttons container */
+.output-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Save Button */
+.save-btn {
+    padding: 0.4rem 0.85rem;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition), opacity var(--transition);
+}
+
+.save-btn:hover {
+    background: #059669;
+}
+
+.save-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.save-btn.saving {
+    background: var(--warning-color);
+}
+
+.save-btn.saved {
+    background: var(--success-color);
+}
+
+.save-btn.save-error {
+    background: var(--danger-color);
+}
+
+/* Delete Button */
+.delete-btn {
+    padding: 0.4rem 0.85rem;
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition), opacity var(--transition);
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+}
+
+.delete-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.delete-btn.deleting {
+    background: var(--warning-color);
+}
+
+.delete-btn.deleted {
+    background: var(--text-secondary);
+}
+
+.delete-btn.delete-error {
+    background: var(--danger-color);
 }
 
 .json-output {

@@ -1,5 +1,75 @@
 // FastPEP Editor - JSON Generator with Edit Mode and Reordering
 
+// ============ API CONFIGURATION ============
+const API_BASE = '/api';
+let serverAvailable = false;
+
+// Check if server is available (for save functionality)
+async function checkServerAvailability() {
+    try {
+        const response = await fetch(`${API_BASE}/data/medications`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+        });
+        serverAvailable = response.ok;
+    } catch {
+        serverAvailable = false;
+    }
+    return serverAvailable;
+}
+
+// Save entry to server
+async function saveToServer(type, id, data) {
+    const response = await fetch(`${API_BASE}/data/${type}/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save');
+    }
+
+    return response.json();
+}
+
+// Delete entry from server
+async function deleteFromServer(type, id) {
+    const response = await fetch(`${API_BASE}/data/${type}/${encodeURIComponent(id)}`, {
+        method: 'DELETE'
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to delete');
+    }
+
+    return response.json();
+}
+
+// Update local dataStore after successful save
+function updateLocalDataStore(type, id, data) {
+    switch (type) {
+        case 'medications':
+            dataStore.medications[id] = data;
+            break;
+        case 'medication-classes':
+            dataStore.medicationClasses[id] = data;
+            break;
+        case 'physical-exam':
+            if (!dataStore.physicalExam.addons) dataStore.physicalExam.addons = {};
+            dataStore.physicalExam.addons[id] = data;
+            break;
+        case 'conditions':
+            dataStore.conditions[id] = data;
+            break;
+    }
+    // Rebuild suggestions with new data
+    buildSuggestions();
+}
+
+
 // ============ DATA STORE ============
 const dataStore = {
     medications: {},
@@ -42,10 +112,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     initConditionForm();
     initCopyButtons();
     initClearButtons();
+    initSaveButtons();
+    initDeleteButtons();
+    initRefreshButton();
     initGlobalAutocomplete();
     initDragAndDrop();
     attachInitialAutocompletes();
+
+    // Check if server is available and show save/delete buttons
+    if (await checkServerAvailability()) {
+        document.querySelectorAll('.save-btn, .delete-btn').forEach(btn => {
+            btn.classList.remove('hidden');
+        });
+        console.log('Server disponível - botões de salvar/excluir ativados');
+    } else {
+        console.log('Server não disponível - use "npm run server" para habilitar salvamento direto');
+    }
 });
+
+// ============ REFRESH BUTTON ============
+function initRefreshButton() {
+    const btn = document.getElementById('refresh-data-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+        const originalText = btn.textContent;
+        btn.textContent = '↻ Atualizando...';
+        btn.disabled = true;
+
+        try {
+            await loadAllData();
+            btn.textContent = '✓ Atualizado!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 1500);
+        } catch (error) {
+            console.error('Refresh error:', error);
+            btn.textContent = '✗ Erro!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 1500);
+        }
+    });
+}
 
 // ============ DATA LOADING ============
 async function loadAllData() {
@@ -84,6 +195,19 @@ async function loadAllData() {
 }
 
 function buildSuggestions() {
+    // Clear existing suggestions first
+    suggestions.medicationIds = [];
+    suggestions.medicationNames = [];
+    suggestions.medicationInstructions = [];
+    suggestions.classIds = [];
+    suggestions.classLabels = [];
+    suggestions.addonIds = [];
+    suggestions.addonTexts = [];
+    suggestions.conductTexts = [];
+    suggestions.conditionIds = [];
+    suggestions.groupIds = [];
+    suggestions.groupLabels = [];
+
     // Medications
     for (const [id, med] of Object.entries(dataStore.medications)) {
         suggestions.medicationIds.push(id);
@@ -135,6 +259,7 @@ function buildSuggestions() {
 function populateSelectors() {
     // Medications
     const medSelect = document.getElementById('medication-select');
+    medSelect.innerHTML = '<option value="">-- Escolha um medicamento --</option>';
     Object.entries(dataStore.medications)
         .sort((a, b) => a[1].name.localeCompare(b[1].name))
         .forEach(([id, med]) => {
@@ -146,6 +271,7 @@ function populateSelectors() {
 
     // Classes
     const classSelect = document.getElementById('class-select');
+    classSelect.innerHTML = '<option value="">-- Escolha uma classe --</option>';
     Object.entries(dataStore.medicationClasses)
         .sort((a, b) => a[1].label.localeCompare(b[1].label))
         .forEach(([id, cls]) => {
@@ -157,6 +283,7 @@ function populateSelectors() {
 
     // Addons
     const examSelect = document.getElementById('exam-select');
+    examSelect.innerHTML = '<option value="">-- Escolha um addon --</option>';
     if (dataStore.physicalExam.addons) {
         Object.entries(dataStore.physicalExam.addons)
             .sort((a, b) => (a[1].label || a[0]).localeCompare(b[1].label || b[0]))
@@ -170,6 +297,7 @@ function populateSelectors() {
 
     // Conditions
     const condSelect = document.getElementById('condition-select');
+    condSelect.innerHTML = '<option value="">-- Escolha uma condição --</option>';
     Object.entries(dataStore.conditions)
         .sort((a, b) => a[1].name.localeCompare(b[1].name))
         .forEach(([id, cond]) => {
@@ -779,6 +907,283 @@ function initCopyButtons() {
             }
         });
     });
+}
+
+// ============ SAVE BUTTONS ============
+function initSaveButtons() {
+    document.querySelectorAll('.save-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const form = btn.dataset.form;
+            await handleSave(form, btn);
+        });
+    });
+}
+
+// ============ DELETE BUTTONS ============
+function initDeleteButtons() {
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const form = btn.dataset.form;
+            await handleDelete(form, btn);
+        });
+    });
+}
+
+async function handleDelete(form, btn) {
+    // Map form to editState key
+    const stateKey = form === 'medication' ? 'medication' : form;
+    const state = editState[stateKey];
+
+    // Check if we're in edit mode with a loaded entry
+    if (state.mode !== 'edit' || !state.currentId) {
+        alert('Selecione uma entrada existente para excluir');
+        return;
+    }
+
+    const id = state.currentId;
+    const typeName = {
+        'medication': 'medicamento',
+        'class': 'classe',
+        'exam': 'addon de exame físico',
+        'condition': 'condição'
+    }[form];
+
+    // Confirm deletion
+    if (!confirm(`Tem certeza que deseja excluir ${typeName} "${id}"?\n\nEsta ação não pode ser desfeita.`)) {
+        return;
+    }
+
+    const originalText = btn.textContent;
+
+    try {
+        btn.textContent = 'Excluindo...';
+        btn.disabled = true;
+        btn.classList.add('deleting');
+
+        // Map form type to API type
+        const typeMap = {
+            'medication': 'medications',
+            'class': 'medication-classes',
+            'exam': 'physical-exam',
+            'condition': 'conditions'
+        };
+        const type = typeMap[form];
+
+        // Delete from server
+        await deleteFromServer(type, id);
+
+        // Reload all data from server
+        await loadAllData();
+
+        // Clear the form
+        clearForm(form);
+
+        // Reset selector
+        const select = document.getElementById(`${form === 'medication' ? 'medication' : form}-select`);
+        if (select) select.value = '';
+
+        // Switch back to "new" mode
+        const newModeBtn = document.querySelector(`.mode-btn[data-form="${stateKey}"][data-mode="new"]`);
+        if (newModeBtn) newModeBtn.click();
+
+        // Show success
+        btn.textContent = 'Excluído!';
+        btn.classList.remove('deleting');
+        btn.classList.add('deleted');
+
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('deleted');
+            btn.disabled = false;
+        }, 2000);
+
+    } catch (error) {
+        console.error('Delete error:', error);
+
+        btn.textContent = 'Erro!';
+        btn.classList.remove('deleting');
+        btn.classList.add('delete-error');
+
+        alert(`Erro ao excluir: ${error.message}`);
+
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('delete-error');
+            btn.disabled = false;
+        }, 2000);
+    }
+}
+
+async function handleSave(form, btn) {
+    const originalText = btn.textContent;
+
+    try {
+        btn.textContent = 'Salvando...';
+        btn.disabled = true;
+        btn.classList.add('saving');
+
+        let type, id, data, outputEl;
+
+        switch (form) {
+            case 'medication':
+                type = 'medications';
+                id = document.getElementById('med-id').value.trim();
+                data = buildMedicationData();
+                outputEl = document.getElementById('medication-output');
+                break;
+            case 'class':
+                type = 'medication-classes';
+                id = document.getElementById('class-id').value.trim();
+                data = buildMedicationClassData();
+                outputEl = document.getElementById('class-output');
+                break;
+            case 'exam':
+                type = 'physical-exam';
+                id = document.getElementById('exam-id').value.trim();
+                data = buildPhysicalExamData();
+                outputEl = document.getElementById('exam-output');
+                break;
+            case 'condition':
+                type = 'conditions';
+                id = document.getElementById('cond-id').value.trim();
+                data = buildConditionData();
+                outputEl = document.getElementById('condition-output');
+                break;
+            default:
+                throw new Error('Unknown form type');
+        }
+
+        // Validate ID
+        if (!id) {
+            throw new Error('ID é obrigatório');
+        }
+
+        // Validate data
+        if (!data) {
+            throw new Error('Dados inválidos - verifique os campos obrigatórios');
+        }
+
+        // Check for validation errors in output
+        if (outputEl && outputEl.classList.contains('has-errors')) {
+            throw new Error('Corrija os erros de validação antes de salvar');
+        }
+
+        // Save to server
+        await saveToServer(type, id, data);
+
+        // Reload all data from server to sync
+        await loadAllData();
+
+        // Clear the form
+        clearForm(form);
+
+        // Reset selector if in edit mode
+        const select = document.getElementById(`${form === 'medication' ? 'medication' : form}-select`);
+        if (select) select.value = '';
+
+        // Show success
+        btn.textContent = 'Salvo!';
+        btn.classList.remove('saving');
+        btn.classList.add('saved');
+
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('saved');
+            btn.disabled = false;
+        }, 2000);
+
+    } catch (error) {
+        console.error('Save error:', error);
+
+        btn.textContent = 'Erro!';
+        btn.classList.remove('saving');
+        btn.classList.add('save-error');
+
+        alert(`Erro ao salvar: ${error.message}`);
+
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('save-error');
+            btn.disabled = false;
+        }, 2000);
+    }
+}
+
+// ============ BUILD DATA FUNCTIONS ============
+function buildMedicationData() {
+    const name = document.getElementById('med-name').value.trim();
+    const instruction = document.getElementById('med-instruction').value.trim();
+    const duration = document.getElementById('med-duration').value.trim();
+    const inHospital = document.getElementById('med-in-hospital').checked;
+    const hospitalNote = document.getElementById('med-hospital-note').value.trim();
+
+    if (!name || !instruction) {
+        return null;
+    }
+
+    const medication = { name, instruction };
+    if (duration) medication.defaultDuration = duration;
+    if (inHospital) {
+        medication.inHospital = true;
+        if (hospitalNote) medication.hospitalNote = hospitalNote;
+    }
+
+    return medication;
+}
+
+function buildMedicationClassData() {
+    const label = document.getElementById('class-label').value.trim();
+    const options = getInputValuesOrdered('#class-options-container .class-option');
+
+    if (!label || options.length === 0) {
+        return null;
+    }
+
+    return { label, options };
+}
+
+function buildPhysicalExamData() {
+    const label = document.getElementById('exam-label').value.trim();
+    const isGendered = document.getElementById('exam-gendered').checked;
+
+    if (!label) {
+        return null;
+    }
+
+    let text;
+    if (isGendered) {
+        const masc = document.getElementById('exam-text-masc').value.trim();
+        const fem = document.getElementById('exam-text-fem').value.trim();
+        if (!masc || !fem) {
+            return null;
+        }
+        text = { masculino: masc, feminino: fem };
+    } else {
+        text = document.getElementById('exam-text').value.trim();
+        if (!text) {
+            return null;
+        }
+    }
+
+    return { label, text };
+}
+
+function buildConditionData() {
+    const name = document.getElementById('cond-name').value.trim();
+    const addons = getInputValuesOrdered('#cond-addons-container .cond-addon');
+    const conduct = getInputValuesOrdered('#cond-conduct-container .cond-conduct');
+    const prescriptionGroups = getPrescriptionGroups();
+
+    if (!name) {
+        return null;
+    }
+
+    return {
+        name,
+        physicalExamAddons: addons,
+        conduct,
+        prescriptionGroups
+    };
 }
 
 // ============ MEDICATION FORM ============

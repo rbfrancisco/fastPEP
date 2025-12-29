@@ -231,5 +231,21 @@
   "calamina": {
     "name": "Calamina 8% (Loção ou creme)",
     "instruction": "Aplicar na região afetada 3 vezes ao dia, por até 5 dias"
+  },
+  "sulfato-ferroso-40mg": {
+    "name": "Sulfato ferroso 40mg",
+    "instruction": "Tomar 2 comprimidos, uma vez ao dia, por 3 meses ou até consulta ambulatorial"
+  },
+  "neutrofer-300mg": {
+    "name": "Glicinato férrico 300mg (Neutrofer - 60mg ferro elementar)",
+    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 3 meses ou até consulta ambulatorial"
+  },
+  "mefanamico-500mg": {
+    "name": "Ácido mefenâmico 500mg",
+    "instruction": "Tomar 1 comprimido, de 8 em 8 horas, por 3 dias"
+  },
+  "tranexamico-250mg": {
+    "name": "Ácido tranexâmico 250mg",
+    "instruction": "Tomar 2 comprimidos de 8 em 8 horas, por 3 dias"
   }
 }

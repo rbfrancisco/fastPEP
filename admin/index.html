@@ -11,6 +11,9 @@
         <header class="header">
             <h1>FastPEP Editor</h1>
             <p class="subtitle">Criar e editar entradas dos arquivos JSON</p>
+            <button id="refresh-data-btn" class="btn-refresh" title="Recarregar dados dos arquivos JSON">
+                ↻ Atualizar Dados
+            </button>
         </header>
 
         <!-- Tab Navigation -->
@@ -76,7 +79,11 @@
                 <div class="output-section">
                     <div class="output-header">
                         <h3>JSON Gerado</h3>
-                        <button class="copy-btn" data-target="medication-output">Copiar</button>
+                        <div class="output-buttons">
+                            <button class="delete-btn hidden" data-form="medication">Excluir</button>
+                            <button class="save-btn hidden" data-form="medication">Salvar</button>
+                            <button class="copy-btn" data-target="medication-output">Copiar</button>
+                        </div>
                     </div>
                     <pre id="medication-output" class="json-output">Preencha o formulário acima para gerar o JSON</pre>
                 </div>
@@ -126,7 +133,11 @@
                 <div class="output-section">
                     <div class="output-header">
                         <h3>JSON Gerado</h3>
-                        <button class="copy-btn" data-target="class-output">Copiar</button>
+                        <div class="output-buttons">
+                            <button class="delete-btn hidden" data-form="class">Excluir</button>
+                            <button class="save-btn hidden" data-form="class">Salvar</button>
+                            <button class="copy-btn" data-target="class-output">Copiar</button>
+                        </div>
                     </div>
                     <pre id="class-output" class="json-output">Preencha o formulário acima para gerar o JSON</pre>
                 </div>
@@ -182,7 +193,11 @@
                 <div class="output-section">
                     <div class="output-header">
                         <h3>JSON Gerado</h3>
-                        <button class="copy-btn" data-target="exam-output">Copiar</button>
+                        <div class="output-buttons">
+                            <button class="delete-btn hidden" data-form="exam">Excluir</button>
+                            <button class="save-btn hidden" data-form="exam">Salvar</button>
+                            <button class="copy-btn" data-target="exam-output">Copiar</button>
+                        </div>
                     </div>
                     <pre id="exam-output" class="json-output">Preencha o formulário acima para gerar o JSON</pre>
                 </div>
@@ -268,7 +283,11 @@
                 <div class="output-section">
                     <div class="output-header">
                         <h3>JSON Gerado</h3>
-                        <button class="copy-btn" data-target="condition-output">Copiar</button>
+                        <div class="output-buttons">
+                            <button class="delete-btn hidden" data-form="condition">Excluir</button>
+                            <button class="save-btn hidden" data-form="condition">Salvar</button>
+                            <button class="copy-btn" data-target="condition-output">Copiar</button>
+                        </div>
                     </div>
                     <pre id="condition-output" class="json-output">Preencha o formulário acima para gerar o JSON</pre>
                 </div>

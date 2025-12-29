@@ -1,7 +1,12 @@
 {
   "ivas": {
     "name": "IVAS (Resfriado comum)",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "oroscopia-hiperemia"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "oroscopia-hiperemia"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Oriento medidas de suporte: hidratação, repouso, lavagem nasal",
@@ -13,16 +18,35 @@
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "med", "medId": "lavagem-nasal", "checked": true },
-          { "type": "med", "medId": "xarope-44e", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+          {
+            "type": "med",
+            "medId": "lavagem-nasal",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "xarope-44e",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "faringoamigdalite-bacteriana": {
     "name": "Faringoamigdalite bacteriana",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "oroscopia-amigdalite", "linfonodomegalia-cervical"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "oroscopia-amigdalite",
+      "linfonodomegalia-cervical"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -35,23 +59,46 @@
         "id": "antibiotico",
         "label": "Antibiótico",
         "type": "radio",
-        "options": ["amoxicilina-500mg", "penicilina-benzatina", "azitromicina-500mg"],
+        "options": [
+          "amoxicilina-500mg",
+          "penicilina-benzatina",
+          "azitromicina-500mg"
+        ],
         "default": "amoxicilina-500mg"
       },
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "med", "medId": "flurbiprofeno-pastilha", "checked": true },
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+          {
+            "type": "med",
+            "medId": "flurbiprofeno-pastilha",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "rinossinusite-bacteriana": {
     "name": "Rinossinusite bacteriana",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "oroscopia-hiperemia"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "oroscopia-hiperemia"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -64,24 +111,51 @@
         "id": "antibiotico",
         "label": "Antibiótico",
         "type": "radio",
-        "options": ["amoxicilina-clavulanato-875mg", "azitromicina-500mg", "levofloxacino-750mg"],
+        "options": [
+          "amoxicilina-clavulanato-875mg",
+          "azitromicina-500mg",
+          "levofloxacino-750mg"
+        ],
         "default": "amoxicilina-clavulanato-875mg"
       },
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "med", "medId": "lavagem-nasal", "checked": true },
-          { "type": "med", "medId": "xarope-44e", "checked": true },
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+          {
+            "type": "med",
+            "medId": "lavagem-nasal",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "xarope-44e",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "geca": {
     "name": "GECA (Gastroenterocolite aguda)",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "abdome-normal"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Oriento hidratação vigorosa e dieta leve",
@@ -93,18 +167,46 @@
         "id": "tratamento",
         "label": "Tratamento",
         "items": [
-          { "type": "med", "medId": "sais-reidratacao", "checked": true },
-          { "type": "med", "medId": "floratil-200mg", "checked": true },
-          { "type": "med", "medId": "racecadotrila-100mg", "checked": true },
-          { "type": "class", "classId": "antiemetico", "default": "ondansetrona-4mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+          {
+            "type": "med",
+            "medId": "sais-reidratacao",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "floratil-200mg",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "racecadotrila-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "antiemetico",
+            "default": "ondansetrona-4mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "itu-nao-complicada": {
     "name": "ITU não complicada",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "abdome-normal", "giordano-negativo"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal",
+      "giordano-negativo"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -117,22 +219,43 @@
         "id": "antibiotico",
         "label": "Antibiótico",
         "type": "radio",
-        "options": ["fosfomicina-3g", "nitrofurantoina-100mg", "cefalexina-500mg", "cefuroxima-250mg", "sulfametoxazol-trimetoprima"],
+        "options": [
+          "fosfomicina-3g",
+          "nitrofurantoina-100mg",
+          "cefalexina-500mg",
+          "cefuroxima-250mg",
+          "sulfametoxazol-trimetoprima"
+        ],
         "default": "fosfomicina-3g"
       },
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "med", "medId": "fenazopiridina-200mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": true }
+          {
+            "type": "med",
+            "medId": "fenazopiridina-200mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "pielonefrite-ambulatorial": {
     "name": "Pielonefrite (tratamento ambulatorial)",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "abdome-normal", "giordano-positivo"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal",
+      "giordano-positivo"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -146,22 +269,42 @@
         "id": "antibiotico",
         "label": "Antibiótico",
         "type": "radio",
-        "options": ["amoxicilina-clavulanato-875mg", "ciprofloxacino-500mg", "levofloxacino-750mg"],
+        "options": [
+          "amoxicilina-clavulanato-875mg",
+          "ciprofloxacino-500mg",
+          "levofloxacino-750mg"
+        ],
         "default": "amoxicilina-clavulanato-875mg"
       },
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true, "duration": "5" },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true,
+            "duration": "5"
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "otite-media-aguda": {
     "name": "Otite média aguda",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "otoscopia-oma"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "otoscopia-oma"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antibioticoterapia",
@@ -173,22 +316,41 @@
         "id": "antibiotico",
         "label": "Antibiótico",
         "type": "radio",
-        "options": ["amoxicilina-500mg-8h", "amoxicilina-clavulanato-875mg-10d"],
+        "options": [
+          "amoxicilina-500mg-8h",
+          "amoxicilina-clavulanato-875mg-10d"
+        ],
         "default": "amoxicilina-500mg-8h"
       },
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true, "duration": "5" },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true,
+            "duration": "5"
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "otite-externa-aguda": {
     "name": "Otite externa aguda",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "otoscopia-oea"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "otoscopia-oea"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo tratamento tópico",
@@ -201,16 +363,35 @@
         "id": "tratamento",
         "label": "Tratamento",
         "items": [
-          { "type": "med", "medId": "ciprofloxacino-hidrocortisona-otologico", "checked": true },
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+          {
+            "type": "med",
+            "medId": "ciprofloxacino-hidrocortisona-otologico",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "enxaqueca": {
     "name": "Enxaqueca",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "neurologico-normal"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "neurologico-normal"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo medicação abortiva para crises",
@@ -223,16 +404,34 @@
         "id": "tratamento",
         "label": "Tratamento",
         "items": [
-          { "type": "med", "medId": "naratriptano-25mg", "checked": true },
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+          {
+            "type": "med",
+            "medId": "naratriptano-25mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "dor-muscular": {
     "name": "Dor muscular / Lombalgia",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Oriento repouso relativo e aplicação de calor local",
@@ -244,16 +443,35 @@
         "id": "tratamento",
         "label": "Tratamento",
         "items": [
-          { "type": "med", "medId": "ciclobenzaprina-5mg", "checked": true },
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+          {
+            "type": "med",
+            "medId": "ciclobenzaprina-5mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "herpes-zoster": {
     "name": "Herpes zoster",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "pele-herpes-zoster"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "pele-herpes-zoster"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo antiviral",
@@ -266,23 +484,45 @@
         "id": "antiviral",
         "label": "Antiviral",
         "type": "radio",
-        "options": ["valaciclovir-500mg", "aciclovir-400mg"],
+        "options": [
+          "valaciclovir-500mg",
+          "aciclovir-400mg"
+        ],
         "default": "valaciclovir-500mg"
       },
       {
         "id": "analgesia",
         "label": "Analgesia",
         "items": [
-          { "type": "med", "medId": "tramadol-50mg", "checked": false },
-          { "type": "class", "classId": "aine", "default": "cetoprofeno-100mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+          {
+            "type": "med",
+            "medId": "tramadol-50mg",
+            "checked": false
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "crise-gota": {
     "name": "Crise de Gota",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "articulacao-gota"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "articulacao-gota"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Prescrevo tratamento para crise",
@@ -295,17 +535,40 @@
         "id": "tratamento",
         "label": "Tratamento",
         "items": [
-          { "type": "med", "medId": "colchicina-05mg", "checked": true },
-          { "type": "med", "medId": "omeprazol-20mg", "checked": true },
-          { "type": "class", "classId": "aine", "default": "naproxeno-500mg", "checked": true },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-1g", "checked": true }
+          {
+            "type": "med",
+            "medId": "colchicina-05mg",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "omeprazol-20mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "naproxeno-500mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
         ]
       }
     ]
   },
   "constipacao-funcional": {
     "name": "Constipação funcional",
-    "physicalExamAddons": ["geral-bom", "cv-normal", "resp-normal", "abdome-normal"],
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal"
+    ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
       "Oriento mudanças alimentares e hidratação adequada",
@@ -318,15 +581,90 @@
         "id": "laxantes",
         "label": "Laxantes",
         "type": "radio",
-        "options": ["macrogol-3350", "lactulose-xarope"],
+        "options": [
+          "macrogol-3350",
+          "lactulose-xarope"
+        ],
         "default": "macrogol-3350"
       },
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
-          { "type": "med", "medId": "escopolamina-10mg", "checked": false },
-          { "type": "class", "classId": "analgesico", "default": "dipirona-500mg", "checked": false }
+          {
+            "type": "med",
+            "medId": "escopolamina-10mg",
+            "checked": false
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": false
+          }
+        ]
+      }
+    ]
+  },
+  "sangramento-mentrual": {
+    "name": "Sangramento menstrual",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Solicito encaminhamento com urgência para ginecologia",
+      "Prescrevo medicação para redução do fluxo menstrual",
+      "Prescrevo reposição de ferro",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "hemostasia",
+        "label": "Redução de sangramento",
+        "items": [
+          {
+            "type": "med",
+            "medId": "mefanamico-500mg",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "tranexamico-250mg",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "id": "sup-ferro",
+        "label": "Reposição de ferro",
+        "items": [
+          {
+            "type": "class",
+            "classId": "ferro",
+            "default": "sulfato-ferroso-40mg",
+            "checked": true
+          }
+        ]
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "escopolamina-10mg",
+            "checked": true
+          }
         ]
       }
     ]
