@@ -331,6 +331,17 @@ body {
     min-height: 100px;
     white-space: pre-wrap;
     word-break: break-word;
+    transition: border-color var(--transition);
+    border-left: 4px solid transparent;
+}
+
+.json-output.has-errors {
+    border-left-color: var(--danger-color);
+    background: #1a1a2e;
+}
+
+.json-output.has-warnings {
+    border-left-color: var(--warning-color);
 }
 
 /* Prescription Groups */

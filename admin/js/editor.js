@@ -265,7 +265,9 @@ function clearForm(form) {
                     <input type="text" class="class-option" placeholder="ID do medicamento (ex: cetoprofeno-100mg)">
                     <button type="button" class="btn-remove" title="Remover">×</button>
                 </div>`;
-            document.getElementById('class-output').textContent = 'Preencha o formulário acima para gerar o JSON';
+            const classOutput = document.getElementById('class-output');
+            classOutput.textContent = 'Preencha o formulário acima para gerar o JSON';
+            classOutput.classList.remove('has-errors', 'has-warnings');
             break;
 
         case 'exam':
@@ -310,7 +312,9 @@ function clearForm(form) {
                 </div>`;
 
             document.getElementById('prescription-groups-container').innerHTML = '';
-            document.getElementById('condition-output').textContent = 'Preencha o formulário acima para gerar o JSON';
+            const conditionOutput = document.getElementById('condition-output');
+            conditionOutput.textContent = 'Preencha o formulário acima para gerar o JSON';
+            conditionOutput.classList.remove('has-errors', 'has-warnings');
             break;
     }
 
@@ -869,19 +873,25 @@ function generateMedicationClassJSON() {
     const id = document.getElementById('class-id').value.trim();
     const label = document.getElementById('class-label').value.trim();
     const options = getInputValuesOrdered('#class-options-container .class-option');
+    const outputEl = document.getElementById('class-output');
 
     if (!id || !label || options.length === 0) {
-        document.getElementById('class-output').textContent = 'Erro: Preencha todos os campos obrigatórios';
+        outputEl.textContent = 'Erro: Preencha todos os campos obrigatórios';
+        outputEl.classList.add('has-errors');
         return;
     }
 
     const classData = { label, options };
-
     const isEdit = editState.class.mode === 'edit' && editState.class.currentId === id;
-    const prefix = isEdit ? '// SUBSTITUIR entrada existente:\n' : '';
 
-    const output = `${prefix}"${id}": ${JSON.stringify(classData, null, 2)}`;
-    document.getElementById('class-output').textContent = output;
+    // Validate references
+    const { errors, warnings } = validateMedicationClass(id, options);
+    const jsonOutput = `"${id}": ${JSON.stringify(classData, null, 2)}`;
+    const output = formatValidationOutput(jsonOutput, errors, warnings, isEdit);
+
+    outputEl.textContent = output;
+    outputEl.classList.toggle('has-errors', errors.length > 0);
+    outputEl.classList.toggle('has-warnings', errors.length === 0 && warnings.length > 0);
 }
 
 // ============ PHYSICAL EXAM FORM ============
@@ -1088,9 +1098,11 @@ function generateConditionJSON() {
     const addons = getInputValuesOrdered('#cond-addons-container .cond-addon');
     const conduct = getInputValuesOrdered('#cond-conduct-container .cond-conduct');
     const prescriptionGroups = getPrescriptionGroups();
+    const outputEl = document.getElementById('condition-output');
 
     if (!id || !name) {
-        document.getElementById('condition-output').textContent = 'Erro: Preencha ID e Nome da condição';
+        outputEl.textContent = 'Erro: Preencha ID e Nome da condição';
+        outputEl.classList.add('has-errors');
         return;
     }
 
@@ -1102,10 +1114,15 @@ function generateConditionJSON() {
     };
 
     const isEdit = editState.condition.mode === 'edit' && editState.condition.currentId === id;
-    const prefix = isEdit ? '// SUBSTITUIR entrada existente:\n' : '';
 
-    const output = `${prefix}"${id}": ${JSON.stringify(condition, null, 2)}`;
-    document.getElementById('condition-output').textContent = output;
+    // Validate references
+    const { errors, warnings } = validateCondition(condition);
+    const jsonOutput = `"${id}": ${JSON.stringify(condition, null, 2)}`;
+    const output = formatValidationOutput(jsonOutput, errors, warnings, isEdit);
+
+    outputEl.textContent = output;
+    outputEl.classList.toggle('has-errors', errors.length > 0);
+    outputEl.classList.toggle('has-warnings', errors.length === 0 && warnings.length > 0);
 }
 
 function getPrescriptionGroups() {
@@ -1196,4 +1213,107 @@ function getInputValuesOrdered(selector) {
         if (val) values.push(val);
     });
     return values;
+}
+
+// ============ VALIDATION ============
+function validateMedicationClass(classId, options) {
+    const errors = [];
+    const warnings = [];
+
+    for (const medId of options) {
+        if (!dataStore.medications[medId]) {
+            errors.push(`Medicamento "${medId}" não existe`);
+        }
+    }
+
+    return { errors, warnings };
+}
+
+function validateCondition(conditionData) {
+    const errors = [];
+    const warnings = [];
+
+    // Validate addons
+    for (const addonId of conditionData.physicalExamAddons || []) {
+        if (!dataStore.physicalExam.addons?.[addonId]) {
+            errors.push(`Addon de exame físico "${addonId}" não existe`);
+        }
+    }
+
+    // Validate prescription groups
+    for (const group of conditionData.prescriptionGroups || []) {
+        if (group.type === 'radio') {
+            // Validate radio options
+            for (const medId of group.options || []) {
+                if (!dataStore.medications[medId]) {
+                    errors.push(`Grupo "${group.label}": medicamento "${medId}" não existe`);
+                }
+            }
+            // Validate default
+            if (group.default && group.options && !group.options.includes(group.default)) {
+                warnings.push(`Grupo "${group.label}": default "${group.default}" não está nas opções`);
+            }
+            if (group.default && !dataStore.medications[group.default]) {
+                errors.push(`Grupo "${group.label}": medicamento default "${group.default}" não existe`);
+            }
+        } else {
+            // Validate items
+            for (const item of group.items || []) {
+                if (item.type === 'med') {
+                    if (!dataStore.medications[item.medId]) {
+                        errors.push(`Grupo "${group.label}": medicamento "${item.medId}" não existe`);
+                    }
+                } else if (item.type === 'class') {
+                    if (!dataStore.medicationClasses[item.classId]) {
+                        errors.push(`Grupo "${group.label}": classe "${item.classId}" não existe`);
+                    } else {
+                        // Validate default medication
+                        if (item.default) {
+                            if (!dataStore.medications[item.default]) {
+                                errors.push(`Grupo "${group.label}": medicamento default "${item.default}" não existe`);
+                            } else {
+                                const classOptions = dataStore.medicationClasses[item.classId].options || [];
+                                if (!classOptions.includes(item.default)) {
+                                    warnings.push(`Grupo "${group.label}": medicamento "${item.default}" não pertence à classe "${item.classId}"`);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return { errors, warnings };
+}
+
+function formatValidationOutput(jsonOutput, errors, warnings, isEdit) {
+    let output = '';
+
+    if (errors.length > 0) {
+        output += '⛔ ERROS (corrija antes de usar):\n';
+        errors.forEach(err => output += `  • ${err}\n`);
+        output += '\n';
+    }
+
+    if (warnings.length > 0) {
+        output += '⚠️ AVISOS:\n';
+        warnings.forEach(warn => output += `  • ${warn}\n`);
+        output += '\n';
+    }
+
+    if (errors.length === 0) {
+        if (isEdit) {
+            output += '// SUBSTITUIR entrada existente:\n';
+        }
+        output += jsonOutput;
+    } else {
+        output += '// JSON gerado com erros (não recomendado usar):\n';
+        if (isEdit) {
+            output += '// SUBSTITUIR entrada existente:\n';
+        }
+        output += jsonOutput;
+    }
+
+    return output;
 }

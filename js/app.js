@@ -61,9 +61,102 @@
             physicalExam = physicalExamData;
             medications = medicationsData;
             medicationClasses = classesData;
+
+            // Validate data references
+            validateData();
         } catch (error) {
             console.error('Erro ao carregar dados:', error);
         }
+    }
+
+    // Validate data integrity - check for broken references
+    function validateData() {
+        const errors = [];
+        const warnings = [];
+
+        // Validate medication classes reference valid medications
+        for (const [classId, classData] of Object.entries(medicationClasses)) {
+            if (!classData.options || !Array.isArray(classData.options)) continue;
+            for (const medId of classData.options) {
+                if (!medications[medId]) {
+                    errors.push(`Classe "${classId}": medicamento "${medId}" não encontrado`);
+                }
+            }
+        }
+
+        // Validate conditions
+        for (const [condId, cond] of Object.entries(conditions)) {
+            // Check physical exam addons
+            if (cond.physicalExamAddons && Array.isArray(cond.physicalExamAddons)) {
+                for (const addonId of cond.physicalExamAddons) {
+                    if (!physicalExam.addons?.[addonId]) {
+                        errors.push(`Condição "${condId}": addon "${addonId}" não encontrado`);
+                    }
+                }
+            }
+
+            // Check prescription groups
+            if (cond.prescriptionGroups && Array.isArray(cond.prescriptionGroups)) {
+                for (const group of cond.prescriptionGroups) {
+                    // Radio group options
+                    if (group.type === 'radio' && group.options) {
+                        for (const medId of group.options) {
+                            if (!medications[medId]) {
+                                errors.push(`Condição "${condId}", grupo "${group.id}": medicamento "${medId}" não encontrado`);
+                            }
+                        }
+                        // Check default exists in options
+                        if (group.default && !group.options.includes(group.default)) {
+                            warnings.push(`Condição "${condId}", grupo "${group.id}": default "${group.default}" não está nas opções`);
+                        }
+                    }
+
+                    // Items group
+                    if (group.items && Array.isArray(group.items)) {
+                        for (const item of group.items) {
+                            if (item.type === 'med') {
+                                if (!medications[item.medId]) {
+                                    errors.push(`Condição "${condId}", grupo "${group.id}": medicamento "${item.medId}" não encontrado`);
+                                }
+                            } else if (item.type === 'class') {
+                                if (!medicationClasses[item.classId]) {
+                                    errors.push(`Condição "${condId}", grupo "${group.id}": classe "${item.classId}" não encontrada`);
+                                } else if (item.default) {
+                                    // Check default medication exists and is in the class
+                                    if (!medications[item.default]) {
+                                        errors.push(`Condição "${condId}", grupo "${group.id}": medicamento default "${item.default}" não encontrado`);
+                                    } else {
+                                        const classOptions = medicationClasses[item.classId].options || [];
+                                        if (!classOptions.includes(item.default)) {
+                                            warnings.push(`Condição "${condId}", grupo "${group.id}": medicamento default "${item.default}" não está na classe "${item.classId}"`);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Log results
+        if (errors.length > 0) {
+            console.group('%c⚠ Erros de validação de dados', 'color: #dc2626; font-weight: bold');
+            errors.forEach(err => console.error(err));
+            console.groupEnd();
+        }
+
+        if (warnings.length > 0) {
+            console.group('%c⚡ Avisos de validação', 'color: #d97706; font-weight: bold');
+            warnings.forEach(warn => console.warn(warn));
+            console.groupEnd();
+        }
+
+        if (errors.length === 0 && warnings.length === 0) {
+            console.log('%c✓ Dados validados sem erros', 'color: #16a34a; font-weight: bold');
+        }
+
+        return { errors, warnings };
     }
 
     // Setup event listeners
