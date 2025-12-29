@@ -4,10 +4,11 @@
 
 FastPEP (Prontuário Eletrônico Rápido) is a medical record documentation generator for Brazilian emergency room physicians. It generates standardized text for electronic medical records in **Brazilian Portuguese**.
 
-**Tech Stack:** Vanilla HTML, CSS, JavaScript (no frameworks)
+**Tech Stack:** Vanilla HTML, CSS, JavaScript (no frameworks), Node.js/Express (local editor server)
 
 **Main Application:** `index.html` + `js/app.js` + `css/styles.css`
 **Admin Editor:** `admin/index.html` + `admin/js/editor.js` + `admin/css/styles.css`
+**Editor Server:** `server/index.js` + `server/routes/data.js`
 
 ## Core Functionality
 
@@ -129,6 +130,29 @@ Two types in `prescriptionGroups`:
 - **Autocomplete:** Suggestions based on existing data
 - **Drag-and-Drop:** Reorder items within lists
 - **Gendered Text Toggle:** Checkbox to switch between simple text and masculino/feminino fields
+- **Direct Save:** Save directly to JSON files (requires server)
+- **Delete:** Remove entries when in edit mode
+- **Refresh:** Reload data from files without page refresh
+- **Validation:** Checks for broken references before save
+
+## Editor Server (Local Development)
+
+The editor can save directly to JSON files using a local Express server:
+
+```bash
+npm install        # First time only
+npm run server     # Start server on port 3001
+# Open http://localhost:3001/admin/
+```
+
+**API Endpoints:**
+- `GET /api/data/:type` - Get all data for a type
+- `PUT /api/data/:type/:id` - Create/update entry
+- `DELETE /api/data/:type/:id` - Delete entry
+
+**Type mapping:** `medications`, `medication-classes`, `physical-exam`, `conditions`
+
+When server is not running, the editor still works for preview/copy workflow.
 
 ## File Structure
 
@@ -146,6 +170,10 @@ fastPEP/
 │   ├── index.html          # Editor interface
 │   ├── js/editor.js        # Editor logic
 │   └── css/styles.css      # Editor styles
+├── server/
+│   ├── index.js            # Express server entry point
+│   └── routes/data.js      # API routes for JSON editing
+├── package.json            # npm dependencies
 └── README.md               # Full documentation
 ```
 
@@ -177,9 +205,18 @@ Add to `physical-exam.json` under `addons`:
 }
 ```
 
+## Main App Features
+
+- **Keyboard shortcuts:** `/` to focus search, `Ctrl+1/2/3` to copy sections, `Ctrl+Shift+A` to copy all
+- **Editable sections:** Output sections can be edited before copying (temporary, resets on changes)
+- **Data validation:** Checks for broken references on load (logged to console)
+- **Gender support:** Toggle between masculino/feminino for gendered physical exam text
+
 ## Important Notes
 
 - All IDs use lowercase with hyphens (e.g., `amoxicilina-500mg`)
 - The app is in Brazilian Portuguese
 - Fuzzy search for diagnoses matches any word in the name
 - Clicking on a filled diagnosis search input clears it for new search
+- Main app works statically (can be hosted on GitHub Pages)
+- Editor server is local-only for data editing
