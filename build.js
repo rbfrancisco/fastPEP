@@ -22,46 +22,35 @@ fs.mkdirSync('dist/js', { recursive: true });
 fs.mkdirSync('dist/css', { recursive: true });
 fs.mkdirSync('dist/data', { recursive: true });
 
-// Function to run command and show output
-function run(cmd) {
-  console.log(`Running: ${cmd}`);
+function encryptFile(inputPath, outputPath) {
+  console.log(`Encrypting ${inputPath} -> ${outputPath}`);
+  
+  // Use staticrypt with --stdout and capture the output
+  const cmd = `./node_modules/.bin/staticrypt "${inputPath}" -p "${password}" --short --stdout`;
+  console.log(`Running: staticrypt ${inputPath} -p [HIDDEN] --short --stdout`);
+  
   try {
-    const output = execSync(cmd, { encoding: 'utf8', stdio: 'pipe' });
-    if (output) console.log(output);
+    const encrypted = execSync(cmd, { 
+      encoding: 'utf8',
+      maxBuffer: 10 * 1024 * 1024 // 10MB buffer
+    });
+    
+    if (!encrypted || encrypted.length === 0) {
+      console.error(`ERROR: staticrypt returned empty output for ${inputPath}`);
+      // Fallback: just copy the original file
+      console.log('Falling back to copying original file...');
+      fs.copyFileSync(inputPath, outputPath);
+    } else {
+      fs.writeFileSync(outputPath, encrypted);
+      console.log(`✓ Created ${outputPath} (${encrypted.length} bytes)`);
+    }
   } catch (err) {
-    console.error(`Command failed with exit code ${err.status}`);
-    console.error('stdout:', err.stdout);
-    console.error('stderr:', err.stderr);
+    console.error(`Command failed:`, err.message);
+    if (err.stdout) console.error('stdout:', err.stdout);
+    if (err.stderr) console.error('stderr:', err.stderr);
     throw err;
   }
 }
-
-// Encrypt HTML files
-console.log('Encrypting index.html...');
-run(`npx staticrypt index.html -p "${password}" -o dist/index.html --short`);
-
-console.log('Checking if file was created...');
-if (fs.existsSync('dist/index.html')) {
-  console.log('✓ dist/index.html created, size:', fs.statSync('dist/index.html').size);
-} else {
-  console.log('✗ dist/index.html NOT created');
-  // Try alternative syntax
-  console.log('Trying alternative syntax...');
-  run(`npx staticrypt index.html -p "${password}" --output dist/index.html --short`);
-}
-
-console.log('Encrypting admin/index.html...');
-run(`npx staticrypt admin/index.html -p "${password}" -o dist/admin/index.html --short`);
-
-if (fs.existsSync('dist/admin/index.html')) {
-  console.log('✓ dist/admin/index.html created');
-} else {
-  console.log('✗ dist/admin/index.html NOT created');
-  run(`npx staticrypt admin/index.html -p "${password}" --output dist/admin/index.html --short`);
-}
-
-// Copy assets
-console.log('Copying assets...');
 
 function copyDir(src, dest) {
   if (!fs.existsSync(src)) return;
@@ -78,13 +67,42 @@ function copyDir(src, dest) {
   }
 }
 
+// Check staticrypt version
+console.log('Checking staticrypt...');
+try {
+  const version = execSync('./node_modules/.bin/staticrypt --version', { encoding: 'utf8' });
+  console.log('staticrypt version:', version.trim());
+} catch (e) {
+  console.log('Could not get version');
+}
+
+// Encrypt HTML files
+encryptFile('index.html', 'dist/index.html');
+encryptFile('admin/index.html', 'dist/admin/index.html');
+
+// Copy assets
+console.log('Copying assets...');
 copyDir('js', 'dist/js');
 copyDir('css', 'dist/css');
 copyDir('data', 'dist/data');
 copyDir('admin/js', 'dist/admin/js');
 copyDir('admin/css', 'dist/admin/css');
 
-console.log('Final dist contents:');
-run('ls -laR dist');
+// Verify
+console.log('\nFinal dist contents:');
+const listFiles = (dir, prefix = '') => {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      console.log(`${prefix}${entry.name}/`);
+      listFiles(fullPath, prefix + '  ');
+    } else {
+      const size = fs.statSync(fullPath).size;
+      console.log(`${prefix}${entry.name} (${size} bytes)`);
+    }
+  }
+};
+listFiles('dist');
 
-console.log('Build complete!');
+console.log('\nBuild complete!');
