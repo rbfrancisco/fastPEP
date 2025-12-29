@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-FastPEP (Prontuário Eletrônico Rápido) is a medical record documentation generator for Brazilian emergency room physicians. It generates standardized text for electronic medical records in **Brazilian Portuguese**.
+FastPEP is a medical record documentation generator for Brazilian physicians. It generates standardized text for electronic medical records in **Brazilian Portuguese**.
 
 **Tech Stack:** Vanilla HTML, CSS, JavaScript (no frameworks), Node.js/Express (local editor server)
 
@@ -33,7 +33,7 @@ Each condition (diagnosis) links everything together:
 ```
 
 ### 2. `physical-exam.json` - Physical exam addons
-**IMPORTANT:** All physical exam components are unified as addons (flat structure):
+All physical exam components are unified as addons (flat structure):
 ```json
 {
   "addons": {
@@ -54,9 +54,9 @@ Each condition (diagnosis) links everything together:
 ```
 
 **Standard addons used by most conditions:**
-- `geral-bom` (or `geral-regular`, `geral-mau`)
-- `cv-normal` (or `cv-taquicardico`, `cv-tec-aumentado`)
-- `resp-normal` (or `resp-sibilos`, `resp-estertores`)
+- `geral-bom`
+- `cv-normal`
+- `resp-normal`
 
 ### 3. `medications.json` - Individual medications
 ```json
@@ -177,40 +177,11 @@ fastPEP/
 └── README.md               # Full documentation
 ```
 
-## Common Tasks
-
-### Adding a new condition
-1. Add physical exam addons if needed to `physical-exam.json`
-2. Add medications if needed to `medications.json`
-3. Add the condition to `conditions.json` with:
-   - `physicalExamAddons` (always include base addons)
-   - `conduct` array
-   - `prescriptionGroups`
-
-### Adding a new medication
-Add to `medications.json`:
-```json
-"new-med-id": {
-  "name": "Nome do Medicamento",
-  "instruction": "Instruções de uso"
-}
-```
-
-### Adding a new physical exam addon
-Add to `physical-exam.json` under `addons`:
-```json
-"new-addon-id": {
-  "label": "Label for display",
-  "text": "Full text for the exam"
-}
-```
-
 ## Main App Features
 
 - **Keyboard shortcuts:** `/` to focus search, `Ctrl+1/2/3` to copy sections, `Ctrl+Shift+A` to copy all
 - **Editable sections:** Output sections can be edited before copying (temporary, resets on changes)
 - **Data validation:** Checks for broken references on load (logged to console)
-- **Gender support:** Toggle between masculino/feminino for gendered physical exam text
 
 ## Important Notes
 
@@ -218,5 +189,5 @@ Add to `physical-exam.json` under `addons`:
 - The app is in Brazilian Portuguese
 - Fuzzy search for diagnoses matches any word in the name
 - Clicking on a filled diagnosis search input clears it for new search
-- Main app works statically (can be hosted on GitHub Pages)
+- Main app works statically
 - Editor server is local-only for data editing

@@ -10,95 +10,114 @@
     <div class="container">
         <header class="header">
             <h1>FastPEP</h1>
-            <p class="subtitle">Prontuário Eletrônico Rápido</p>
+            <div class="header-controls">
+                <span class="shortcuts-hint"><kbd>/</kbd> buscar <kbd>Ctrl+1/2/3</kbd> copiar <kbd>Ctrl+Shift+A</kbd> tudo <kbd>Ctrl+D</kbd> tema</span>
+                <button class="theme-toggle" id="theme-toggle" title="Alternar tema (Ctrl+D)">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
         </header>
 
         <main class="main">
-            <!-- Configuration Section -->
-            <section class="config-section">
-                <div class="config-group">
-                    <label class="config-label">Sexo:</label>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="gender" value="masculino"> Masculino
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="gender" value="feminino" checked> Feminino
-                        </label>
+            <!-- Left Panel: Controls -->
+            <div class="panel-left">
+                <!-- Configuration Section -->
+                <section class="config-section">
+                    <div class="config-group">
+                        <label class="config-label">Sexo:</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="masculino"> Masculino
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="feminino" checked> Feminino
+                            </label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="config-group">
-                    <label class="config-label" for="diagnosis-search">Diagnóstico:</label>
-                    <div class="search-container">
-                        <input
-                            type="text"
-                            id="diagnosis-search"
-                            class="search-input"
-                            placeholder="Digite para buscar..."
-                            autocomplete="off"
-                        >
-                        <div id="diagnosis-dropdown" class="dropdown hidden"></div>
+                    <div class="config-group">
+                        <label class="config-label" for="diagnosis-search">Diagnóstico:</label>
+                        <div class="search-container">
+                            <input
+                                type="text"
+                                id="diagnosis-search"
+                                class="search-input"
+                                placeholder="Digite para buscar..."
+                                autocomplete="off"
+                            >
+                            <div id="diagnosis-dropdown" class="dropdown hidden"></div>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Physical Exam Section -->
-            <section class="output-section" id="physical-exam-section">
-                <div class="section-header">
-                    <h2>Exame Físico</h2>
-                    <button class="copy-btn" data-target="physical-exam-content" title="Copiar (Ctrl+1)">
-                        <span class="copy-icon">📋</span>
-                        <span class="copy-text">Copiar</span>
-                    </button>
-                </div>
-                <div class="section-content" id="physical-exam-content">
-                    <p class="placeholder-text">Selecione um diagnóstico para ver o exame físico</p>
-                </div>
-            </section>
+                <!-- Treatment Options Section (only visible when there are options) -->
+                <section class="output-section hidden" id="treatment-options-section">
+                    <div class="section-header">
+                        <h2>Opções de Tratamento</h2>
+                    </div>
+                    <div class="section-content" id="treatment-options-content">
+                    </div>
+                </section>
+            </div>
 
-            <!-- Treatment Options Section (only visible when there are options) -->
-            <section class="output-section hidden" id="treatment-options-section">
-                <div class="section-header">
-                    <h2>Opções de Tratamento</h2>
-                </div>
-                <div class="section-content" id="treatment-options-content">
-                </div>
-            </section>
+            <!-- Right Panel: Output -->
+            <div class="panel-right">
+                <!-- Physical Exam Section -->
+                <section class="output-section" id="physical-exam-section">
+                    <div class="section-header">
+                        <h2>Exame Físico</h2>
+                        <button class="copy-btn" data-target="physical-exam-content" title="Copiar (Ctrl+1)">
+                            <span class="copy-icon">📋</span>
+                            <span class="copy-text">Copiar</span>
+                        </button>
+                    </div>
+                    <div class="section-content" id="physical-exam-content">
+                        <p class="placeholder-text">Selecione um diagnóstico para ver o exame físico</p>
+                    </div>
+                </section>
 
-            <!-- Conduct Section -->
-            <section class="output-section" id="conduct-section">
-                <div class="section-header">
-                    <h2>Conduta</h2>
-                    <button class="copy-btn" data-target="conduct-content" title="Copiar (Ctrl+2)">
-                        <span class="copy-icon">📋</span>
-                        <span class="copy-text">Copiar</span>
-                    </button>
-                </div>
-                <div class="section-content" id="conduct-content">
-                    <p class="placeholder-text">Selecione um diagnóstico para ver a conduta</p>
-                </div>
-            </section>
+                <!-- Conduct Section -->
+                <section class="output-section" id="conduct-section">
+                    <div class="section-header">
+                        <h2>Conduta</h2>
+                        <button class="copy-btn" data-target="conduct-content" title="Copiar (Ctrl+2)">
+                            <span class="copy-icon">📋</span>
+                            <span class="copy-text">Copiar</span>
+                        </button>
+                    </div>
+                    <div class="section-content" id="conduct-content">
+                        <p class="placeholder-text">Selecione um diagnóstico para ver a conduta</p>
+                    </div>
+                </section>
 
-            <!-- Prescription Section -->
-            <section class="output-section" id="prescription-section">
-                <div class="section-header">
-                    <h2>Prescrição</h2>
-                    <button class="copy-btn" data-target="prescription-content" title="Copiar (Ctrl+3)">
-                        <span class="copy-icon">📋</span>
-                        <span class="copy-text">Copiar</span>
-                    </button>
-                </div>
-                <div class="section-content" id="prescription-content">
-                    <p class="placeholder-text">Selecione um diagnóstico para ver a prescrição</p>
-                </div>
-            </section>
+                <!-- Prescription Section -->
+                <section class="output-section" id="prescription-section">
+                    <div class="section-header">
+                        <h2>Prescrição</h2>
+                        <button class="copy-btn" data-target="prescription-content" title="Copiar (Ctrl+3)">
+                            <span class="copy-icon">📋</span>
+                            <span class="copy-text">Copiar</span>
+                        </button>
+                    </div>
+                    <div class="section-content" id="prescription-content">
+                        <p class="placeholder-text">Selecione um diagnóstico para ver a prescrição</p>
+                    </div>
+                </section>
+            </div>
         </main>
-
-        <footer class="footer">
-            <p>FastPEP - Ferramenta de apoio à documentação médica</p>
-            <p class="shortcuts-hint">Atalhos: <kbd>/</kbd> buscar &nbsp; <kbd>Ctrl+1/2/3</kbd> copiar seção &nbsp; <kbd>Ctrl+Shift+A</kbd> copiar tudo</p>
-        </footer>
     </div>
 
     <!-- Toast notification -->

@@ -23,14 +23,34 @@
         treatmentOptionsContent: null,
         conductContent: null,
         prescriptionContent: null,
-        toast: null
+        toast: null,
+        themeToggle: null
     };
 
     // Initialize application
     async function init() {
         cacheElements();
+        initTheme();
         await loadData();
         setupEventListeners();
+    }
+
+    // Initialize theme from localStorage or system preference
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    }
+
+    // Toggle theme between light and dark
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
     }
 
     // Cache DOM elements
@@ -44,6 +64,7 @@
         elements.conductContent = document.getElementById('conduct-content');
         elements.prescriptionContent = document.getElementById('prescription-content');
         elements.toast = document.getElementById('toast');
+        elements.themeToggle = document.getElementById('theme-toggle');
     }
 
     // Load JSON data (with cache busting)
@@ -179,6 +200,11 @@
             btn.addEventListener('click', handleCopy);
         });
 
+        // Theme toggle button
+        if (elements.themeToggle) {
+            elements.themeToggle.addEventListener('click', toggleTheme);
+        }
+
         // Keyboard shortcuts
         document.addEventListener('keydown', handleGlobalKeydown);
     }
@@ -217,6 +243,12 @@
         if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
             e.preventDefault();
             copyAllSections();
+        }
+
+        // Ctrl+D to toggle dark mode
+        if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'd') {
+            e.preventDefault();
+            toggleTheme();
         }
     }
 
