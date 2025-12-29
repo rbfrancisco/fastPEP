@@ -5,7 +5,8 @@
   "main": "server/index.js",
   "scripts": {
     "server": "node server/index.js",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "build": "bash build.sh"
   },
   "keywords": [
     "medical",
