@@ -20,6 +20,6 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
-    "staticrypt": "^3.5.4"
+    "pagecrypt": "^6.1.0"
   }
 }
