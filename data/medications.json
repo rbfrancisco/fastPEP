@@ -19,7 +19,7 @@
     "name": "Penicilina Benzatina 1.200.000 UI",
     "instruction": "Aplicar 1 ampola intramuscular, dose única",
     "inHospital": true,
-    "hospitalNote": "(Aplicado no PS - não entra na prescrição para casa)"
+    "hospitalNote": "APLICADO NO PS"
   },
   "azitromicina-500mg": {
     "name": "Azitromicina 500mg",
@@ -126,7 +126,7 @@
   },
   "naratriptano-25mg": {
     "name": "Naratriptano 2.5mg",
-    "instruction": "Tomar 1 comprimido logo no começo da crise de enxaqueca. Se necessário, tomar mais 1 comprimido após 4 horas da primeira dose. NÃO TOMAR MAIS QUE 2 COMPRIMIDOS POR DIA."
+    "instruction": "Tomar 1 comprimido logo no começo da crise de enxaqueca. Se não houver melhora da dor após 4 horas, tomar mais 1 comprimido. NÃO TOMAR MAIS QUE 2 COMPRIMIDOS POR DIA."
   },
   "ciclobenzaprina-5mg": {
     "name": "Ciclobenzaprina 5mg",
@@ -134,11 +134,8 @@
   },
   "loratadina-10mg": {
     "name": "Loratadina 10mg",
-    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 5 dias"
-  },
-  "fexofenadina-120mg": {
-    "name": "Fexofenadina 120mg",
-    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 5 dias"
+    "instruction": "Tomar 1 comprimido, uma vez ao dia, por (duration) dias",
+    "defaultDuration": "5"
   },
   "hidroxizina-25mg": {
     "name": "Hidroxizina 25mg",
@@ -247,5 +244,26 @@
   "tranexamico-250mg": {
     "name": "Ácido tranexâmico 250mg",
     "instruction": "Tomar 2 comprimidos de 8 em 8 horas, por 3 dias"
+  },
+  "sumatriptano-50mg": {
+    "name": "Sumatriptano 50mg",
+    "instruction": "Tomar 1 comprimido logo no começo da crise de enxaqueca. Se não houver melhora da dor após 2 horas, tomar mais 1 comprimido. NÃO TOMAR MAIS QUE 2 COMPRIMIDOS POR DIA"
+  },
+  "fexofenadina-180mg": {
+    "name": "Fexofenadina 180mg",
+    "instruction": "Tomar 1 comprimido, uma vez ao dia, por (duration) dias",
+    "defaultDuration": "5"
+  },
+  "clindamicina-300mg": {
+    "name": "Clindamicina 300mg",
+    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, por 7 dias"
+  },
+  "salbutamol-100mcg": {
+    "name": "Salbumatol 100mcg spray",
+    "instruction": "Realizar a aplicação de 2 inalações a cada 6 horas, conforme necessidade.\nInstruções: agite o inalador, solte todo o ar e no começo da inspiração aperte o topo do inalador e respire a névoa liberada até encher os pulmões. Prenda a respiração com o peito cheio de ar por 10 segundos e solte lentamente. Repita em 1 minuto."
+  },
+  "alenia-12-400": {
+    "name": "Formoterol 12mcg + budesonida 400mcg",
+    "instruction": "Realizar 1 inalação a cada 12 horas até a consulta ambulatorial\nInstruções: insira a cápsula dentro do inalador, feche até ouvir um clique. Solte todo o ar e coloque o bocal do inalador entre os dentes. Puxe o ar rapidamente e profundamente até encher os pulmões. Segure por 10 segundos e solte lentamente. Lave a boca após cada inalação."
   }
 }

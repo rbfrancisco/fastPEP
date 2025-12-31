@@ -37,5 +37,19 @@
       "sulfato-ferroso-40mg",
       "neutrofer-300mg"
     ]
+  },
+  "triptanos": {
+    "label": "Triptanos",
+    "options": [
+      "sumatriptano-50mg",
+      "naratriptano-25mg"
+    ]
+  },
+  "antihistaminico": {
+    "label": "Anti-histamínicos",
+    "options": [
+      "loratadina-10mg",
+      "fexofenadina-180mg"
+    ]
   }
 }

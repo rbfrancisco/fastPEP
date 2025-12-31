@@ -104,6 +104,18 @@
     "articulacao-gota": {
       "label": "Artrite (Gota)",
       "text": "Articulação com sinais flogísticos: edema, calor, rubor e dor à palpação."
+    },
+    "pele-urticaria": {
+      "label": "Pele com urticaria",
+      "text": "Lesões eritematoedematosas pruriginosas"
+    },
+    "resp-asma": {
+      "label": "Sibilos",
+      "text": "MV+ bilateralmente, com presença de sibilos expiratórios difusamente e tempo expiratório prolongado"
+    },
+    "resp-dpoc": {
+      "label": "DPOC",
+      "text": "MV+ bilateralmente, presença de sibilos expiratórios e roncos difusos"
     }
   }
 }

@@ -26,7 +26,7 @@
           {
             "type": "med",
             "medId": "xarope-44e",
-            "checked": true
+            "checked": false
           },
           {
             "type": "class",
@@ -61,8 +61,7 @@
         "type": "radio",
         "options": [
           "amoxicilina-500mg",
-          "penicilina-benzatina",
-          "azitromicina-500mg"
+          "penicilina-benzatina"
         ],
         "default": "amoxicilina-500mg"
       },
@@ -258,7 +257,7 @@
     ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo antibioticoterapia",
+      "Prescrevo dose de ceftriaxona IM agora e antibioticoterapia oral para casa",
       "Oriento hidratação abundante",
       "Prescrevo sintomáticos para casa",
       "Oriento retorno em 48-72h para reavaliação",
@@ -405,8 +404,15 @@
         "label": "Tratamento",
         "items": [
           {
-            "type": "med",
-            "medId": "naratriptano-25mg",
+            "type": "class",
+            "classId": "triptanos",
+            "default": "naratriptano-25mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
             "checked": true
           },
           {
@@ -416,10 +422,9 @@
             "checked": true
           },
           {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
+            "type": "med",
+            "medId": "metoclopramida-10mg",
+            "checked": false
           }
         ]
       }
@@ -666,6 +671,166 @@
             "checked": true
           }
         ]
+      }
+    ]
+  },
+  "urticaria": {
+    "name": "Urticária",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal",
+      "pele-urticaria"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento sinais de alarme para retorno ao pronto-socorro",
+      "Oriento acompanhamento ambulatorial caso haja recorrência da condição",
+      "Prescrevo medicações para casa"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "items": [
+          {
+            "type": "class",
+            "classId": "antihistaminico",
+            "default": "loratadina-10mg",
+            "checked": true,
+            "duration": "5"
+          },
+          {
+            "type": "med",
+            "medId": "prednisolona-40mg",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "infeccao-pele": {
+    "name": "Infecção de pele e partes moles",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro",
+      "Prescrevo sintomáticos para casa"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "cefalexina-500mg",
+          "cefadroxila-500mg",
+          "sulfametoxazol-trimetoprima",
+          "amoxicilina-clavulanato-875mg",
+          "clindamicina-300mg",
+          "mupirocina-pomada"
+        ],
+        "default": "cefalexina-500mg"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "ibuprofeno-600mg",
+            "checked": true,
+            "duration": "5"
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "hidroxizina-25mg",
+            "checked": false
+          }
+        ]
+      }
+    ]
+  },
+  "asma": {
+    "name": "Asma",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-asma"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Solicito encaminhamento com urgência para clínica médica e pneumologia",
+      "Prescrevo alenia para casa até consulta ambulatorial",
+      "Prescrevo salbutamol de resgate"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "inalacao",
+        "label": "Inalação",
+        "items": [
+          {
+            "type": "med",
+            "medId": "alenia-12-400",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "salbutamol-100mcg",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "dpoc": {
+    "name": "DPOC",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-dpoc"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Solicito encaminhamento com urgência para clínica médica e pneumologia",
+      "Prescrevo antibioticoterapia para casa",
+      "Prescrevo salbutamol de resgate"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "inalacao",
+        "label": "Inalação",
+        "items": [
+          {
+            "type": "med",
+            "medId": "salbutamol-100mcg",
+            "checked": true
+          }
+        ]
+      },
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "azitromicina-500mg",
+          "amoxicilina-clavulanato-875mg",
+          "levofloxacino-750mg"
+        ],
+        "default": "azitromicina-500mg"
       }
     ]
   }
