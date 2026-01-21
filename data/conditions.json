@@ -490,10 +490,11 @@
         "label": "Antiviral",
         "type": "radio",
         "options": [
+          "aciclovir-zoster",
           "valaciclovir-500mg",
           "aciclovir-400mg"
         ],
-        "default": "valaciclovir-500mg"
+        "default": "aciclovir-zoster"
       },
       {
         "id": "analgesia",
@@ -831,6 +832,151 @@
           "levofloxacino-750mg"
         ],
         "default": "azitromicina-500mg"
+      }
+    ]
+  },
+  "faringoamigdalite-viral": {
+    "name": "Faringoamigdalite viral",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "oroscopia-hiperemia"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "med",
+            "medId": "flurbiprofeno-pastilha",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "rinossinusite-viral": {
+    "name": "Rinossinusite viral",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "oroscopia-hiperemia"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento lavagem nasal frequente",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "med",
+            "medId": "lavagem-nasal",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "xarope-44e",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "pneumonia": {
+    "name": "Pneumonia",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-estertores"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia oral para casa",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "amoxicilina-1g",
+          "amoxicilina-clavulanato-875mg",
+          "levofloxacino-750mg"
+        ],
+        "default": "amoxicilina-1g"
+      },
+      {
+        "id": "macrolideo",
+        "label": "Macrolídeo",
+        "items": [
+          {
+            "type": "med",
+            "medId": "azitromicina-500mg",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "xarope-44e",
+            "checked": false
+          }
+        ]
       }
     ]
   }

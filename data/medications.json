@@ -63,7 +63,7 @@
   },
   "aciclovir-400mg": {
     "name": "Aciclovir 400mg",
-    "instruction": "Tomar 2 comprimidos, de 4 em 4 horas, por 7 dias (5 vezes por dia, pular a dose da noite)"
+    "instruction": "Tomar 2 comprimidos, de 4 em 4 horas, por 7 dias (5 vezes por dia, pular a dose da noite)\nSugestão: 7h, 11h, 15h, 19h e 23h"
   },
   "valaciclovir-500mg": {
     "name": "Valaciclovir 500mg",
@@ -79,15 +79,15 @@
   },
   "dipirona-500mg": {
     "name": "Dipirona 500mg",
-    "instruction": "Tomar 2cp de 6 em 6 horas, SE DOR OU FEBRE"
+    "instruction": "Tomar até 2 comprimidos, de 6 em 6 horas, se dor ou febre"
   },
   "dipirona-1g": {
     "name": "Dipirona 1g",
-    "instruction": "Tomar 1cp de 6 em 6 horas, SE DOR OU FEBRE"
+    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, se dor ou febre"
   },
   "paracetamol-500mg": {
     "name": "Paracetamol 500mg",
-    "instruction": "Tomar 1cp de 6 em 6 horas, SE DOR OU FEBRE"
+    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, se dor ou febre"
   },
   "tramadol-50mg": {
     "name": "Tramadol 50mg",
@@ -95,11 +95,11 @@
   },
   "cetoprofeno-100mg": {
     "name": "Cetoprofeno 100mg",
-    "instruction": "Tomar 1cp de 12 em 12 horas, por {duration} dias",
+    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por {duration} dias",
     "defaultDuration": "3"
   },
   "ibuprofeno-600mg": {
-    "name": "Ibuprofeno 600mg",
+    "name": "Ibuprofeno 300mg",
     "instruction": "Tomar 1cp de 8 em 8 horas, por {duration} dias",
     "defaultDuration": "3"
   },
@@ -265,5 +265,21 @@
   "alenia-12-400": {
     "name": "Formoterol 12mcg + budesonida 400mcg",
     "instruction": "Realizar 1 inalação a cada 12 horas até a consulta ambulatorial\nInstruções: insira a cápsula dentro do inalador, feche até ouvir um clique. Solte todo o ar e coloque o bocal do inalador entre os dentes. Puxe o ar rapidamente e profundamente até encher os pulmões. Segure por 10 segundos e solte lentamente. Lave a boca após cada inalação."
+  },
+  "amoxicilina-1g": {
+    "name": "Amoxicilina 500mg",
+    "instruction": "Tomar 2 comprimidos, de 8 em 8 horas, por 7 dias"
+  },
+  "aciclovir-zoster": {
+    "name": "Aciclovir 200mg",
+    "instruction": "Tomar 4 comprimidos, de 4 em 4 horas, por 7 dias (5 vezes por dia, pular a dose da noite)\nSugestão: 7h, 11h, 15h, 19h e 23h"
+  },
+  "aciclovir-200mg-simplex": {
+    "name": "Aciclovir 200mg",
+    "instruction": "Tomar 2 comprimidos, de 8 em 8 horas, por 7 dias"
+  },
+  "valaciclovir-simples": {
+    "name": "Valaciclovir 500mg",
+    "instruction": "Tomar 2 comprimidos, de 12 em 12 horas, por 7 dias"
   }
 }
