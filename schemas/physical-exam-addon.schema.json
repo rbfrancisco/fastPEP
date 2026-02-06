@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PhysicalExamAddon",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "label",
+    "text"
+  ],
+  "properties": {
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "text": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "masculino",
+            "feminino"
+          ],
+          "properties": {
+            "masculino": {
+              "type": "string",
+              "minLength": 1
+            },
+            "feminino": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    }
+  }
+}

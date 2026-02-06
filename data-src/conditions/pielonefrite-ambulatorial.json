@@ -1,0 +1,50 @@
+{
+  "name": "Pielonefrite (tratamento ambulatorial)",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "abdome-normal",
+    "giordano-positivo"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo dose de ceftriaxona IM agora e antibioticoterapia oral para casa",
+    "Oriento hidratação abundante",
+    "Prescrevo sintomáticos para casa",
+    "Oriento retorno em 48-72h para reavaliação",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "antibiotico",
+      "label": "Antibiótico",
+      "type": "radio",
+      "options": [
+        "amoxicilina-clavulanato-875mg",
+        "ciprofloxacino-500mg",
+        "levofloxacino-750mg"
+      ],
+      "default": "amoxicilina-clavulanato-875mg"
+    },
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true,
+          "duration": "5"
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Asma",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-asma"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Solicito encaminhamento com urgência para clínica médica e pneumologia",
+    "Prescrevo alenia para casa até consulta ambulatorial",
+    "Prescrevo salbutamol de resgate"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "inalacao",
+      "label": "Inalação",
+      "items": [
+        {
+          "type": "med",
+          "medId": "alenia-12-400",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "salbutamol-100mcg",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

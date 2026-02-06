@@ -1,4 +1,24 @@
 {
+  "aciclovir-200mg-simplex": {
+    "name": "Aciclovir 200mg",
+    "instruction": "Tomar 2 comprimidos, de 8 em 8 horas, por 7 dias"
+  },
+  "aciclovir-400mg": {
+    "name": "Aciclovir 400mg",
+    "instruction": "Tomar 2 comprimidos, de 4 em 4 horas, por 7 dias (5 vezes por dia, pular a dose da noite)\nSugestão: 7h, 11h, 15h, 19h e 23h"
+  },
+  "aciclovir-zoster": {
+    "name": "Aciclovir 200mg",
+    "instruction": "Tomar 4 comprimidos, de 4 em 4 horas, por 7 dias (5 vezes por dia, pular a dose da noite)\nSugestão: 7h, 11h, 15h, 19h e 23h"
+  },
+  "alenia-12-400": {
+    "name": "Formoterol 12mcg + budesonida 400mcg",
+    "instruction": "Realizar 1 inalação a cada 12 horas até a consulta ambulatorial\nInstruções: insira a cápsula dentro do inalador, feche até ouvir um clique. Solte todo o ar e coloque o bocal do inalador entre os dentes. Puxe o ar rapidamente e profundamente até encher os pulmões. Segure por 10 segundos e solte lentamente. Lave a boca após cada inalação."
+  },
+  "amoxicilina-1g": {
+    "name": "Amoxicilina 500mg",
+    "instruction": "Tomar 2 comprimidos, de 8 em 8 horas, por 7 dias"
+  },
   "amoxicilina-500mg": {
     "name": "Amoxicilina 500mg",
     "instruction": "Tomar 1 comprimido de 12 em 12 horas, por 10 dias"
@@ -15,106 +35,74 @@
     "name": "Amoxicilina-Clavulanato 875/125 mg",
     "instruction": "Tomar 1 comprimido de 12 em 12 horas, por 10 dias"
   },
-  "penicilina-benzatina": {
-    "name": "Penicilina Benzatina 1.200.000 UI",
-    "instruction": "Aplicar 1 ampola intramuscular, dose única",
-    "inHospital": true,
-    "hospitalNote": "APLICADO NO PS"
-  },
   "azitromicina-500mg": {
     "name": "Azitromicina 500mg",
     "instruction": "Tomar 1 comprimido, uma vez ao dia, por 5 dias"
   },
-  "cefalexina-500mg": {
-    "name": "Cefalexina 500mg",
-    "instruction": "Tomar 1 comprimido de 6 em 6 horas, por 7 dias"
+  "bisacodil-5mg": {
+    "name": "Bisacodil 5mg",
+    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 7 dias"
+  },
+  "calamina": {
+    "name": "Calamina 8% (Loção ou creme)",
+    "instruction": "Aplicar na região afetada 3 vezes ao dia, por até 5 dias"
   },
   "cefadroxila-500mg": {
     "name": "Cefadroxila 500mg",
     "instruction": "Tomar 1 comprimido de 12 em 12 horas, por 7 dias"
   },
+  "cefalexina-500mg": {
+    "name": "Cefalexina 500mg",
+    "instruction": "Tomar 1 comprimido de 6 em 6 horas, por 7 dias"
+  },
   "cefuroxima-250mg": {
     "name": "Cefuroxima 250mg",
     "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por 7 dias"
   },
-  "ciprofloxacino-500mg": {
-    "name": "Ciprofloxacino 500mg",
-    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por 7 dias"
-  },
-  "levofloxacino-750mg": {
-    "name": "Levofloxacino 750mg",
-    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 7 dias"
-  },
-  "sulfametoxazol-trimetoprima": {
-    "name": "Sulfametoxazol + Trimetoprima 800/160 mg",
-    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por 7 dias"
-  },
-  "doxiciclina-100mg": {
-    "name": "Doxiciclina 100mg",
-    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por 7 dias"
-  },
-  "nitrofurantoina-100mg": {
-    "name": "Nitrofurantoina 100mg",
-    "instruction": "Tomar 1 comprimido de 6 em 6 horas, por 7 dias"
-  },
-  "fosfomicina-3g": {
-    "name": "Fosfomicina Trometamol 5,631 g (fosfomicina 3g)",
-    "instruction": "Esvaziar a bexiga antes de dormir, dissolver 1 envelope em um copo de água (200mL), mexa bem. Tomar em dose única."
-  },
-  "aciclovir-400mg": {
-    "name": "Aciclovir 400mg",
-    "instruction": "Tomar 2 comprimidos, de 4 em 4 horas, por 7 dias (5 vezes por dia, pular a dose da noite)\nSugestão: 7h, 11h, 15h, 19h e 23h"
-  },
-  "valaciclovir-500mg": {
-    "name": "Valaciclovir 500mg",
-    "instruction": "Tomar 2 comprimidos, de 8 em 8 horas, por 7 dias"
-  },
-  "colchicina-05mg": {
-    "name": "Colchicina 0.5mg",
-    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, até resolução da crise, no máximo por 14 dias"
-  },
-  "ciprofloxacino-hidrocortisona-otologico": {
-    "name": "Ciprofloxacino + Hidrocortisona Otológico (Otociriax®)",
-    "instruction": "Pingar 3 gotas na orelha acometida de 12 em 12 horas, por 7 dias"
-  },
-  "dipirona-500mg": {
-    "name": "Dipirona 500mg",
-    "instruction": "Tomar até 2 comprimidos, de 6 em 6 horas, se dor ou febre"
-  },
-  "dipirona-1g": {
-    "name": "Dipirona 1g",
-    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, se dor ou febre"
-  },
-  "paracetamol-500mg": {
-    "name": "Paracetamol 500mg",
-    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, se dor ou febre"
-  },
-  "tramadol-50mg": {
-    "name": "Tramadol 50mg",
-    "instruction": "Tomar 1 comprimido, de 8 em 8 horas, SE DOR FORTE, por 5 dias"
+  "cetoconazol-betametasona": {
+    "name": "Cetoconazol 20mg/g + Dipropiona de Betametasona 0,5mg/g creme",
+    "instruction": "Aplicar sobre a lesão, duas vezes ao dia, por 2 semanas"
   },
   "cetoprofeno-100mg": {
     "name": "Cetoprofeno 100mg",
     "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por {duration} dias",
     "defaultDuration": "3"
   },
-  "ibuprofeno-600mg": {
-    "name": "Ibuprofeno 300mg",
-    "instruction": "Tomar 1cp de 8 em 8 horas, por {duration} dias",
-    "defaultDuration": "3"
+  "ciclobenzaprina-5mg": {
+    "name": "Ciclobenzaprina 5mg",
+    "instruction": "Tomar 1 comprimido, 30 minutos antes de dormir, por 7 dias"
   },
-  "naproxeno-500mg": {
-    "name": "Naproxeno 500mg",
-    "instruction": "Tomar 1cp de 12 em 12 horas, por {duration} dias",
-    "defaultDuration": "3"
+  "ciprofloxacino-500mg": {
+    "name": "Ciprofloxacino 500mg",
+    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por 7 dias"
   },
-  "prednisolona-40mg": {
-    "name": "Prednisolona 40mg",
-    "instruction": "Tomar 1 comprimido, uma vez ao dia, pela manhã, por 5 dias"
+  "ciprofloxacino-hidrocortisona-otologico": {
+    "name": "Ciprofloxacino + Hidrocortisona Otológico (Otociriax®)",
+    "instruction": "Pingar 3 gotas na orelha acometida de 12 em 12 horas, por 7 dias"
   },
-  "flurbiprofeno-pastilha": {
-    "name": "Flurbiprofeno 8.75mg Pastilha (Strepsils)",
-    "instruction": "Dissolver lentamente 1 pastilha na boca, conforme necessidade. Usar no máximo 6 pastilhas por dia."
+  "clindamicina-300mg": {
+    "name": "Clindamicina 300mg",
+    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, por 7 dias"
+  },
+  "colchicina-05mg": {
+    "name": "Colchicina 0.5mg",
+    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, até resolução da crise, no máximo por 14 dias"
+  },
+  "dipirona-1g": {
+    "name": "Dipirona 1g",
+    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, se dor ou febre"
+  },
+  "dipirona-500mg": {
+    "name": "Dipirona 500mg",
+    "instruction": "Tomar até 2 comprimidos, de 6 em 6 horas, se dor ou febre"
+  },
+  "doxiciclina-100mg": {
+    "name": "Doxiciclina 100mg",
+    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por 7 dias"
+  },
+  "dramin-b6": {
+    "name": "Dimenidrinato 50mg + Cloridrato de Piridoxina 10mg (Dramin B6®)",
+    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, se náuseas ou vômitos"
   },
   "escopolamina-10mg": {
     "name": "Escopolamina 10mg",
@@ -124,22 +112,93 @@
     "name": "Fenazopiridina 200mg (Pyridium®)",
     "instruction": "Tomar 1 comprimido de 8 em 8 horas, por 2 dias"
   },
-  "naratriptano-25mg": {
-    "name": "Naratriptano 2.5mg",
-    "instruction": "Tomar 1 comprimido logo no começo da crise de enxaqueca. Se não houver melhora da dor após 4 horas, tomar mais 1 comprimido. NÃO TOMAR MAIS QUE 2 COMPRIMIDOS POR DIA."
+  "fexofenadina-180mg": {
+    "name": "Fexofenadina 180mg",
+    "instruction": "Tomar 1 comprimido, uma vez ao dia, por (duration) dias",
+    "defaultDuration": "5"
   },
-  "ciclobenzaprina-5mg": {
-    "name": "Ciclobenzaprina 5mg",
-    "instruction": "Tomar 1 comprimido, 30 minutos antes de dormir, por 7 dias"
+  "floratil-200mg": {
+    "name": "Floratil® (Saccharomyces boulardii) 200 mg",
+    "instruction": "Tomar 1 comprimido de 12 em 12 horas por 3 dias"
+  },
+  "flurbiprofeno-pastilha": {
+    "name": "Flurbiprofeno 8.75mg Pastilha (Strepsils)",
+    "instruction": "Dissolver lentamente 1 pastilha na boca, conforme necessidade. Usar no máximo 6 pastilhas por dia."
+  },
+  "fosfomicina-3g": {
+    "name": "Fosfomicina Trometamol 5,631 g (fosfomicina 3g)",
+    "instruction": "Esvaziar a bexiga antes de dormir, dissolver 1 envelope em um copo de água (200mL), mexa bem. Tomar em dose única."
+  },
+  "hidrocortisona-pomada": {
+    "name": "Hidrocortisona 10mg/g pomada",
+    "instruction": "Aplicar uma fina camada sobre a lesão, de 12 em 12 horas, por 7 dias"
+  },
+  "hidroxizina-25mg": {
+    "name": "Hidroxizina 25mg",
+    "instruction": "Tomar 1 comprimido, conforme necessidade, de 6 em 6 horas"
+  },
+  "ibuprofeno-600mg": {
+    "name": "Ibuprofeno 300mg",
+    "instruction": "Tomar 1cp de 8 em 8 horas, por {duration} dias",
+    "defaultDuration": "3"
+  },
+  "lactulose-xarope": {
+    "name": "Lactulose 667mg/mL Xarope",
+    "instruction": "Tomar 15mL uma vez ao dia, por 7 dias"
+  },
+  "lavagem-nasal": {
+    "name": "Lavagem nasal com SF 0.9%",
+    "instruction": "Realizar a lavagem com seringa (sem agulha) de 20mL ou frasco de lavagem nasal (como Nasoar™). Incline a cabeça para frente, mantenha a boca aberta e lave sem aplicar muita pressão. Faça 2 a 4 vezes por dia."
+  },
+  "levofloxacino-750mg": {
+    "name": "Levofloxacino 750mg",
+    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 7 dias"
   },
   "loratadina-10mg": {
     "name": "Loratadina 10mg",
     "instruction": "Tomar 1 comprimido, uma vez ao dia, por (duration) dias",
     "defaultDuration": "5"
   },
-  "hidroxizina-25mg": {
-    "name": "Hidroxizina 25mg",
-    "instruction": "Tomar 1 comprimido, conforme necessidade, de 6 em 6 horas"
+  "macrogol-3350": {
+    "name": "Macrogol 3350 (PegLax)",
+    "instruction": "Dissolver dois envelopes em um copo de água (200mL) e tomar uma vez ao dia, por 7 dias"
+  },
+  "mefanamico-500mg": {
+    "name": "Ácido mefenâmico 500mg",
+    "instruction": "Tomar 1 comprimido, de 8 em 8 horas, por 3 dias"
+  },
+  "metoclopramida-10mg": {
+    "name": "Metoclopramida 10mg",
+    "instruction": "Tomar 1 comprimido, de 8 em 8 horas, se náuseas ou vômitos"
+  },
+  "mupirocina-pomada": {
+    "name": "Mupirocina 20mg/g pomada",
+    "instruction": "Aplicar sobre a lesão, até 3 vezes por dia, por 7 dias ou até melhora"
+  },
+  "naproxeno-500mg": {
+    "name": "Naproxeno 500mg",
+    "instruction": "Tomar 1cp de 12 em 12 horas, por {duration} dias",
+    "defaultDuration": "3"
+  },
+  "naratriptano-25mg": {
+    "name": "Naratriptano 2.5mg",
+    "instruction": "Tomar 1 comprimido logo no começo da crise de enxaqueca. Se não houver melhora da dor após 4 horas, tomar mais 1 comprimido. NÃO TOMAR MAIS QUE 2 COMPRIMIDOS POR DIA."
+  },
+  "neomicina-bacitracina": {
+    "name": "Neomicina 5mg/g + Bacitracina 250UI/g pomada",
+    "instruction": "Aplicar sobre a lesão, de 12 em 12 horas, por 5 dias"
+  },
+  "neutrofer-300mg": {
+    "name": "Glicinato férrico 300mg (Neutrofer - 60mg ferro elementar)",
+    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 3 meses ou até consulta ambulatorial"
+  },
+  "nitrofurantoina-100mg": {
+    "name": "Nitrofurantoina 100mg",
+    "instruction": "Tomar 1 comprimido de 6 em 6 horas, por 7 dias"
+  },
+  "omeprazol-20mg": {
+    "name": "Omeprazol 20mg",
+    "instruction": "Tomar 1 cápsula, em jejum, 30 minutos antes do café da manhã, por 14 dias"
   },
   "ondansetrona-4mg": {
     "name": "Ondansetrona 4mg",
@@ -149,137 +208,78 @@
     "name": "Ondansetrona 8mg",
     "instruction": "Tomar 1 comprimido, de 8 em 8 horas, se náuseas ou vômitos"
   },
-  "metoclopramida-10mg": {
-    "name": "Metoclopramida 10mg",
-    "instruction": "Tomar 1 comprimido, de 8 em 8 horas, se náuseas ou vômitos"
-  },
-  "dramin-b6": {
-    "name": "Dimenidrinato 50mg + Cloridrato de Piridoxina 10mg (Dramin B6®)",
-    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, se náuseas ou vômitos"
-  },
-  "omeprazol-20mg": {
-    "name": "Omeprazol 20mg",
-    "instruction": "Tomar 1 cápsula, em jejum, 30 minutos antes do café da manhã, por 14 dias"
-  },
-  "lavagem-nasal": {
-    "name": "Lavagem nasal com SF 0.9%",
-    "instruction": "Realizar a lavagem com seringa (sem agulha) de 20mL ou frasco de lavagem nasal (como Nasoar™). Incline a cabeça para frente, mantenha a boca aberta e lave sem aplicar muita pressão. Faça 2 a 4 vezes por dia."
-  },
-  "xarope-44e": {
-    "name": "Dextrometorfano 1,33mg/mL + Guaifenesina 13,33 mg/mL (Xarope 44E)",
-    "instruction": "Tomar 15mL, SE TOSSE, de 6 em 6 horas, por até 5 dias"
-  },
-  "sais-reidratacao": {
-    "name": "Sais de Reidratação Oral",
-    "instruction": "Dissolver 1 envelope em 1 litro de água filtrada. Tomar 1 litro por dia, enquanto continuar tendo episódios de diarreia. Complementar hidratação com água, chás e sucos (meta de 3 a 5L por dia)"
-  },
-  "floratil-200mg": {
-    "name": "Floratil® (Saccharomyces boulardii) 200 mg",
-    "instruction": "Tomar 1 comprimido de 12 em 12 horas por 3 dias"
-  },
-  "racecadotrila-100mg": {
-    "name": "Racecadotrila 100mg",
-    "instruction": "Tomar 1 comprimido, de 8/8 horas, antes das refeições por até 5 dias. Suspender em caso de constipação."
-  },
-  "macrogol-3350": {
-    "name": "Macrogol 3350 (PegLax)",
-    "instruction": "Dissolver dois envelopes em um copo de água (200mL) e tomar uma vez ao dia, por 7 dias"
-  },
-  "lactulose-xarope": {
-    "name": "Lactulose 667mg/mL Xarope",
-    "instruction": "Tomar 15mL uma vez ao dia, por 7 dias"
-  },
-  "bisacodil-5mg": {
-    "name": "Bisacodil 5mg",
-    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 7 dias"
-  },
   "oxido-zinco-pomada": {
     "name": "Óxido de zinco + Retinol (vitamina A) + Colecalciferol pomada",
     "instruction": "Aplicar sobre a lesão, de 12 em 12 horas, por 5 dias"
   },
-  "sulfadiazina-prata": {
-    "name": "Sulfadiazina de prata 1%",
-    "instruction": "Aplicar sobre a lesão, de 12 em 12 horas, por 5 dias"
+  "paracetamol-500mg": {
+    "name": "Paracetamol 500mg",
+    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, se dor ou febre"
   },
-  "neomicina-bacitracina": {
-    "name": "Neomicina 5mg/g + Bacitracina 250UI/g pomada",
-    "instruction": "Aplicar sobre a lesão, de 12 em 12 horas, por 5 dias"
+  "penicilina-benzatina": {
+    "name": "Penicilina Benzatina 1.200.000 UI",
+    "instruction": "Aplicar 1 ampola intramuscular, dose única",
+    "inHospital": true,
+    "hospitalNote": "APLICADO NO PS"
   },
-  "cetoconazol-betametasona": {
-    "name": "Cetoconazol 20mg/g + Dipropiona de Betametasona 0,5mg/g creme",
-    "instruction": "Aplicar sobre a lesão, duas vezes ao dia, por 2 semanas"
-  },
-  "tacrolimo-01": {
-    "name": "Tacrolimo 0.1% pomada",
-    "instruction": "Aplicar uma fina camada sobre a lesão, de 12 em 12 horas, por 7 dias"
-  },
-  "hidrocortisona-pomada": {
-    "name": "Hidrocortisona 10mg/g pomada",
-    "instruction": "Aplicar uma fina camada sobre a lesão, de 12 em 12 horas, por 7 dias"
-  },
-  "mupirocina-pomada": {
-    "name": "Mupirocina 20mg/g pomada",
-    "instruction": "Aplicar sobre a lesão, até 3 vezes por dia, por 7 dias ou até melhora"
+  "prednisolona-40mg": {
+    "name": "Prednisolona 40mg",
+    "instruction": "Tomar 1 comprimido, uma vez ao dia, pela manhã, por 5 dias"
   },
   "proctyl": {
     "name": "Policresuleno + Cloridrato de Cinchocaína (Proctyl®)",
     "instruction": "Aplicar até 3 vezes por dia, em região anal, por 7 dias"
   },
-  "calamina": {
-    "name": "Calamina 8% (Loção ou creme)",
-    "instruction": "Aplicar na região afetada 3 vezes ao dia, por até 5 dias"
+  "racecadotrila-100mg": {
+    "name": "Racecadotrila 100mg",
+    "instruction": "Tomar 1 comprimido, de 8/8 horas, antes das refeições por até 5 dias. Suspender em caso de constipação."
   },
-  "sulfato-ferroso-40mg": {
-    "name": "Sulfato ferroso 40mg",
-    "instruction": "Tomar 2 comprimidos, uma vez ao dia, por 3 meses ou até consulta ambulatorial"
-  },
-  "neutrofer-300mg": {
-    "name": "Glicinato férrico 300mg (Neutrofer - 60mg ferro elementar)",
-    "instruction": "Tomar 1 comprimido, uma vez ao dia, por 3 meses ou até consulta ambulatorial"
-  },
-  "mefanamico-500mg": {
-    "name": "Ácido mefenâmico 500mg",
-    "instruction": "Tomar 1 comprimido, de 8 em 8 horas, por 3 dias"
-  },
-  "tranexamico-250mg": {
-    "name": "Ácido tranexâmico 250mg",
-    "instruction": "Tomar 2 comprimidos de 8 em 8 horas, por 3 dias"
-  },
-  "sumatriptano-50mg": {
-    "name": "Sumatriptano 50mg",
-    "instruction": "Tomar 1 comprimido logo no começo da crise de enxaqueca. Se não houver melhora da dor após 2 horas, tomar mais 1 comprimido. NÃO TOMAR MAIS QUE 2 COMPRIMIDOS POR DIA"
-  },
-  "fexofenadina-180mg": {
-    "name": "Fexofenadina 180mg",
-    "instruction": "Tomar 1 comprimido, uma vez ao dia, por (duration) dias",
-    "defaultDuration": "5"
-  },
-  "clindamicina-300mg": {
-    "name": "Clindamicina 300mg",
-    "instruction": "Tomar 1 comprimido, de 6 em 6 horas, por 7 dias"
+  "sais-reidratacao": {
+    "name": "Sais de Reidratação Oral",
+    "instruction": "Dissolver 1 envelope em 1 litro de água filtrada. Tomar 1 litro por dia, enquanto continuar tendo episódios de diarreia. Complementar hidratação com água, chás e sucos (meta de 3 a 5L por dia)"
   },
   "salbutamol-100mcg": {
     "name": "Salbumatol 100mcg spray",
     "instruction": "Realizar a aplicação de 2 inalações a cada 6 horas, conforme necessidade.\nInstruções: agite o inalador, solte todo o ar e no começo da inspiração aperte o topo do inalador e respire a névoa liberada até encher os pulmões. Prenda a respiração com o peito cheio de ar por 10 segundos e solte lentamente. Repita em 1 minuto."
   },
-  "alenia-12-400": {
-    "name": "Formoterol 12mcg + budesonida 400mcg",
-    "instruction": "Realizar 1 inalação a cada 12 horas até a consulta ambulatorial\nInstruções: insira a cápsula dentro do inalador, feche até ouvir um clique. Solte todo o ar e coloque o bocal do inalador entre os dentes. Puxe o ar rapidamente e profundamente até encher os pulmões. Segure por 10 segundos e solte lentamente. Lave a boca após cada inalação."
+  "sulfadiazina-prata": {
+    "name": "Sulfadiazina de prata 1%",
+    "instruction": "Aplicar sobre a lesão, de 12 em 12 horas, por 5 dias"
   },
-  "amoxicilina-1g": {
-    "name": "Amoxicilina 500mg",
-    "instruction": "Tomar 2 comprimidos, de 8 em 8 horas, por 7 dias"
+  "sulfametoxazol-trimetoprima": {
+    "name": "Sulfametoxazol + Trimetoprima 800/160 mg",
+    "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por 7 dias"
   },
-  "aciclovir-zoster": {
-    "name": "Aciclovir 200mg",
-    "instruction": "Tomar 4 comprimidos, de 4 em 4 horas, por 7 dias (5 vezes por dia, pular a dose da noite)\nSugestão: 7h, 11h, 15h, 19h e 23h"
+  "sulfato-ferroso-40mg": {
+    "name": "Sulfato ferroso 40mg",
+    "instruction": "Tomar 2 comprimidos, uma vez ao dia, por 3 meses ou até consulta ambulatorial"
   },
-  "aciclovir-200mg-simplex": {
-    "name": "Aciclovir 200mg",
+  "sumatriptano-50mg": {
+    "name": "Sumatriptano 50mg",
+    "instruction": "Tomar 1 comprimido logo no começo da crise de enxaqueca. Se não houver melhora da dor após 2 horas, tomar mais 1 comprimido. NÃO TOMAR MAIS QUE 2 COMPRIMIDOS POR DIA"
+  },
+  "tacrolimo-01": {
+    "name": "Tacrolimo 0.1% pomada",
+    "instruction": "Aplicar uma fina camada sobre a lesão, de 12 em 12 horas, por 7 dias"
+  },
+  "tramadol-50mg": {
+    "name": "Tramadol 50mg",
+    "instruction": "Tomar 1 comprimido, de 8 em 8 horas, SE DOR FORTE, por 5 dias"
+  },
+  "tranexamico-250mg": {
+    "name": "Ácido tranexâmico 250mg",
+    "instruction": "Tomar 2 comprimidos de 8 em 8 horas, por 3 dias"
+  },
+  "valaciclovir-500mg": {
+    "name": "Valaciclovir 500mg",
     "instruction": "Tomar 2 comprimidos, de 8 em 8 horas, por 7 dias"
   },
   "valaciclovir-simples": {
     "name": "Valaciclovir 500mg",
     "instruction": "Tomar 2 comprimidos, de 12 em 12 horas, por 7 dias"
+  },
+  "xarope-44e": {
+    "name": "Dextrometorfano 1,33mg/mL + Guaifenesina 13,33 mg/mL (Xarope 44E)",
+    "instruction": "Tomar 15mL, SE TOSSE, de 6 em 6 horas, por até 5 dias"
   }
 }

@@ -6,9 +6,11 @@
   "scripts": {
     "server": "node server/index.js",
     "start": "node server/index.js",
+    "split-data": "node scripts/split-data.js",
+    "compile-data": "node scripts/compile-data.js",
     "validate-data": "node scripts/validate-data.js",
-    "build": "npm run validate-data && node build.js",
-    "build:full": "npm run validate-data && node build.js --include-admin"
+    "build": "npm run compile-data && npm run validate-data && node build.js",
+    "build:full": "npm run compile-data && npm run validate-data && node build.js --include-admin"
   },
   "keywords": [
     "medical",

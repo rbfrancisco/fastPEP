@@ -1,0 +1,52 @@
+{
+  "name": "Herpes zoster",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "pele-herpes-zoster"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo antiviral",
+    "Prescrevo analgesia",
+    "Oriento cuidados com as lesões",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "antiviral",
+      "label": "Antiviral",
+      "type": "radio",
+      "options": [
+        "aciclovir-zoster",
+        "valaciclovir-500mg",
+        "aciclovir-400mg"
+      ],
+      "default": "aciclovir-zoster"
+    },
+    {
+      "id": "analgesia",
+      "label": "Analgesia",
+      "items": [
+        {
+          "type": "med",
+          "medId": "tramadol-50mg",
+          "checked": false
+        },
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

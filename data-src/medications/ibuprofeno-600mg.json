@@ -1,0 +1,5 @@
+{
+  "name": "Ibuprofeno 300mg",
+  "instruction": "Tomar 1cp de 8 em 8 horas, por {duration} dias",
+  "defaultDuration": "3"
+}

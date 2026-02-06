@@ -1,0 +1,5 @@
+{
+  "name": "Naproxeno 500mg",
+  "instruction": "Tomar 1cp de 12 em 12 horas, por {duration} dias",
+  "defaultDuration": "3"
+}

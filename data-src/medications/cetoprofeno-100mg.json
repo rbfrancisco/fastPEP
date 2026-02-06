@@ -1,0 +1,5 @@
+{
+  "name": "Cetoprofeno 100mg",
+  "instruction": "Tomar 1 comprimido, de 12 em 12 horas, por {duration} dias",
+  "defaultDuration": "3"
+}

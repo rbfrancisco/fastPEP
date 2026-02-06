@@ -1,0 +1,54 @@
+{
+  "name": "Infecção de pele e partes moles",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo antibioticoterapia para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro",
+    "Prescrevo sintomáticos para casa"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "antibiotico",
+      "label": "Antibiótico",
+      "type": "radio",
+      "options": [
+        "cefalexina-500mg",
+        "cefadroxila-500mg",
+        "sulfametoxazol-trimetoprima",
+        "amoxicilina-clavulanato-875mg",
+        "clindamicina-300mg",
+        "mupirocina-pomada"
+      ],
+      "default": "cefalexina-500mg"
+    },
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "ibuprofeno-600mg",
+          "checked": true,
+          "duration": "5"
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "hidroxizina-25mg",
+          "checked": false
+        }
+      ]
+    }
+  ]
+}

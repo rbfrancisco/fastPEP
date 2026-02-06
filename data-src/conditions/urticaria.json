@@ -1,0 +1,36 @@
+{
+  "name": "Urticária",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "abdome-normal",
+    "pele-urticaria"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Oriento sinais de alarme para retorno ao pronto-socorro",
+    "Oriento acompanhamento ambulatorial caso haja recorrência da condição",
+    "Prescrevo medicações para casa"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "tratamento",
+      "label": "Tratamento",
+      "items": [
+        {
+          "type": "class",
+          "classId": "antihistaminico",
+          "default": "loratadina-10mg",
+          "checked": true,
+          "duration": "5"
+        },
+        {
+          "type": "med",
+          "medId": "prednisolona-40mg",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

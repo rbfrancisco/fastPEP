@@ -1,0 +1,46 @@
+{
+  "name": "Otite média aguda",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "otoscopia-oma"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo antibioticoterapia",
+    "Prescrevo sintomáticos para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "antibiotico",
+      "label": "Antibiótico",
+      "type": "radio",
+      "options": [
+        "amoxicilina-500mg-8h",
+        "amoxicilina-clavulanato-875mg-10d"
+      ],
+      "default": "amoxicilina-500mg-8h"
+    },
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true,
+          "duration": "5"
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

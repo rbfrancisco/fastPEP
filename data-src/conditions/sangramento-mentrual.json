@@ -1,0 +1,63 @@
+{
+  "name": "Sangramento menstrual",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "abdome-normal"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Solicito encaminhamento com urgência para ginecologia",
+    "Prescrevo medicação para redução do fluxo menstrual",
+    "Prescrevo reposição de ferro",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "hemostasia",
+      "label": "Redução de sangramento",
+      "items": [
+        {
+          "type": "med",
+          "medId": "mefanamico-500mg",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "tranexamico-250mg",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "id": "sup-ferro",
+      "label": "Reposição de ferro",
+      "items": [
+        {
+          "type": "class",
+          "classId": "ferro",
+          "default": "sulfato-ferroso-40mg",
+          "checked": true
+        }
+      ]
+    },
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-500mg",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "escopolamina-10mg",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

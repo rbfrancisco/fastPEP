@@ -1,0 +1,39 @@
+{
+  "name": "Dor muscular / Lombalgia",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Oriento repouso relativo e aplicação de calor local",
+    "Prescrevo anti-inflamatório e relaxante muscular",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "tratamento",
+      "label": "Tratamento",
+      "items": [
+        {
+          "type": "med",
+          "medId": "ciclobenzaprina-5mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

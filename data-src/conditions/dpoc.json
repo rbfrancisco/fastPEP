@@ -1,0 +1,38 @@
+{
+  "name": "DPOC",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-dpoc"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Solicito encaminhamento com urgência para clínica médica e pneumologia",
+    "Prescrevo antibioticoterapia para casa",
+    "Prescrevo salbutamol de resgate"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "inalacao",
+      "label": "Inalação",
+      "items": [
+        {
+          "type": "med",
+          "medId": "salbutamol-100mcg",
+          "checked": true
+        }
+      ]
+    },
+    {
+      "id": "antibiotico",
+      "label": "Antibiótico",
+      "type": "radio",
+      "options": [
+        "azitromicina-500mg",
+        "amoxicilina-clavulanato-875mg",
+        "levofloxacino-750mg"
+      ],
+      "default": "azitromicina-500mg"
+    }
+  ]
+}

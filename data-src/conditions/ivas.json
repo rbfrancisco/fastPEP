@@ -1,0 +1,39 @@
+{
+  "name": "IVAS (Resfriado comum)",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "oroscopia-hiperemia"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Oriento medidas de suporte: hidratação, repouso, lavagem nasal",
+    "Prescrevo sintomáticos para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "med",
+          "medId": "lavagem-nasal",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "xarope-44e",
+          "checked": false
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-500mg",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

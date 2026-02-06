@@ -5,13 +5,16 @@ Last updated: 2026-02-06
 ## Project Snapshot
 - Main app is static: `index.html`, `js/`, `css/`, `data/`.
 - Admin/editor is local-only tooling: `admin/` + `server/`.
-- Runtime data source is JSON in `data/`.
+- Data source-of-truth is split JSON in `data-src/`.
+- Runtime data in `data/` is compiled from `data-src/`.
 
 ## Current Build/Deploy Rules
 - Production build command: `npm run build`
 - Production output directory: `dist`
 - `npm run build` excludes `admin/` by default.
 - `npm run build:full` includes `admin/` (internal/local use only).
+- Data compile command: `npm run compile-data`
+- Data validation command: `npm run validate-data`
 - Cloudflare build settings:
   - Build command: `npm run build`
   - Output directory: `dist`
@@ -32,6 +35,10 @@ Last updated: 2026-02-06
 - Main app rendering paths hardened to avoid unsafe data interpolation via `innerHTML`.
 - Data integrity validator:
   - `npm run validate-data`
+- Data compiler:
+  - `npm run compile-data`
+- Schemas:
+  - `schemas/*.schema.json`
 - CI validation workflow:
   - `.github/workflows/validate-data.yml`
 - Optional pre-commit hook:
@@ -42,6 +49,7 @@ Last updated: 2026-02-06
 - Keep admin/server local-only and never deploy by default.
 - Prefer small, reviewable commits with explicit verification steps.
 - After structural changes, always verify:
-  1. `npm run validate-data`
-  2. `npm run build`
-  3. Dist contents match production expectations
+  1. `npm run compile-data`
+  2. `npm run validate-data`
+  3. `npm run build`
+  4. Dist contents match production expectations

@@ -1,0 +1,47 @@
+{
+  "name": "Enxaqueca",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "neurologico-normal"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo medicação abortiva para crises",
+    "Prescrevo sintomáticos para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro",
+    "Encaminho para acompanhamento ambulatorial"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "tratamento",
+      "label": "Tratamento",
+      "items": [
+        {
+          "type": "class",
+          "classId": "triptanos",
+          "default": "naratriptano-25mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "metoclopramida-10mg",
+          "checked": false
+        }
+      ]
+    }
+  ]
+}

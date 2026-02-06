@@ -1,38 +1,246 @@
 {
-  "ivas": {
-    "name": "IVAS (Resfriado comum)",
+  "asma": {
+    "name": "Asma",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-asma"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Solicito encaminhamento com urgência para clínica médica e pneumologia",
+      "Prescrevo alenia para casa até consulta ambulatorial",
+      "Prescrevo salbutamol de resgate"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "inalacao",
+        "label": "Inalação",
+        "items": [
+          {
+            "type": "med",
+            "medId": "alenia-12-400",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "salbutamol-100mcg",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "constipacao-funcional": {
+    "name": "Constipação funcional",
     "physicalExamAddons": [
       "geral-bom",
       "cv-normal",
       "resp-normal",
-      "oroscopia-hiperemia"
+      "abdome-normal"
     ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
-      "Oriento medidas de suporte: hidratação, repouso, lavagem nasal",
-      "Prescrevo sintomáticos para casa",
+      "Oriento mudanças alimentares e hidratação adequada",
+      "Prescrevo laxativo osmótico para casa",
+      "Oriento acompanhamento médico caso mudança continue para investigação aprofundada.",
       "Oriento sinais de alarme para retorno ao pronto-socorro"
     ],
     "prescriptionGroups": [
+      {
+        "id": "laxantes",
+        "label": "Laxantes",
+        "type": "radio",
+        "options": [
+          "macrogol-3350",
+          "lactulose-xarope"
+        ],
+        "default": "macrogol-3350"
+      },
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
           {
             "type": "med",
-            "medId": "lavagem-nasal",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "xarope-44e",
+            "medId": "escopolamina-10mg",
             "checked": false
           },
           {
             "type": "class",
             "classId": "analgesico",
             "default": "dipirona-500mg",
+            "checked": false
+          }
+        ]
+      }
+    ]
+  },
+  "crise-gota": {
+    "name": "Crise de Gota",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "articulacao-gota"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo tratamento para crise",
+      "Oriento repouso da articulação",
+      "Oriento dieta com restrição de purinas",
+      "Encaminho para acompanhamento ambulatorial"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "items": [
+          {
+            "type": "med",
+            "medId": "colchicina-05mg",
             "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "omeprazol-20mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "naproxeno-500mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "dor-muscular": {
+    "name": "Dor muscular / Lombalgia",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento repouso relativo e aplicação de calor local",
+      "Prescrevo anti-inflamatório e relaxante muscular",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "items": [
+          {
+            "type": "med",
+            "medId": "ciclobenzaprina-5mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "dpoc": {
+    "name": "DPOC",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-dpoc"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Solicito encaminhamento com urgência para clínica médica e pneumologia",
+      "Prescrevo antibioticoterapia para casa",
+      "Prescrevo salbutamol de resgate"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "inalacao",
+        "label": "Inalação",
+        "items": [
+          {
+            "type": "med",
+            "medId": "salbutamol-100mcg",
+            "checked": true
+          }
+        ]
+      },
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "azitromicina-500mg",
+          "amoxicilina-clavulanato-875mg",
+          "levofloxacino-750mg"
+        ],
+        "default": "azitromicina-500mg"
+      }
+    ]
+  },
+  "enxaqueca": {
+    "name": "Enxaqueca",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "neurologico-normal"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo medicação abortiva para crises",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro",
+      "Encaminho para acompanhamento ambulatorial"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "items": [
+          {
+            "type": "class",
+            "classId": "triptanos",
+            "default": "naratriptano-25mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "metoclopramida-10mg",
+            "checked": false
           }
         ]
       }
@@ -85,6 +293,487 @@
             "classId": "analgesico",
             "default": "dipirona-500mg",
             "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "faringoamigdalite-viral": {
+    "name": "Faringoamigdalite viral",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "oroscopia-hiperemia"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "med",
+            "medId": "flurbiprofeno-pastilha",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "geca": {
+    "name": "GECA (Gastroenterocolite aguda)",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento hidratação vigorosa e dieta leve",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "items": [
+          {
+            "type": "med",
+            "medId": "sais-reidratacao",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "floratil-200mg",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "racecadotrila-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "antiemetico",
+            "default": "ondansetrona-4mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "herpes-zoster": {
+    "name": "Herpes zoster",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "pele-herpes-zoster"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antiviral",
+      "Prescrevo analgesia",
+      "Oriento cuidados com as lesões",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antiviral",
+        "label": "Antiviral",
+        "type": "radio",
+        "options": [
+          "aciclovir-zoster",
+          "valaciclovir-500mg",
+          "aciclovir-400mg"
+        ],
+        "default": "aciclovir-zoster"
+      },
+      {
+        "id": "analgesia",
+        "label": "Analgesia",
+        "items": [
+          {
+            "type": "med",
+            "medId": "tramadol-50mg",
+            "checked": false
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "infeccao-pele": {
+    "name": "Infecção de pele e partes moles",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro",
+      "Prescrevo sintomáticos para casa"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "cefalexina-500mg",
+          "cefadroxila-500mg",
+          "sulfametoxazol-trimetoprima",
+          "amoxicilina-clavulanato-875mg",
+          "clindamicina-300mg",
+          "mupirocina-pomada"
+        ],
+        "default": "cefalexina-500mg"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "ibuprofeno-600mg",
+            "checked": true,
+            "duration": "5"
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "hidroxizina-25mg",
+            "checked": false
+          }
+        ]
+      }
+    ]
+  },
+  "itu-nao-complicada": {
+    "name": "ITU não complicada",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal",
+      "giordano-negativo"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia",
+      "Oriento hidratação abundante",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "fosfomicina-3g",
+          "nitrofurantoina-100mg",
+          "cefalexina-500mg",
+          "cefuroxima-250mg",
+          "sulfametoxazol-trimetoprima"
+        ],
+        "default": "fosfomicina-3g"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "med",
+            "medId": "fenazopiridina-200mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "ivas": {
+    "name": "IVAS (Resfriado comum)",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "oroscopia-hiperemia"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Oriento medidas de suporte: hidratação, repouso, lavagem nasal",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "med",
+            "medId": "lavagem-nasal",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "xarope-44e",
+            "checked": false
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-500mg",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "otite-externa-aguda": {
+    "name": "Otite externa aguda",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "otoscopia-oea"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo tratamento tópico",
+      "Oriento manter orelha seca",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "tratamento",
+        "label": "Tratamento",
+        "items": [
+          {
+            "type": "med",
+            "medId": "ciprofloxacino-hidrocortisona-otologico",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "otite-media-aguda": {
+    "name": "Otite média aguda",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "otoscopia-oma"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "amoxicilina-500mg-8h",
+          "amoxicilina-clavulanato-875mg-10d"
+        ],
+        "default": "amoxicilina-500mg-8h"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true,
+            "duration": "5"
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "pielonefrite-ambulatorial": {
+    "name": "Pielonefrite (tratamento ambulatorial)",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-normal",
+      "abdome-normal",
+      "giordano-positivo"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo dose de ceftriaxona IM agora e antibioticoterapia oral para casa",
+      "Oriento hidratação abundante",
+      "Prescrevo sintomáticos para casa",
+      "Oriento retorno em 48-72h para reavaliação",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "amoxicilina-clavulanato-875mg",
+          "ciprofloxacino-500mg",
+          "levofloxacino-750mg"
+        ],
+        "default": "amoxicilina-clavulanato-875mg"
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true,
+            "duration": "5"
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          }
+        ]
+      }
+    ]
+  },
+  "pneumonia": {
+    "name": "Pneumonia",
+    "physicalExamAddons": [
+      "geral-bom",
+      "cv-normal",
+      "resp-estertores"
+    ],
+    "conduct": [
+      "Explico sobre a condição e esclareço dúvidas",
+      "Prescrevo antibioticoterapia oral para casa",
+      "Prescrevo sintomáticos para casa",
+      "Oriento sinais de alarme para retorno ao pronto-socorro"
+    ],
+    "prescriptionGroups": [
+      {
+        "id": "antibiotico",
+        "label": "Antibiótico",
+        "type": "radio",
+        "options": [
+          "amoxicilina-1g",
+          "amoxicilina-clavulanato-875mg",
+          "levofloxacino-750mg"
+        ],
+        "default": "amoxicilina-1g"
+      },
+      {
+        "id": "macrolideo",
+        "label": "Macrolídeo",
+        "items": [
+          {
+            "type": "med",
+            "medId": "azitromicina-500mg",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "id": "sintomaticos",
+        "label": "Sintomáticos",
+        "items": [
+          {
+            "type": "class",
+            "classId": "aine",
+            "default": "cetoprofeno-100mg",
+            "checked": true
+          },
+          {
+            "type": "class",
+            "classId": "analgesico",
+            "default": "dipirona-1g",
+            "checked": true
+          },
+          {
+            "type": "med",
+            "medId": "xarope-44e",
+            "checked": false
           }
         ]
       }
@@ -147,224 +836,33 @@
       }
     ]
   },
-  "geca": {
-    "name": "GECA (Gastroenterocolite aguda)",
+  "rinossinusite-viral": {
+    "name": "Rinossinusite viral",
     "physicalExamAddons": [
       "geral-bom",
       "cv-normal",
       "resp-normal",
-      "abdome-normal"
+      "oroscopia-hiperemia"
     ],
     "conduct": [
       "Explico sobre a condição e esclareço dúvidas",
-      "Oriento hidratação vigorosa e dieta leve",
+      "Oriento lavagem nasal frequente",
       "Prescrevo sintomáticos para casa",
       "Oriento sinais de alarme para retorno ao pronto-socorro"
     ],
     "prescriptionGroups": [
-      {
-        "id": "tratamento",
-        "label": "Tratamento",
-        "items": [
-          {
-            "type": "med",
-            "medId": "sais-reidratacao",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "floratil-200mg",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "racecadotrila-100mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "antiemetico",
-            "default": "ondansetrona-4mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-500mg",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "itu-nao-complicada": {
-    "name": "ITU não complicada",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "abdome-normal",
-      "giordano-negativo"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo antibioticoterapia",
-      "Oriento hidratação abundante",
-      "Prescrevo sintomáticos para casa",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "antibiotico",
-        "label": "Antibiótico",
-        "type": "radio",
-        "options": [
-          "fosfomicina-3g",
-          "nitrofurantoina-100mg",
-          "cefalexina-500mg",
-          "cefuroxima-250mg",
-          "sulfametoxazol-trimetoprima"
-        ],
-        "default": "fosfomicina-3g"
-      },
       {
         "id": "sintomaticos",
         "label": "Sintomáticos",
         "items": [
           {
             "type": "med",
-            "medId": "fenazopiridina-200mg",
+            "medId": "lavagem-nasal",
             "checked": true
           },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-500mg",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "pielonefrite-ambulatorial": {
-    "name": "Pielonefrite (tratamento ambulatorial)",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "abdome-normal",
-      "giordano-positivo"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo dose de ceftriaxona IM agora e antibioticoterapia oral para casa",
-      "Oriento hidratação abundante",
-      "Prescrevo sintomáticos para casa",
-      "Oriento retorno em 48-72h para reavaliação",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "antibiotico",
-        "label": "Antibiótico",
-        "type": "radio",
-        "options": [
-          "amoxicilina-clavulanato-875mg",
-          "ciprofloxacino-500mg",
-          "levofloxacino-750mg"
-        ],
-        "default": "amoxicilina-clavulanato-875mg"
-      },
-      {
-        "id": "sintomaticos",
-        "label": "Sintomáticos",
-        "items": [
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "cetoprofeno-100mg",
-            "checked": true,
-            "duration": "5"
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "otite-media-aguda": {
-    "name": "Otite média aguda",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "otoscopia-oma"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo antibioticoterapia",
-      "Prescrevo sintomáticos para casa",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "antibiotico",
-        "label": "Antibiótico",
-        "type": "radio",
-        "options": [
-          "amoxicilina-500mg-8h",
-          "amoxicilina-clavulanato-875mg-10d"
-        ],
-        "default": "amoxicilina-500mg-8h"
-      },
-      {
-        "id": "sintomaticos",
-        "label": "Sintomáticos",
-        "items": [
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "cetoprofeno-100mg",
-            "checked": true,
-            "duration": "5"
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "otite-externa-aguda": {
-    "name": "Otite externa aguda",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "otoscopia-oea"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo tratamento tópico",
-      "Oriento manter orelha seca",
-      "Prescrevo sintomáticos para casa",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "tratamento",
-        "label": "Tratamento",
-        "items": [
           {
             "type": "med",
-            "medId": "ciprofloxacino-hidrocortisona-otologico",
+            "medId": "xarope-44e",
             "checked": true
           },
           {
@@ -378,235 +876,6 @@
             "classId": "analgesico",
             "default": "dipirona-1g",
             "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "enxaqueca": {
-    "name": "Enxaqueca",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "neurologico-normal"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo medicação abortiva para crises",
-      "Prescrevo sintomáticos para casa",
-      "Oriento sinais de alarme para retorno ao pronto-socorro",
-      "Encaminho para acompanhamento ambulatorial"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "tratamento",
-        "label": "Tratamento",
-        "items": [
-          {
-            "type": "class",
-            "classId": "triptanos",
-            "default": "naratriptano-25mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "cetoprofeno-100mg",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "metoclopramida-10mg",
-            "checked": false
-          }
-        ]
-      }
-    ]
-  },
-  "dor-muscular": {
-    "name": "Dor muscular / Lombalgia",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Oriento repouso relativo e aplicação de calor local",
-      "Prescrevo anti-inflamatório e relaxante muscular",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "tratamento",
-        "label": "Tratamento",
-        "items": [
-          {
-            "type": "med",
-            "medId": "ciclobenzaprina-5mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "cetoprofeno-100mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "herpes-zoster": {
-    "name": "Herpes zoster",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "pele-herpes-zoster"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo antiviral",
-      "Prescrevo analgesia",
-      "Oriento cuidados com as lesões",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "antiviral",
-        "label": "Antiviral",
-        "type": "radio",
-        "options": [
-          "aciclovir-zoster",
-          "valaciclovir-500mg",
-          "aciclovir-400mg"
-        ],
-        "default": "aciclovir-zoster"
-      },
-      {
-        "id": "analgesia",
-        "label": "Analgesia",
-        "items": [
-          {
-            "type": "med",
-            "medId": "tramadol-50mg",
-            "checked": false
-          },
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "cetoprofeno-100mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "crise-gota": {
-    "name": "Crise de Gota",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "articulacao-gota"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo tratamento para crise",
-      "Oriento repouso da articulação",
-      "Oriento dieta com restrição de purinas",
-      "Encaminho para acompanhamento ambulatorial"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "tratamento",
-        "label": "Tratamento",
-        "items": [
-          {
-            "type": "med",
-            "medId": "colchicina-05mg",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "omeprazol-20mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "naproxeno-500mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "constipacao-funcional": {
-    "name": "Constipação funcional",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "abdome-normal"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Oriento mudanças alimentares e hidratação adequada",
-      "Prescrevo laxativo osmótico para casa",
-      "Oriento acompanhamento médico caso mudança continue para investigação aprofundada.",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "laxantes",
-        "label": "Laxantes",
-        "type": "radio",
-        "options": [
-          "macrogol-3350",
-          "lactulose-xarope"
-        ],
-        "default": "macrogol-3350"
-      },
-      {
-        "id": "sintomaticos",
-        "label": "Sintomáticos",
-        "items": [
-          {
-            "type": "med",
-            "medId": "escopolamina-10mg",
-            "checked": false
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-500mg",
-            "checked": false
           }
         ]
       }
@@ -706,275 +975,6 @@
             "type": "med",
             "medId": "prednisolona-40mg",
             "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "infeccao-pele": {
-    "name": "Infecção de pele e partes moles",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo antibioticoterapia para casa",
-      "Oriento sinais de alarme para retorno ao pronto-socorro",
-      "Prescrevo sintomáticos para casa"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "antibiotico",
-        "label": "Antibiótico",
-        "type": "radio",
-        "options": [
-          "cefalexina-500mg",
-          "cefadroxila-500mg",
-          "sulfametoxazol-trimetoprima",
-          "amoxicilina-clavulanato-875mg",
-          "clindamicina-300mg",
-          "mupirocina-pomada"
-        ],
-        "default": "cefalexina-500mg"
-      },
-      {
-        "id": "sintomaticos",
-        "label": "Sintomáticos",
-        "items": [
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "ibuprofeno-600mg",
-            "checked": true,
-            "duration": "5"
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "hidroxizina-25mg",
-            "checked": false
-          }
-        ]
-      }
-    ]
-  },
-  "asma": {
-    "name": "Asma",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-asma"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Solicito encaminhamento com urgência para clínica médica e pneumologia",
-      "Prescrevo alenia para casa até consulta ambulatorial",
-      "Prescrevo salbutamol de resgate"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "inalacao",
-        "label": "Inalação",
-        "items": [
-          {
-            "type": "med",
-            "medId": "alenia-12-400",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "salbutamol-100mcg",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "dpoc": {
-    "name": "DPOC",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-dpoc"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Solicito encaminhamento com urgência para clínica médica e pneumologia",
-      "Prescrevo antibioticoterapia para casa",
-      "Prescrevo salbutamol de resgate"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "inalacao",
-        "label": "Inalação",
-        "items": [
-          {
-            "type": "med",
-            "medId": "salbutamol-100mcg",
-            "checked": true
-          }
-        ]
-      },
-      {
-        "id": "antibiotico",
-        "label": "Antibiótico",
-        "type": "radio",
-        "options": [
-          "azitromicina-500mg",
-          "amoxicilina-clavulanato-875mg",
-          "levofloxacino-750mg"
-        ],
-        "default": "azitromicina-500mg"
-      }
-    ]
-  },
-  "faringoamigdalite-viral": {
-    "name": "Faringoamigdalite viral",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "oroscopia-hiperemia"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo sintomáticos para casa",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "sintomaticos",
-        "label": "Sintomáticos",
-        "items": [
-          {
-            "type": "med",
-            "medId": "flurbiprofeno-pastilha",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "cetoprofeno-100mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "rinossinusite-viral": {
-    "name": "Rinossinusite viral",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-normal",
-      "oroscopia-hiperemia"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Oriento lavagem nasal frequente",
-      "Prescrevo sintomáticos para casa",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "sintomaticos",
-        "label": "Sintomáticos",
-        "items": [
-          {
-            "type": "med",
-            "medId": "lavagem-nasal",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "xarope-44e",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "cetoprofeno-100mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          }
-        ]
-      }
-    ]
-  },
-  "pneumonia": {
-    "name": "Pneumonia",
-    "physicalExamAddons": [
-      "geral-bom",
-      "cv-normal",
-      "resp-estertores"
-    ],
-    "conduct": [
-      "Explico sobre a condição e esclareço dúvidas",
-      "Prescrevo antibioticoterapia oral para casa",
-      "Prescrevo sintomáticos para casa",
-      "Oriento sinais de alarme para retorno ao pronto-socorro"
-    ],
-    "prescriptionGroups": [
-      {
-        "id": "antibiotico",
-        "label": "Antibiótico",
-        "type": "radio",
-        "options": [
-          "amoxicilina-1g",
-          "amoxicilina-clavulanato-875mg",
-          "levofloxacino-750mg"
-        ],
-        "default": "amoxicilina-1g"
-      },
-      {
-        "id": "macrolideo",
-        "label": "Macrolídeo",
-        "items": [
-          {
-            "type": "med",
-            "medId": "azitromicina-500mg",
-            "checked": false
-          }
-        ]
-      },
-      {
-        "id": "sintomaticos",
-        "label": "Sintomáticos",
-        "items": [
-          {
-            "type": "class",
-            "classId": "aine",
-            "default": "cetoprofeno-100mg",
-            "checked": true
-          },
-          {
-            "type": "class",
-            "classId": "analgesico",
-            "default": "dipirona-1g",
-            "checked": true
-          },
-          {
-            "type": "med",
-            "medId": "xarope-44e",
-            "checked": false
           }
         ]
       }

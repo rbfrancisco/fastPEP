@@ -24,11 +24,11 @@
       "dramin-b6"
     ]
   },
-  "laxantes": {
-    "label": "Laxantes",
+  "antihistaminico": {
+    "label": "Anti-histamínicos",
     "options": [
-      "macrogol-3350",
-      "lactulose-xarope"
+      "loratadina-10mg",
+      "fexofenadina-180mg"
     ]
   },
   "ferro": {
@@ -38,18 +38,18 @@
       "neutrofer-300mg"
     ]
   },
+  "laxantes": {
+    "label": "Laxantes",
+    "options": [
+      "macrogol-3350",
+      "lactulose-xarope"
+    ]
+  },
   "triptanos": {
     "label": "Triptanos",
     "options": [
       "sumatriptano-50mg",
       "naratriptano-25mg"
-    ]
-  },
-  "antihistaminico": {
-    "label": "Anti-histamínicos",
-    "options": [
-      "loratadina-10mg",
-      "fexofenadina-180mg"
     ]
   }
 }

@@ -16,7 +16,11 @@ No installation, no server, no internet required - it runs entirely in your brow
 
 ## For Data Editors
 
-You can add new conditions, medications, and physical exam findings by editing the JSON files in the `data/` folder. There's also an **Admin Editor** tool at `admin/index.html` that provides forms with autocomplete to generate the JSON for you.
+You can add new conditions, medications, and physical exam findings through:
+- Split source files in `data-src/` (recommended for AI/manual edits)
+- The local **Admin Editor** (recommended for form-based edits)
+
+The app runtime still reads compiled JSON files from `data/`, generated from `data-src/`.
 
 ## Production vs Admin Scope
 
@@ -40,6 +44,8 @@ Server defaults:
 
 ## Build and Deploy
 
+- `npm run split-data`: one-time migration from `data/` into `data-src/` (already applied in this repo)
+- `npm run compile-data`: compiles `data-src/` into runtime `data/`
 - `npm run validate-data`: validates JSON structure/references
 - `npm run build`: creates `dist/` with production app only (excludes `admin/`)
 - `npm run build:full`: creates `dist/` including admin (for internal use only)
@@ -47,16 +53,18 @@ Server defaults:
 Optional pre-commit data validation:
 
 1. Configure hooks path once: `git config core.hooksPath .githooks`
-2. Commit as usual; the hook runs `npm run validate-data`
+2. Commit as usual; the hook runs compile + validation
 
 ### Data Files Overview
 
-| File | Purpose |
+| Path | Purpose |
 |------|---------|
-| `data/medications.json` | All available medications with dosing instructions |
-| `data/medication-classes.json` | Groups of interchangeable medications (e.g., NSAIDs) |
-| `data/physical-exam.json` | Base exam text and condition-specific addons |
-| `data/conditions.json` | Diagnoses with their exam addons, conduct, and prescriptions |
+| `data-src/medications/*.json` | Source entries for medications |
+| `data-src/medication-classes/*.json` | Source entries for medication classes |
+| `data-src/physical-exam/*.json` | Source entries for physical exam addons |
+| `data-src/conditions/*.json` | Source entries for conditions |
+| `data/*.json` | Compiled runtime files consumed by app/admin |
+| `schemas/*.schema.json` | Entity schemas used in validation |
 
 ---
 
@@ -395,16 +403,16 @@ Used for symptomatic medications where multiple can be selected.
 
 ### Adding a New Medication
 
-1. Open `data/medications.json`
-2. Add a new entry before the closing `}`
-3. Use the pattern:
+1. Create `data-src/medications/<medication-id>.json`
+2. Use the content pattern:
 ```json
-"new-medication-id": {
+{
   "name": "Medication Name Dose",
   "instruction": "Complete dosing instructions"
 }
 ```
-4. Add a comma after the previous entry if needed
+3. Run `npm run compile-data`
+4. Run `npm run validate-data`
 
 ### Adding a New Condition
 
@@ -413,11 +421,11 @@ Used for symptomatic medications where multiple can be selected.
    - All class IDs must exist in `medication-classes.json`
    - All addon IDs must exist in `physical-exam.json`
 
-2. **Open `data/conditions.json`**
+2. **Create/edit `data-src/conditions/<condition-id>.json`**
 
-3. **Add the new condition following this template:**
+3. **Use this template:**
 ```json
-"new-condition-id": {
+{
   "name": "Condition Display Name",
   "physicalExamAddons": ["relevant-addon-id"],
   "conduct": [
@@ -435,6 +443,8 @@ Used for symptomatic medications where multiple can be selected.
   ]
 }
 ```
+4. Run `npm run compile-data`
+5. Run `npm run validate-data`
 
 ### Using the Admin Editor
 
@@ -460,7 +470,8 @@ The Admin Editor provides a visual interface for creating and editing JSON entri
 5. For lists (medications in a class, items in a prescription group), use the drag handles (⋮⋮) to reorder
 6. Click "Gerar JSON" to generate the JSON code
 7. Click "Copiar" to copy to clipboard
-8. Paste into the appropriate data file, replacing or adding the entry
+8. If using copy/paste mode, paste into the appropriate `data-src/<type>/<id>.json`
+9. Run `npm run compile-data && npm run validate-data`
 
 #### Editing Existing Entries
 
@@ -471,7 +482,8 @@ The Admin Editor provides a visual interface for creating and editing JSON entri
 5. Make your changes (edit text, reorder items, add/remove elements)
 6. Click "Gerar JSON" to generate the updated JSON
 7. Click "Copiar" to copy to clipboard
-8. In the data file, find and replace the existing entry with the new JSON
+8. In copy/paste mode, replace content in `data-src/<type>/<id>.json`
+9. Run `npm run compile-data && npm run validate-data`
 
 #### Reordering Items
 
@@ -509,7 +521,17 @@ fastPEP/
 │   └── routes/
 │       └── data.js
 ├── scripts/
-│   └── validate-data.js    # Data integrity checks
+│   ├── compile-data.js     # Compiles split source into runtime data
+│   ├── split-data.js       # One-time migration from data/ to data-src/
+│   ├── validate-data.js    # Schema + reference + sync checks
+│   └── lib/
+│       ├── data-pipeline.js
+│       └── simple-schema-validator.js
+├── schemas/
+│   ├── medication.schema.json
+│   ├── medication-class.schema.json
+│   ├── physical-exam-addon.schema.json
+│   └── condition.schema.json
 ├── .github/
 │   └── workflows/
 │       └── validate-data.yml
@@ -519,7 +541,12 @@ fastPEP/
 │   └── styles.css          # Application styles
 ├── js/
 │   └── app.js              # Application logic
-├── data/
+├── data-src/               # Source-of-truth split files (AI-friendly)
+│   ├── medications/
+│   ├── medication-classes/
+│   ├── physical-exam/
+│   └── conditions/
+├── data/                   # Compiled runtime data
 │   ├── medications.json    # Medication definitions
 │   ├── medication-classes.json  # Medication groups
 │   ├── physical-exam.json  # Physical exam templates

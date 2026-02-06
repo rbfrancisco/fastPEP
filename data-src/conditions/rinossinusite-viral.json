@@ -1,0 +1,45 @@
+{
+  "name": "Rinossinusite viral",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "oroscopia-hiperemia"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Oriento lavagem nasal frequente",
+    "Prescrevo sintomáticos para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "med",
+          "medId": "lavagem-nasal",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "xarope-44e",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

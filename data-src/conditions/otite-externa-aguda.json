@@ -1,0 +1,41 @@
+{
+  "name": "Otite externa aguda",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "otoscopia-oea"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo tratamento tópico",
+    "Oriento manter orelha seca",
+    "Prescrevo sintomáticos para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "tratamento",
+      "label": "Tratamento",
+      "items": [
+        {
+          "type": "med",
+          "medId": "ciprofloxacino-hidrocortisona-otologico",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

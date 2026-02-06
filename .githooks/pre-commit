@@ -2,4 +2,5 @@
 set -euo pipefail
 
 echo "Running FastPEP data validation..."
+npm run compile-data
 npm run validate-data

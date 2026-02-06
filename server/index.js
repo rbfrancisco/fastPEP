@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const dataRoutes = require('./routes/data');
+const { compileDataFromSource } = require('../scripts/lib/data-pipeline');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -33,20 +34,29 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
 });
 
-// Start server
-app.listen(PORT, HOST, () => {
-    console.log('');
-    console.log('='.repeat(50));
-    console.log('  FastPEP Editor Server');
-    console.log('='.repeat(50));
-    console.log(`  Server running at: http://${HOST}:${PORT}`);
-    console.log(`  Editor available at: http://${HOST}:${PORT}/admin/`);
-    console.log(`  Main app at: http://${HOST}:${PORT}/`);
-    if (ADMIN_CORS_ORIGIN) {
-        console.log(`  CORS enabled for: ${ADMIN_CORS_ORIGIN}`);
-    } else {
-        console.log('  CORS disabled (same-origin only)');
-    }
-    console.log('='.repeat(50));
-    console.log('');
+async function startServer() {
+    // Keep runtime data/ synchronized with split source files.
+    await compileDataFromSource();
+
+    app.listen(PORT, HOST, () => {
+        console.log('');
+        console.log('='.repeat(50));
+        console.log('  FastPEP Editor Server');
+        console.log('='.repeat(50));
+        console.log(`  Server running at: http://${HOST}:${PORT}`);
+        console.log(`  Editor available at: http://${HOST}:${PORT}/admin/`);
+        console.log(`  Main app at: http://${HOST}:${PORT}/`);
+        if (ADMIN_CORS_ORIGIN) {
+            console.log(`  CORS enabled for: ${ADMIN_CORS_ORIGIN}`);
+        } else {
+            console.log('  CORS disabled (same-origin only)');
+        }
+        console.log('='.repeat(50));
+        console.log('');
+    });
+}
+
+startServer().catch(error => {
+    console.error('Failed to start server:', error.message);
+    process.exit(1);
 });

@@ -1,21 +1,16 @@
 const express = require('express');
-const fs = require('fs').promises;
-const path = require('path');
+const {
+    ID_PATTERN,
+    readSourceType,
+    writeSourceEntry,
+    deleteSourceEntry,
+    compileDataFromSource
+} = require('../../scripts/lib/data-pipeline');
 
 const router = express.Router();
 
-const DATA_DIR = path.join(__dirname, '../../data');
 const ADMIN_API_TOKEN = process.env.ADMIN_API_TOKEN || '';
-const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const writeLocks = new Map();
-
-// Map URL type parameter to actual file names
-const FILE_MAP = {
-    'medications': 'medications.json',
-    'medication-classes': 'medication-classes.json',
-    'physical-exam': 'physical-exam.json',
-    'conditions': 'conditions.json'
-};
 
 function isValidId(id) {
     return ID_PATTERN.test(id);
@@ -45,28 +40,11 @@ async function withWriteLock(type, task) {
 
 // Helper: Read JSON file
 async function readDataFile(type) {
-    const filename = FILE_MAP[type];
-    if (!filename) {
-        throw new Error(`Invalid data type: ${type}`);
+    const sourceData = await readSourceType(type);
+    if (type === 'physical-exam') {
+        return { addons: sourceData };
     }
-    const filepath = path.join(DATA_DIR, filename);
-    const content = await fs.readFile(filepath, 'utf-8');
-    return JSON.parse(content);
-}
-
-// Helper: Write JSON file with pretty formatting
-async function writeDataFile(type, data) {
-    const filename = FILE_MAP[type];
-    if (!filename) {
-        throw new Error(`Invalid data type: ${type}`);
-    }
-    const filepath = path.join(DATA_DIR, filename);
-    const tempFilepath = `${filepath}.tmp-${process.pid}-${Date.now()}`;
-    const serialized = JSON.stringify(data, null, 2) + '\n';
-
-    // Atomic write: write temp file then rename over target
-    await fs.writeFile(tempFilepath, serialized, 'utf-8');
-    await fs.rename(tempFilepath, filepath);
+    return sourceData;
 }
 
 // GET /api/data/:type - Get all data for a type
@@ -97,19 +75,8 @@ router.put('/data/:type/:id', requireAdminToken, async (req, res) => {
         }
 
         await withWriteLock(type, async () => {
-            let data = await readDataFile(type);
-
-            // Special handling for physical-exam (nested under "addons")
-            if (type === 'physical-exam') {
-                if (!data.addons) {
-                    data.addons = {};
-                }
-                data.addons[id] = entryData;
-            } else {
-                data[id] = entryData;
-            }
-
-            await writeDataFile(type, data);
+            await writeSourceEntry(type, id, entryData);
+            await compileDataFromSource();
         });
 
         console.log(`Saved ${type}/${id}`);
@@ -132,21 +99,9 @@ router.delete('/data/:type/:id', requireAdminToken, async (req, res) => {
         }
 
         const deleted = await withWriteLock(type, async () => {
-            let data = await readDataFile(type);
-            let removed = false;
-
-            if (type === 'physical-exam') {
-                if (data.addons && data.addons[id]) {
-                    delete data.addons[id];
-                    removed = true;
-                }
-            } else if (data[id]) {
-                delete data[id];
-                removed = true;
-            }
-
+            const removed = await deleteSourceEntry(type, id);
             if (removed) {
-                await writeDataFile(type, data);
+                await compileDataFromSource();
             }
 
             return removed;

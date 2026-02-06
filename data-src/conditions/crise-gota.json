@@ -1,0 +1,46 @@
+{
+  "name": "Crise de Gota",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "articulacao-gota"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo tratamento para crise",
+    "Oriento repouso da articulação",
+    "Oriento dieta com restrição de purinas",
+    "Encaminho para acompanhamento ambulatorial"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "tratamento",
+      "label": "Tratamento",
+      "items": [
+        {
+          "type": "med",
+          "medId": "colchicina-05mg",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "omeprazol-20mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "naproxeno-500mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

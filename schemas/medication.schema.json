@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Medication",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "instruction"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "instruction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "defaultDuration": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inHospital": {
+      "type": "boolean"
+    },
+    "hospitalNote": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "Faringoamigdalite bacteriana",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "oroscopia-amigdalite",
+    "linfonodomegalia-cervical"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo antibioticoterapia",
+    "Prescrevo sintomáticos para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro",
+    "Atesto 2 dias"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "antibiotico",
+      "label": "Antibiótico",
+      "type": "radio",
+      "options": [
+        "amoxicilina-500mg",
+        "penicilina-benzatina"
+      ],
+      "default": "amoxicilina-500mg"
+    },
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "med",
+          "medId": "flurbiprofeno-pastilha",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-500mg",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

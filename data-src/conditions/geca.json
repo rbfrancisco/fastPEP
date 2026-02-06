@@ -1,0 +1,50 @@
+{
+  "name": "GECA (Gastroenterocolite aguda)",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-normal",
+    "abdome-normal"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Oriento hidratação vigorosa e dieta leve",
+    "Prescrevo sintomáticos para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "tratamento",
+      "label": "Tratamento",
+      "items": [
+        {
+          "type": "med",
+          "medId": "sais-reidratacao",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "floratil-200mg",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "racecadotrila-100mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "antiemetico",
+          "default": "ondansetrona-4mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-500mg",
+          "checked": true
+        }
+      ]
+    }
+  ]
+}

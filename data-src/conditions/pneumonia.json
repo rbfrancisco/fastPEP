@@ -1,0 +1,61 @@
+{
+  "name": "Pneumonia",
+  "physicalExamAddons": [
+    "geral-bom",
+    "cv-normal",
+    "resp-estertores"
+  ],
+  "conduct": [
+    "Explico sobre a condição e esclareço dúvidas",
+    "Prescrevo antibioticoterapia oral para casa",
+    "Prescrevo sintomáticos para casa",
+    "Oriento sinais de alarme para retorno ao pronto-socorro"
+  ],
+  "prescriptionGroups": [
+    {
+      "id": "antibiotico",
+      "label": "Antibiótico",
+      "type": "radio",
+      "options": [
+        "amoxicilina-1g",
+        "amoxicilina-clavulanato-875mg",
+        "levofloxacino-750mg"
+      ],
+      "default": "amoxicilina-1g"
+    },
+    {
+      "id": "macrolideo",
+      "label": "Macrolídeo",
+      "items": [
+        {
+          "type": "med",
+          "medId": "azitromicina-500mg",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "id": "sintomaticos",
+      "label": "Sintomáticos",
+      "items": [
+        {
+          "type": "class",
+          "classId": "aine",
+          "default": "cetoprofeno-100mg",
+          "checked": true
+        },
+        {
+          "type": "class",
+          "classId": "analgesico",
+          "default": "dipirona-1g",
+          "checked": true
+        },
+        {
+          "type": "med",
+          "medId": "xarope-44e",
+          "checked": false
+        }
+      ]
+    }
+  ]
+}
