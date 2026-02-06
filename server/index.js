@@ -5,10 +5,21 @@ const dataRoutes = require('./routes/data');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const HOST = process.env.HOST || '127.0.0.1';
+const ADMIN_CORS_ORIGIN = process.env.ADMIN_CORS_ORIGIN;
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.disable('x-powered-by');
+app.use(express.json({ limit: '1mb' }));
+
+// CORS is disabled by default. If you need cross-origin admin access, set ADMIN_CORS_ORIGIN.
+if (ADMIN_CORS_ORIGIN) {
+    app.use(cors({
+        origin: ADMIN_CORS_ORIGIN,
+        methods: ['GET', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'X-Admin-Token']
+    }));
+}
 
 // Serve static files (main app and admin)
 app.use(express.static(path.join(__dirname, '..')));
@@ -23,14 +34,19 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
     console.log('');
     console.log('='.repeat(50));
     console.log('  FastPEP Editor Server');
     console.log('='.repeat(50));
-    console.log(`  Server running at: http://localhost:${PORT}`);
-    console.log(`  Editor available at: http://localhost:${PORT}/admin/`);
-    console.log(`  Main app at: http://localhost:${PORT}/`);
+    console.log(`  Server running at: http://${HOST}:${PORT}`);
+    console.log(`  Editor available at: http://${HOST}:${PORT}/admin/`);
+    console.log(`  Main app at: http://${HOST}:${PORT}/`);
+    if (ADMIN_CORS_ORIGIN) {
+        console.log(`  CORS enabled for: ${ADMIN_CORS_ORIGIN}`);
+    } else {
+        console.log('  CORS disabled (same-origin only)');
+    }
     console.log('='.repeat(50));
     console.log('');
 });

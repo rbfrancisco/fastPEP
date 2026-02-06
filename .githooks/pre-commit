@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Running FastPEP data validation..."
+npm run validate-data

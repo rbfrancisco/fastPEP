@@ -5,6 +5,9 @@ const path = require('path');
 const router = express.Router();
 
 const DATA_DIR = path.join(__dirname, '../../data');
+const ADMIN_API_TOKEN = process.env.ADMIN_API_TOKEN || '';
+const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const writeLocks = new Map();
 
 // Map URL type parameter to actual file names
 const FILE_MAP = {
@@ -13,6 +16,32 @@ const FILE_MAP = {
     'physical-exam': 'physical-exam.json',
     'conditions': 'conditions.json'
 };
+
+function isValidId(id) {
+    return ID_PATTERN.test(id);
+}
+
+function requireAdminToken(req, res, next) {
+    if (!ADMIN_API_TOKEN) {
+        return res.status(503).json({
+            error: 'Write operations are disabled. Set ADMIN_API_TOKEN to enable saving/deleting.'
+        });
+    }
+
+    const providedToken = req.get('x-admin-token');
+    if (!providedToken || providedToken !== ADMIN_API_TOKEN) {
+        return res.status(401).json({ error: 'Invalid or missing admin token' });
+    }
+
+    next();
+}
+
+async function withWriteLock(type, task) {
+    const previous = writeLocks.get(type) || Promise.resolve();
+    const current = previous.then(task, task);
+    writeLocks.set(type, current.catch(() => {}));
+    return current;
+}
 
 // Helper: Read JSON file
 async function readDataFile(type) {
@@ -32,8 +61,12 @@ async function writeDataFile(type, data) {
         throw new Error(`Invalid data type: ${type}`);
     }
     const filepath = path.join(DATA_DIR, filename);
-    // Pretty print with 2-space indent and trailing newline
-    await fs.writeFile(filepath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+    const tempFilepath = `${filepath}.tmp-${process.pid}-${Date.now()}`;
+    const serialized = JSON.stringify(data, null, 2) + '\n';
+
+    // Atomic write: write temp file then rename over target
+    await fs.writeFile(tempFilepath, serialized, 'utf-8');
+    await fs.rename(tempFilepath, filepath);
 }
 
 // GET /api/data/:type - Get all data for a type
@@ -48,7 +81,7 @@ router.get('/data/:type', async (req, res) => {
 });
 
 // PUT /api/data/:type/:id - Create or update a single entry
-router.put('/data/:type/:id', async (req, res) => {
+router.put('/data/:type/:id', requireAdminToken, async (req, res) => {
     try {
         const { type, id } = req.params;
         const entryData = req.body;
@@ -57,19 +90,27 @@ router.put('/data/:type/:id', async (req, res) => {
             return res.status(400).json({ error: 'ID is required' });
         }
 
-        let data = await readDataFile(type);
-
-        // Special handling for physical-exam (nested under "addons")
-        if (type === 'physical-exam') {
-            if (!data.addons) {
-                data.addons = {};
-            }
-            data.addons[id] = entryData;
-        } else {
-            data[id] = entryData;
+        if (!isValidId(id)) {
+            return res.status(400).json({
+                error: 'Invalid ID format. Use lowercase letters, numbers, and hyphens only.'
+            });
         }
 
-        await writeDataFile(type, data);
+        await withWriteLock(type, async () => {
+            let data = await readDataFile(type);
+
+            // Special handling for physical-exam (nested under "addons")
+            if (type === 'physical-exam') {
+                if (!data.addons) {
+                    data.addons = {};
+                }
+                data.addons[id] = entryData;
+            } else {
+                data[id] = entryData;
+            }
+
+            await writeDataFile(type, data);
+        });
 
         console.log(`Saved ${type}/${id}`);
         res.json({ success: true, id, message: `Entry "${id}" saved successfully` });
@@ -80,29 +121,40 @@ router.put('/data/:type/:id', async (req, res) => {
 });
 
 // DELETE /api/data/:type/:id - Delete an entry
-router.delete('/data/:type/:id', async (req, res) => {
+router.delete('/data/:type/:id', requireAdminToken, async (req, res) => {
     try {
         const { type, id } = req.params;
-        let data = await readDataFile(type);
-        let deleted = false;
 
-        if (type === 'physical-exam') {
-            if (data.addons && data.addons[id]) {
-                delete data.addons[id];
-                deleted = true;
-            }
-        } else {
-            if (data[id]) {
-                delete data[id];
-                deleted = true;
-            }
+        if (!isValidId(id)) {
+            return res.status(400).json({
+                error: 'Invalid ID format. Use lowercase letters, numbers, and hyphens only.'
+            });
         }
+
+        const deleted = await withWriteLock(type, async () => {
+            let data = await readDataFile(type);
+            let removed = false;
+
+            if (type === 'physical-exam') {
+                if (data.addons && data.addons[id]) {
+                    delete data.addons[id];
+                    removed = true;
+                }
+            } else if (data[id]) {
+                delete data[id];
+                removed = true;
+            }
+
+            if (removed) {
+                await writeDataFile(type, data);
+            }
+
+            return removed;
+        });
 
         if (!deleted) {
             return res.status(404).json({ error: `Entry "${id}" not found` });
         }
-
-        await writeDataFile(type, data);
 
         console.log(`Deleted ${type}/${id}`);
         res.json({ success: true, id, message: `Entry "${id}" deleted successfully` });

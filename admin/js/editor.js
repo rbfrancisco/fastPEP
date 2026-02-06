@@ -3,6 +3,27 @@
 // ============ API CONFIGURATION ============
 const API_BASE = '/api';
 let serverAvailable = false;
+const ADMIN_TOKEN_STORAGE_KEY = 'fastpep_admin_token';
+const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function isValidId(id) {
+    return ID_PATTERN.test(id);
+}
+
+function getAdminToken() {
+    return localStorage.getItem(ADMIN_TOKEN_STORAGE_KEY) || '';
+}
+
+function ensureAdminToken() {
+    let token = getAdminToken().trim();
+    if (token) return token;
+
+    token = (window.prompt('Digite o ADMIN_API_TOKEN para salvar/excluir dados:') || '').trim();
+    if (token) {
+        localStorage.setItem(ADMIN_TOKEN_STORAGE_KEY, token);
+    }
+    return token;
+}
 
 // Check if server is available (for save functionality)
 async function checkServerAvailability() {
@@ -19,15 +40,21 @@ async function checkServerAvailability() {
 }
 
 // Save entry to server
-async function saveToServer(type, id, data) {
+async function saveToServer(type, id, data, token) {
     const response = await fetch(`${API_BASE}/data/${type}/${encodeURIComponent(id)}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Admin-Token': token
+        },
         body: JSON.stringify(data)
     });
 
     if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+            localStorage.removeItem(ADMIN_TOKEN_STORAGE_KEY);
+        }
         throw new Error(error.error || 'Failed to save');
     }
 
@@ -35,13 +62,17 @@ async function saveToServer(type, id, data) {
 }
 
 // Delete entry from server
-async function deleteFromServer(type, id) {
+async function deleteFromServer(type, id, token) {
     const response = await fetch(`${API_BASE}/data/${type}/${encodeURIComponent(id)}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: { 'X-Admin-Token': token }
     });
 
     if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+            localStorage.removeItem(ADMIN_TOKEN_STORAGE_KEY);
+        }
         throw new Error(error.error || 'Failed to delete');
     }
 
@@ -488,7 +519,7 @@ function loadMedicationClass(id) {
         row.className = 'class-option-row sortable-item';
         row.innerHTML = `
             <span class="drag-handle">⋮⋮</span>
-            <input type="text" class="class-option" value="${optId}" placeholder="ID do medicamento">
+            <input type="text" class="class-option" value="${escapeHtml(optId)}" placeholder="ID do medicamento">
             <button type="button" class="btn-remove" title="Remover">×</button>
         `;
         container.appendChild(row);
@@ -544,7 +575,7 @@ function loadCondition(id) {
         row.className = 'addon-row sortable-item';
         row.innerHTML = `
             <span class="drag-handle">⋮⋮</span>
-            <input type="text" class="cond-addon" value="${addonId}" placeholder="ID do addon">
+            <input type="text" class="cond-addon" value="${escapeHtml(addonId)}" placeholder="ID do addon">
             <button type="button" class="btn-remove" title="Remover">×</button>
         `;
         addonsContainer.appendChild(row);
@@ -610,7 +641,7 @@ function loadRadioGroup(container, group) {
         row.className = 'group-option-row sortable-item';
         row.innerHTML = `
             <span class="drag-handle">⋮⋮</span>
-            <input type="text" class="group-option" value="${optId}" placeholder="ID do medicamento">
+            <input type="text" class="group-option" value="${escapeHtml(optId)}" placeholder="ID do medicamento">
             <button type="button" class="btn-remove" title="Remover">×</button>
         `;
         optionsContainer.appendChild(row);
@@ -956,6 +987,11 @@ async function handleDelete(form, btn) {
     const originalText = btn.textContent;
 
     try {
+        const token = ensureAdminToken();
+        if (!token) {
+            throw new Error('Token de admin é obrigatório para excluir');
+        }
+
         btn.textContent = 'Excluindo...';
         btn.disabled = true;
         btn.classList.add('deleting');
@@ -970,7 +1006,7 @@ async function handleDelete(form, btn) {
         const type = typeMap[form];
 
         // Delete from server
-        await deleteFromServer(type, id);
+        await deleteFromServer(type, id, token);
 
         // Reload all data from server
         await loadAllData();
@@ -1022,32 +1058,28 @@ async function handleSave(form, btn) {
         btn.disabled = true;
         btn.classList.add('saving');
 
-        let type, id, data, outputEl;
+        let type, id, data;
 
         switch (form) {
             case 'medication':
                 type = 'medications';
                 id = document.getElementById('med-id').value.trim();
                 data = buildMedicationData();
-                outputEl = document.getElementById('medication-output');
                 break;
             case 'class':
                 type = 'medication-classes';
                 id = document.getElementById('class-id').value.trim();
                 data = buildMedicationClassData();
-                outputEl = document.getElementById('class-output');
                 break;
             case 'exam':
                 type = 'physical-exam';
                 id = document.getElementById('exam-id').value.trim();
                 data = buildPhysicalExamData();
-                outputEl = document.getElementById('exam-output');
                 break;
             case 'condition':
                 type = 'conditions';
                 id = document.getElementById('cond-id').value.trim();
                 data = buildConditionData();
-                outputEl = document.getElementById('condition-output');
                 break;
             default:
                 throw new Error('Unknown form type');
@@ -1058,18 +1090,31 @@ async function handleSave(form, btn) {
             throw new Error('ID é obrigatório');
         }
 
+        if (!isValidId(id)) {
+            throw new Error('ID inválido. Use letras minúsculas, números e hífens.');
+        }
+
         // Validate data
         if (!data) {
             throw new Error('Dados inválidos - verifique os campos obrigatórios');
         }
 
-        // Check for validation errors in output
-        if (outputEl && outputEl.classList.contains('has-errors')) {
-            throw new Error('Corrija os erros de validação antes de salvar');
+        const validation = validateBeforeSave(form, id, data);
+        if (validation.errors.length > 0) {
+            throw new Error(`Corrija os erros antes de salvar:\n- ${validation.errors.join('\n- ')}`);
+        }
+
+        if (validation.warnings.length > 0) {
+            console.warn('Save warnings:', validation.warnings);
+        }
+
+        const token = ensureAdminToken();
+        if (!token) {
+            throw new Error('Token de admin é obrigatório para salvar');
         }
 
         // Save to server
-        await saveToServer(type, id, data);
+        await saveToServer(type, id, data, token);
 
         // Reload all data from server to sync
         await loadAllData();
@@ -1237,6 +1282,11 @@ function generateMedicationJSON() {
         return;
     }
 
+    if (!isValidId(id)) {
+        document.getElementById('medication-output').textContent = 'Erro: ID inválido. Use letras minúsculas, números e hífens.';
+        return;
+    }
+
     const medication = { name, instruction };
     if (duration) medication.defaultDuration = duration;
     if (inHospital) {
@@ -1282,6 +1332,12 @@ function generateMedicationClassJSON() {
 
     if (!id || !label || options.length === 0) {
         outputEl.textContent = 'Erro: Preencha todos os campos obrigatórios';
+        outputEl.classList.add('has-errors');
+        return;
+    }
+
+    if (!isValidId(id)) {
+        outputEl.textContent = 'Erro: ID inválido. Use letras minúsculas, números e hífens.';
         outputEl.classList.add('has-errors');
         return;
     }
@@ -1343,6 +1399,11 @@ function generatePhysicalExamJSON() {
 
     if (!id || !label) {
         document.getElementById('exam-output').textContent = 'Erro: Preencha todos os campos obrigatórios (*)';
+        return;
+    }
+
+    if (!isValidId(id)) {
+        document.getElementById('exam-output').textContent = 'Erro: ID inválido. Use letras minúsculas, números e hífens.';
         return;
     }
 
@@ -1511,6 +1572,12 @@ function generateConditionJSON() {
         return;
     }
 
+    if (!isValidId(id)) {
+        outputEl.textContent = 'Erro: ID inválido. Use letras minúsculas, números e hífens.';
+        outputEl.classList.add('has-errors');
+        return;
+    }
+
     const condition = {
         name,
         physicalExamAddons: addons,
@@ -1620,15 +1687,53 @@ function getInputValuesOrdered(selector) {
     return values;
 }
 
+function validateBeforeSave(form, id, data) {
+    const errors = [];
+    const warnings = [];
+
+    if (!isValidId(id)) {
+        errors.push('ID inválido. Use letras minúsculas, números e hífens.');
+    }
+
+    if (form === 'medication') {
+        if (data.instruction.includes('{duration}') && !data.defaultDuration) {
+            errors.push('Medicação com {duration} precisa de defaultDuration');
+        }
+    } else if (form === 'class') {
+        const result = validateMedicationClass(id, data.options || []);
+        errors.push(...result.errors);
+        warnings.push(...result.warnings);
+    } else if (form === 'exam') {
+        if (typeof data.text === 'object') {
+            if (!data.text.masculino || !data.text.feminino) {
+                errors.push('Addon com texto por gênero precisa de masculino e feminino');
+            }
+        } else if (!data.text || typeof data.text !== 'string') {
+            errors.push('Texto do addon é obrigatório');
+        }
+    } else if (form === 'condition') {
+        const result = validateCondition(data);
+        errors.push(...result.errors);
+        warnings.push(...result.warnings);
+    }
+
+    return { errors, warnings };
+}
+
 // ============ VALIDATION ============
 function validateMedicationClass(classId, options) {
     const errors = [];
     const warnings = [];
+    const seen = new Set();
 
     for (const medId of options) {
         if (!dataStore.medications[medId]) {
             errors.push(`Medicamento "${medId}" não existe`);
         }
+        if (seen.has(medId)) {
+            warnings.push(`Medicamento "${medId}" está duplicado nas opções`);
+        }
+        seen.add(medId);
     }
 
     return { errors, warnings };
@@ -1637,6 +1742,14 @@ function validateMedicationClass(classId, options) {
 function validateCondition(conditionData) {
     const errors = [];
     const warnings = [];
+
+    const groupIds = (conditionData.prescriptionGroups || [])
+        .map(group => group.id)
+        .filter(Boolean);
+    const duplicatedGroupIds = groupIds.filter((id, index) => groupIds.indexOf(id) !== index);
+    for (const id of [...new Set(duplicatedGroupIds)]) {
+        errors.push(`ID de grupo "${id}" está duplicado`);
+    }
 
     // Validate addons
     for (const addonId of conditionData.physicalExamAddons || []) {

@@ -18,6 +18,37 @@ No installation, no server, no internet required - it runs entirely in your brow
 
 You can add new conditions, medications, and physical exam findings by editing the JSON files in the `data/` folder. There's also an **Admin Editor** tool at `admin/index.html` that provides forms with autocomplete to generate the JSON for you.
 
+## Production vs Admin Scope
+
+- Production hosting should include only: `index.html`, `js/`, `css/`, `data/`
+- `admin/` and `server/` should stay local/dev-only
+- Save/delete operations in the local editor API require `ADMIN_API_TOKEN`
+
+## Local Admin Workflow (Recommended)
+
+Use this for direct save/delete (no manual copy/paste):
+
+1. Install dependencies: `npm install`
+2. Set a token: `export ADMIN_API_TOKEN="your-strong-token"`
+3. Start local server: `npm run server`
+4. Open: `http://127.0.0.1:3001/admin/`
+5. On first save/delete, the editor prompts for token and stores it in browser localStorage
+
+Server defaults:
+- Binds to `127.0.0.1`
+- Disables CORS unless `ADMIN_CORS_ORIGIN` is set
+
+## Build and Deploy
+
+- `npm run validate-data`: validates JSON structure/references
+- `npm run build`: creates `dist/` with production app only (excludes `admin/`)
+- `npm run build:full`: creates `dist/` including admin (for internal use only)
+
+Optional pre-commit data validation:
+
+1. Configure hooks path once: `git config core.hooksPath .githooks`
+2. Commit as usual; the hook runs `npm run validate-data`
+
 ### Data Files Overview
 
 | File | Purpose |
@@ -407,7 +438,9 @@ Used for symptomatic medications where multiple can be selected.
 
 ### Using the Admin Editor
 
-The Admin Editor (`admin/index.html`) provides a visual interface for creating and editing JSON entries without manually editing files.
+The Admin Editor provides a visual interface for creating and editing JSON entries:
+- Recommended: `http://127.0.0.1:3001/admin/` (direct save/delete via API)
+- Fallback: open `admin/index.html` directly (copy/paste workflow)
 
 #### Features
 
@@ -416,10 +449,11 @@ The Admin Editor (`admin/index.html`) provides a visual interface for creating a
 - **Autocomplete**: All fields suggest existing values to ensure consistency and speed up data entry
 - **Drag-and-Drop Reordering**: Reorder prescription items, medication options, addons, and conduct items by dragging
 - **Validation**: Warns about missing references or duplicate IDs
+- **Direct Save/Delete (local server mode)**: Writes to JSON files via token-protected API
 
 #### Creating New Entries
 
-1. Open `admin/index.html` in your browser
+1. Open `http://127.0.0.1:3001/admin/` (recommended) or `admin/index.html`
 2. Select the appropriate tab (Medication, Class, Physical Exam, or Condition)
 3. Ensure "Novo" mode is selected (default)
 4. Fill in the form fields - autocomplete will suggest existing values
@@ -430,7 +464,7 @@ The Admin Editor (`admin/index.html`) provides a visual interface for creating a
 
 #### Editing Existing Entries
 
-1. Open `admin/index.html` in your browser
+1. Open `http://127.0.0.1:3001/admin/` (recommended) or `admin/index.html`
 2. Select the appropriate tab
 3. Click "Editar Existente" to switch to edit mode
 4. Select an entry from the dropdown - all fields will be populated
@@ -468,6 +502,19 @@ Reorderable elements include:
 ```
 fastPEP/
 ├── index.html              # Main application
+├── build.js                # Build script (production excludes admin by default)
+├── package.json
+├── server/                 # Local-only editor server
+│   ├── index.js
+│   └── routes/
+│       └── data.js
+├── scripts/
+│   └── validate-data.js    # Data integrity checks
+├── .github/
+│   └── workflows/
+│       └── validate-data.yml
+├── .githooks/
+│   └── pre-commit
 ├── css/
 │   └── styles.css          # Application styles
 ├── js/
@@ -477,7 +524,7 @@ fastPEP/
 │   ├── medication-classes.json  # Medication groups
 │   ├── physical-exam.json  # Physical exam templates
 │   └── conditions.json     # Condition definitions
-└── admin/
+└── admin/                  # Local-only editor UI
     ├── index.html          # Admin editor interface
     ├── css/
     │   └── styles.css      # Editor styles

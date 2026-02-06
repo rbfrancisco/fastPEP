@@ -399,34 +399,66 @@
     }
 
     function renderDropdown(items, query) {
+        elements.dropdown.innerHTML = '';
+
         if (items.length === 0) {
-            elements.dropdown.innerHTML = '<div class="dropdown-item">Nenhum diagnóstico encontrado</div>';
+            const emptyItem = document.createElement('div');
+            emptyItem.className = 'dropdown-item';
+            emptyItem.textContent = 'Nenhum diagnóstico encontrado';
+            elements.dropdown.appendChild(emptyItem);
             showDropdown();
             return;
         }
 
-        elements.dropdown.innerHTML = items.map(({ id, name }) => {
-            const highlighted = highlightMatches(name, query);
-            const selectedClass = currentCondition === id ? 'selected' : '';
-            return `<div class="dropdown-item ${selectedClass}" data-id="${id}">${highlighted}</div>`;
-        }).join('');
-
-        elements.dropdown.querySelectorAll('.dropdown-item[data-id]').forEach(item => {
-            item.addEventListener('click', () => selectCondition(item.dataset.id));
+        items.forEach(({ id, name }) => {
+            const item = document.createElement('div');
+            item.className = `dropdown-item ${currentCondition === id ? 'selected' : ''}`.trim();
+            item.dataset.id = id;
+            appendHighlightedText(item, name, query);
+            item.addEventListener('click', () => selectCondition(id));
+            elements.dropdown.appendChild(item);
         });
 
         showDropdown();
     }
 
-    function highlightMatches(text, query) {
-        if (!query) return text;
+    function appendHighlightedText(container, text, query) {
+        if (!query) {
+            container.textContent = text;
+            return;
+        }
+
         const words = query.split(/\s+/).filter(w => w.length > 0);
-        let result = text;
-        words.forEach(word => {
-            const regex = new RegExp(`(${escapeRegex(word)})`, 'gi');
-            result = result.replace(regex, '<span class="highlight">$1</span>');
-        });
-        return result;
+        if (words.length === 0) {
+            container.textContent = text;
+            return;
+        }
+
+        const pattern = words.map(escapeRegex).join('|');
+        const regex = new RegExp(pattern, 'gi');
+        let cursor = 0;
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+            const matchedText = match[0];
+            if (match.index > cursor) {
+                container.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+            }
+
+            const highlight = document.createElement('span');
+            highlight.className = 'highlight';
+            highlight.textContent = matchedText;
+            container.appendChild(highlight);
+
+            cursor = match.index + matchedText.length;
+            if (matchedText.length === 0) {
+                regex.lastIndex += 1;
+            }
+        }
+
+        if (cursor < text.length) {
+            container.appendChild(document.createTextNode(text.slice(cursor)));
+        }
     }
 
     function escapeRegex(string) {
@@ -543,12 +575,20 @@
         }
 
         elements.treatmentOptionsSection.classList.remove('hidden');
-        let html = '';
+        elements.treatmentOptionsContent.innerHTML = '';
+        const fragment = document.createDocumentFragment();
 
         condition.prescriptionGroups.forEach(group => {
-            html += `<div class="treatment-group">`;
-            html += `<span class="treatment-group-label">${group.label}:</span>`;
-            html += `<div class="treatment-options">`;
+            const groupContainer = document.createElement('div');
+            groupContainer.className = 'treatment-group';
+
+            const groupLabel = document.createElement('span');
+            groupLabel.className = 'treatment-group-label';
+            groupLabel.textContent = `${group.label}:`;
+            groupContainer.appendChild(groupLabel);
+
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'treatment-options';
 
             if (group.type === 'radio') {
                 // Radio group for antibiotics
@@ -556,8 +596,33 @@
                     const med = medications[medId];
                     if (!med) return;
                     const isChecked = currentSelections[group.id]?.selected === medId;
-                    const hospitalNote = med.inHospital ? ` <span class="hospital-note">${med.hospitalNote}</span>` : '';
-                    html += `<label class="treatment-option"><input type="radio" name="radio-${group.id}" value="${medId}" data-group="${group.id}" data-type="radio" ${isChecked ? 'checked' : ''}><span class="treatment-option-text">${med.name}${hospitalNote}</span></label>`;
+
+                    const label = document.createElement('label');
+                    label.className = 'treatment-option';
+
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `radio-${group.id}`;
+                    input.value = medId;
+                    input.dataset.group = group.id;
+                    input.dataset.type = 'radio';
+                    input.checked = isChecked;
+
+                    const text = document.createElement('span');
+                    text.className = 'treatment-option-text';
+                    text.appendChild(document.createTextNode(med.name));
+
+                    if (med.inHospital && med.hospitalNote) {
+                        text.appendChild(document.createTextNode(' '));
+                        const hospitalNote = document.createElement('span');
+                        hospitalNote.className = 'hospital-note';
+                        hospitalNote.textContent = med.hospitalNote;
+                        text.appendChild(hospitalNote);
+                    }
+
+                    label.appendChild(input);
+                    label.appendChild(text);
+                    optionsContainer.appendChild(label);
                 });
             } else if (group.items) {
                 // Separate items into meds and classes
@@ -579,8 +644,32 @@
                     if (!med) return;
                     const itemState = currentSelections[group.id]?.items?.[itemKey];
                     const isChecked = itemState?.checked;
-                    const hospitalNote = med.inHospital ? ` <span class="hospital-note">${med.hospitalNote}</span>` : '';
-                    html += `<label class="treatment-option"><input type="checkbox" data-group="${group.id}" data-item-key="${itemKey}" data-type="med" ${isChecked ? 'checked' : ''}><span class="treatment-option-text">${med.name}${hospitalNote}</span></label>`;
+
+                    const label = document.createElement('label');
+                    label.className = 'treatment-option';
+
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.dataset.group = group.id;
+                    input.dataset.itemKey = itemKey;
+                    input.dataset.type = 'med';
+                    input.checked = !!isChecked;
+
+                    const text = document.createElement('span');
+                    text.className = 'treatment-option-text';
+                    text.appendChild(document.createTextNode(med.name));
+
+                    if (med.inHospital && med.hospitalNote) {
+                        text.appendChild(document.createTextNode(' '));
+                        const hospitalNote = document.createElement('span');
+                        hospitalNote.className = 'hospital-note';
+                        hospitalNote.textContent = med.hospitalNote;
+                        text.appendChild(hospitalNote);
+                    }
+
+                    label.appendChild(input);
+                    label.appendChild(text);
+                    optionsContainer.appendChild(label);
                 });
 
                 // Render class items (checkbox + radios) after
@@ -591,23 +680,66 @@
                     const isChecked = itemState?.checked;
                     const selectedMed = itemState?.selected;
 
-                    html += `<div class="treatment-class-item"><label class="treatment-option treatment-class-checkbox"><input type="checkbox" data-group="${group.id}" data-item-key="${itemKey}" data-type="class-toggle" ${isChecked ? 'checked' : ''}><span class="treatment-option-text treatment-class-label">${medClass.label}:</span></label><div class="treatment-class-options ${isChecked ? '' : 'disabled'}">`;
+                    const classContainer = document.createElement('div');
+                    classContainer.className = 'treatment-class-item';
+
+                    const classToggleLabel = document.createElement('label');
+                    classToggleLabel.className = 'treatment-option treatment-class-checkbox';
+
+                    const classToggle = document.createElement('input');
+                    classToggle.type = 'checkbox';
+                    classToggle.dataset.group = group.id;
+                    classToggle.dataset.itemKey = itemKey;
+                    classToggle.dataset.type = 'class-toggle';
+                    classToggle.checked = !!isChecked;
+
+                    const classLabel = document.createElement('span');
+                    classLabel.className = 'treatment-option-text treatment-class-label';
+                    classLabel.textContent = `${medClass.label}:`;
+
+                    classToggleLabel.appendChild(classToggle);
+                    classToggleLabel.appendChild(classLabel);
+
+                    const classOptionsContainer = document.createElement('div');
+                    classOptionsContainer.className = `treatment-class-options ${isChecked ? '' : 'disabled'}`.trim();
 
                     medClass.options.forEach(medId => {
                         const med = medications[medId];
                         if (!med) return;
                         const isSelected = selectedMed === medId;
-                        html += `<label class="treatment-class-radio"><input type="radio" name="class-${itemKey}" value="${medId}" data-group="${group.id}" data-item-key="${itemKey}" data-type="class-select" ${isSelected ? 'checked' : ''} ${isChecked ? '' : 'disabled'}><span>${med.name}</span></label>`;
+
+                        const optionLabel = document.createElement('label');
+                        optionLabel.className = 'treatment-class-radio';
+
+                        const optionInput = document.createElement('input');
+                        optionInput.type = 'radio';
+                        optionInput.name = `class-${itemKey}`;
+                        optionInput.value = medId;
+                        optionInput.dataset.group = group.id;
+                        optionInput.dataset.itemKey = itemKey;
+                        optionInput.dataset.type = 'class-select';
+                        optionInput.checked = isSelected;
+                        optionInput.disabled = !isChecked;
+
+                        const optionText = document.createElement('span');
+                        optionText.textContent = med.name;
+
+                        optionLabel.appendChild(optionInput);
+                        optionLabel.appendChild(optionText);
+                        classOptionsContainer.appendChild(optionLabel);
                     });
 
-                    html += `</div></div>`;
+                    classContainer.appendChild(classToggleLabel);
+                    classContainer.appendChild(classOptionsContainer);
+                    optionsContainer.appendChild(classContainer);
                 });
             }
 
-            html += `</div></div>`;
+            groupContainer.appendChild(optionsContainer);
+            fragment.appendChild(groupContainer);
         });
 
-        elements.treatmentOptionsContent.innerHTML = html;
+        elements.treatmentOptionsContent.appendChild(fragment);
 
         elements.treatmentOptionsContent.querySelectorAll('input').forEach(input => {
             input.addEventListener('change', handleTreatmentChange);
@@ -709,15 +841,39 @@
             return;
         }
 
-        let html = '';
+        elements.prescriptionContent.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+
         homeMeds.forEach(({ medId, duration }, index) => {
             const med = medications[medId];
             if (!med) return;
             const instruction = getInstructionWithDuration(med, duration);
-            html += `<div class="prescription-item"><div><span class="prescription-number">${index + 1}.</span> <span class="prescription-name">${med.name}</span></div><div class="prescription-instruction">${instruction}</div></div>`;
+
+            const item = document.createElement('div');
+            item.className = 'prescription-item';
+
+            const title = document.createElement('div');
+            const number = document.createElement('span');
+            number.className = 'prescription-number';
+            number.textContent = `${index + 1}.`;
+            const name = document.createElement('span');
+            name.className = 'prescription-name';
+            name.textContent = med.name;
+
+            title.appendChild(number);
+            title.appendChild(document.createTextNode(' '));
+            title.appendChild(name);
+
+            const instructionEl = document.createElement('div');
+            instructionEl.className = 'prescription-instruction';
+            instructionEl.textContent = instruction;
+
+            item.appendChild(title);
+            item.appendChild(instructionEl);
+            fragment.appendChild(item);
         });
 
-        elements.prescriptionContent.innerHTML = html;
+        elements.prescriptionContent.appendChild(fragment);
         elements.prescriptionContent.contentEditable = 'true';
         elements.prescriptionContent.classList.add('editable');
     }

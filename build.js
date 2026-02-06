@@ -1,8 +1,9 @@
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
 const password = process.env.STATICRYPT_PASSWORD;
+const includeAdmin = process.argv.includes('--include-admin');
 
 if (!password) {
   console.error('Error: STATICRYPT_PASSWORD environment variable is not set');
@@ -14,14 +15,16 @@ if (fs.existsSync('dist')) {
   fs.rmSync('dist', { recursive: true });
 }
 
-fs.mkdirSync('dist/admin/js', { recursive: true });
-fs.mkdirSync('dist/admin/css', { recursive: true });
 fs.mkdirSync('dist/js', { recursive: true });
 fs.mkdirSync('dist/css', { recursive: true });
 fs.mkdirSync('dist/data', { recursive: true });
+if (includeAdmin) {
+  fs.mkdirSync('dist/admin/js', { recursive: true });
+  fs.mkdirSync('dist/admin/css', { recursive: true });
+}
 
 function encryptFile(inputPath, outputPath) {
-  execSync(`./node_modules/.bin/pagecrypt "${inputPath}" "${outputPath}" "${password}"`, { 
+  execFileSync('./node_modules/.bin/pagecrypt', [inputPath, outputPath, password], {
     stdio: 'inherit' 
   });
 }
@@ -43,13 +46,21 @@ function copyDir(src, dest) {
 
 // Encrypt HTML files
 encryptFile('index.html', 'dist/index.html');
-encryptFile('admin/index.html', 'dist/admin/index.html');
+if (includeAdmin) {
+  encryptFile('admin/index.html', 'dist/admin/index.html');
+}
 
 // Copy assets
 copyDir('js', 'dist/js');
 copyDir('css', 'dist/css');
 copyDir('data', 'dist/data');
-copyDir('admin/js', 'dist/admin/js');
-copyDir('admin/css', 'dist/admin/css');
+if (includeAdmin) {
+  copyDir('admin/js', 'dist/admin/js');
+  copyDir('admin/css', 'dist/admin/css');
+}
 
-console.log('Build complete!');
+if (includeAdmin) {
+  console.log('Build complete (main app + admin).');
+} else {
+  console.log('Build complete (production app only, no admin).');
+}

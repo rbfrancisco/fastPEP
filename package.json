@@ -6,7 +6,9 @@
   "scripts": {
     "server": "node server/index.js",
     "start": "node server/index.js",
-    "build": "node build.js"
+    "validate-data": "node scripts/validate-data.js",
+    "build": "npm run validate-data && node build.js",
+    "build:full": "npm run validate-data && node build.js --include-admin"
   },
   "keywords": [
     "medical",
